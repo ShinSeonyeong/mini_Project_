@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>월별사용금액</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #app {
+            position: relative;
+            width: 393px;
+            height: 852px;
+            margin: 0 auto;
+        }
+
+        #app>#navbar {
+            background-color: lightgray;
+            width: 393px;
+            height: 8%;
+        }
+
+        #app>#navbar>#nav1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            padding: 3px;
+        }
+
+        #app>#navbar>#nav2 {
+            position: absolute;
+            right: 0;
+            width: 80px;
+            height: 25px;
+            margin: 5px;
+            padding-top: 15px;
+        }
+
+        #app>#navbar>#nav2>img {
+            width: 25px;
+            height: 25px;
+            float: right;
+        }
+
+        #app>#navbar>#nav2>div {
+            width: 40px;
+            height: 25px;
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="navbar">
+            <div id="nav1">
+                <img src="images/close.png" alt="">
+            </div>
+
+            <div id="nav2">
+                <img src="images/arrow.png" alt="">
+                <div>월별</div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>
