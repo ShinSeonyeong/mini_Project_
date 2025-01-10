@@ -1,0 +1,113 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#app {
+    position: relative;
+    width: 393px;
+    height: 852px;
+    margin: 0 auto;
+}
+
+#app>#navbar {
+    /* background-color: lightgray; */
+    width: 393px;
+    height: 8%;
+}
+
+#app>#navbar>#nav1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    padding: 3px;
+}
+
+#app>#navbar>#nav2 {
+    position: absolute;
+    right: 0;
+    width: 60px;
+    height: 50px;
+    margin: 5px;
+    padding-top: 15px;
+}
+
+#app>#navbar>#nav2>img {
+    width: 25px;
+    height: 25px;
+    float: right;
+}
+
+#app>#navbar>#nav2>div {
+    width: 30px;
+    height: 25px;
+    float: right;
+}
+
+#app>#basic {
+    overflow: hidden;
+    width: 393px;
+    height: 8%;
+}
+
+#app>#basic>#spend {
+    background-color: lightcoral;
+    color: white;
+    text-align: center;
+    float: left;
+    font-size: 25px;
+    width: 80px;
+    border-radius: 10px 0 0 10px;
+    padding: 5px;
+    border: gray;
+    margin-left: 120px;
+    margin-top: 3%;
+}
+
+#app>#basic>#income {
+    background-color: rgb(235, 235, 235);
+    color: rgb(150, 140, 140);
+    text-align: center;
+    float: left;
+    font-size: 25px;
+    width: 80px;
+    border-radius: 0 10px 10px 0;
+    padding: 5px;
+    border: gray;
+    margin-right: 100px;
+    margin-top: 3%;
+}
+
+#app>#header {
+    background-color: bisque;
+    width: 393px;
+    height: 8%;
+    clear: both;
+}
+
+#app>#header>div {
+    float: left;
+}
+
+#app>#header>#left{
+    float: left;
+    margin-left: 100px;
+}
+
+#app>#header>#right{
+    float: right;
+    margin-right: 50px;
+}
+
+input[type="month"] {
+    border: 0;
+    cursor: pointer;
+    text-align: center;
+    font-size: 15px;
+    margin-top: 22%;
+    /* margin-left: 150%; */
+}

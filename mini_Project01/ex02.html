@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'GowunDodum-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunDodum-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'GowunDodum-Regular', Courier, monospace;
+        }
+
+        #container {
+            width: 560px;
+            /* background-color: lightskyblue; */
+            padding: 30px;
+            margin: 0 auto;
+        }
+
+        #container>#nav {background-color: lightgrey;}
+        #container>#nav>div {padding: 20px;}
+        #container>#nav h1 {display: inline;}
+        #container table,th,td{
+            border: 1px solid black;
+            border-collapse: collapse;
+        } 
+        #container th, td{
+            padding: 10px;
+        }
+        /* #container>div {background-color: lightyellow;} */
+        #container>#footer {
+            text-align: center;
+            padding: 20px;
+            background-color: lightgrey;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div id="nav" style="overflow: hidden;">
+            <div style="float: left;">
+                <a href=""><h1>홈</h1></a>
+            </div>
+            <div style="float: right;">
+                <a href=""><h1>메뉴1</h1></a>
+                <a href=""><h1>메뉴2</h1></a>
+            </div>
+        </div>
+            <div>
+                <div style="overflow: hidden;">
+                    <figure style="float: left;">
+                        <img src="main1.jpg" alt="" style="width: 250px">
+                        <figcaption>먹자먹자</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="main2.png" alt="" style="width: 250px;">
+                        <figcaption>춤추자</figcaption>
+                    </figure>
+                </div>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis cumque quae, rerum saepe placeat ullam iure magni exercitationem nesciunt nam ex non sapiente, molestias sunt qui mollitia explicabo fuga voluptatibus!</p>
+            </div>
+        <div style="padding: 20px;">
+            <h1>Education</h1>
+            <table style="width: 100%;">
+                <caption>학력사항</caption>
+                <thead>
+                    <tr>
+                        <th>출신학교</th>
+                        <th>전공</th>
+                        <th>기간</th>
+                        <th>구분</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ㅁㅁㅁ대학교</td>
+                        <td>정보통신공학</td>
+                        <td>2017.02~2022.02</td>
+                        <td>졸업</td>
+                    </tr>
+                    <tr>
+                        <td>aaa고등학교</td>
+                        <td>-</td>
+                        <td>2014.03~2017.02</td>
+                        <td>졸업</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="footer"><h1>CopyRight 신선영</h1></div>
+    </div>
+    <div>피그마에 디자인 한 것에 대해 실습진행</div>
+</body>
+
+</html>
