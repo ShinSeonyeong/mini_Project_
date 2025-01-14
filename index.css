@@ -197,3 +197,16 @@ input[type="month"] {
     height: 48%;
     background-color: antiquewhite;
 }
+
+#app>#footer>#one{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 393px;
+    height: 50px;
+}
+
+#app>#footer>#one>img{
+    width: 50px;
+    height: 50px;
+    float: left;
+}
