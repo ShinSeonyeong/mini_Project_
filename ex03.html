@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        input[type="checkbox"] {
+            width: 50px;
+            height: 50px;
+        }
+
+        input[type="password"],
+        [type="text"] {
+            width: 100%;
+            height: 30px;
+            font-size: 22px;
+            margin: 20px 0;
+            outline: none;
+            border: 0;
+            border-bottom: 1px solid black;
+            /* border: 0; */
+        }
+
+        input[type="text"]:focus {
+            color: rgb(50, 245, 240);
+            border: 5px solid rgb(100, 250, 100);
+        }
+
+        input[type="submit"] {
+            border: 0;
+            font-size: 22px;
+            width: 150px;
+            padding: 5px 10px;
+            color: white;
+            background-color: lightcoral;
+            cursor: pointer;
+        }
+
+        input[type="date"]{
+            display: block;
+            margin: 10px;
+            border: 0;
+            background-color: rgb(238, 238, 238);
+            font-size: 22px;
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <label for="aa">체크박스</label>
+    <div>
+        <h1>라벨이 밖에 있습니다.</h1>
+    </div>
+    <form action="ex07.html">
+        <input type="checkbox" name="" id="aa">
+        <input type="password" name="pw" id="">
+        <input type="text" name="id" id="" autofocus required>
+        <input type="number" name="" id="" step="10">
+        <input type="email" name="" id="" placeholder="email">
+        <input type="date" name="" id="">
+        <input type="submit" value="전송">
+    </form>
+</body>
+
+</html>

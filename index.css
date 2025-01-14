@@ -1,0 +1,199 @@
+@font-face {
+    font-family: 'Ownglyph_meetme-Rg';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Ownglyph_meetme-Rg';
+}
+
+#app {
+    position: relative;
+    width: 393px;
+    height: 852px;
+    margin: 0 auto;
+}
+
+#app>#navbar {
+    /* background-color: lightgray; */
+    width: 393px;
+    height: 8%;
+}
+
+#app>#navbar>#nav1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    padding: 3px;
+}
+
+#app>#navbar>#nav2 {
+    position: absolute;
+    right: 0;
+    width: 60px;
+    height: 50px;
+    margin: 5px;
+    padding-top: 15px;
+}
+
+#app>#navbar>#nav2>img {
+    width: 25px;
+    height: 25px;
+    float: right;
+}
+
+#app>#navbar>#nav2>div {
+    width: 30px;
+    height: 25px;
+    float: right;
+}
+
+#app>#basic {
+    overflow: hidden;
+    width: 393px;
+    height: 8%;
+}
+
+#app>#basic>#spend {
+    background-color: lightcoral;
+    color: white;
+    text-align: center;
+    float: left;
+    font-size: 25px;
+    width: 80px;
+    border-radius: 10px 0 0 10px;
+    padding: 5px;
+    border: gray;
+    margin-left: 120px;
+    margin-top: 3%;
+}
+
+#app>#basic>#income {
+    background-color: rgb(235, 235, 235);
+    color: rgb(150, 140, 140);
+    text-align: center;
+    float: left;
+    font-size: 25px;
+    width: 80px;
+    border-radius: 0 10px 10px 0;
+    padding: 5px;
+    border: gray;
+    margin-right: 100px;
+    margin-top: 3%;
+}
+
+#app>#header {
+    width: 393px;
+    height: 8%;
+    clear: both;
+}
+
+#app>#header {
+    overflow: hidden;
+}
+
+#app>#header>div {
+    float: left;
+}
+
+#app>#header>#left {
+    float: left;
+    margin-left: 120px;
+    margin-top: 5%;
+}
+
+#app>#header>#left>img {
+    width: 25px;
+    height: 25px;
+}
+
+#app>#header>#right {
+    float: right;
+    margin-right: 95px;
+    margin-top: 5%;
+}
+
+#app>#header>#right>img {
+    width: 25px;
+    height: 25px;
+}
+
+input[type="month"] {
+    border: 0;
+    cursor: pointer;
+    text-align: center;
+    font-size: 15px;
+    margin-top: 20%;
+    margin-left: 15px;
+}
+
+#app>#content {
+    overflow: hidden;
+}
+
+#app>#content>#month_data {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#app>#content>#month_detail {
+    width: 393px;
+    height: 36%;
+
+}
+
+#app>#content>#month_detail>ul {
+    list-style-type: none;
+}
+
+#app>#content>#month_detail>span {
+    margin: 1px 3px 0 0;
+    font-size: 15px;
+}
+
+#app>#content>#month_detail>span:before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+.detail_one:before {
+    background: rgb(122, 194, 101);
+}
+
+.detail_two:before {
+    background: rgb(92, 91, 150);
+}
+
+.detail_three:before {
+    background: rgb(189, 186, 186);
+}
+
+.detail_four:before {
+    background: rgb(250, 242, 166);
+}
+
+.detail_five:before {
+    background: rgb(245, 220, 220);
+}
+
+.detail_six:before {
+    background: rgb(130, 207, 218);
+}
+
+#app>#footer{
+    margin: 20px 0;
+    width: 393px;
+    height: 48%;
+    background-color: antiquewhite;
+}
