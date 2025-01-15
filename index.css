@@ -20,7 +20,6 @@
 }
 
 #app>#navbar {
-    /* background-color: lightgray; */
     width: 393px;
     height: 8%;
 }
@@ -62,11 +61,7 @@
     height: 8%;
 }
 
-#app>#basic>#spend {
-    background-color: lightcoral;
-    color: white;
-    text-align: center;
-    float: left;
+#app>#basic>#spend>button{
     font-size: 25px;
     width: 80px;
     border-radius: 10px 0 0 10px;
@@ -74,9 +69,33 @@
     border: gray;
     margin-left: 120px;
     margin-top: 3%;
+    float: left;
 }
 
-#app>#basic>#income {
+#app>#basic>#spend>button:focus{
+    background-color: lightcoral;
+    color: white;
+}
+
+#app>#basic>#income>button{
+    background-color: rgb(235, 235, 235);
+    text-align: center;
+    float: left;
+    font-size: 25px;
+    width: 80px;
+    border-radius: 0 10px 10px 0;
+    padding: 5px;
+    border: gray;
+    margin-right: 100px;
+    margin-top: 3%;
+}
+
+#app>#basic>#income>button:focus{
+    background-color: lightcoral;
+    color: white;
+}
+
+/* #app>#basic>#income {
     background-color: rgb(235, 235, 235);
     color: rgb(150, 140, 140);
     text-align: center;
@@ -88,7 +107,7 @@
     border: gray;
     margin-right: 100px;
     margin-top: 3%;
-}
+} */
 
 #app>#header {
     width: 393px;
@@ -191,22 +210,106 @@ input[type="month"] {
     background: rgb(130, 207, 218);
 }
 
-#app>#footer{
+#app>#footer {
     margin: 20px 0;
     width: 393px;
-    height: 48%;
-    background-color: antiquewhite;
+    height: 45%;
+    background-color: rgb(235, 235, 235);
 }
 
-#app>#footer>#one{
-    border: 1px solid black;
+#app>#footer>div{
+    margin-top: 5px;
+}
+
+#app>#footer>#one {
+    background-color: white;
+    border: 1px solid white;
     border-radius: 10px;
-    width: 393px;
+    width: 390px;
     height: 50px;
 }
 
-#app>#footer>#one>img{
+#app>#footer>#one>div {
+}
+
+#app>#footer>#one>img {
     width: 50px;
     height: 50px;
+    padding: 5px;
+    float: left;
+}
+
+#app>#footer>#two {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 390px;
+    height: 50px;
+}
+
+#app>#footer>#two>img {
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+    float: left;
+}
+
+#app>#footer>#three {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 390px;
+    height: 50px;
+}
+
+#app>#footer>#three>img {
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+    float: left;
+}
+
+#app>#footer>#four {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 390px;
+    height: 50px;
+}
+
+#app>#footer>#four>img {
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+    float: left;
+}
+
+#app>#footer>#five {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 390px;
+    height: 50px;
+}
+
+#app>#footer>#five>img {
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+    float: left;
+}
+
+#app>#footer>#six {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 390px;
+    height: 50px;
+}
+
+#app>#footer>#six>img {
+    width: 50px;
+    height: 50px;
+    padding: 5px;
     float: left;
 }
