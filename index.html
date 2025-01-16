@@ -6,24 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>월별사용금액</title>
     <link rel="stylesheet" href="index.css">
+    <script src="https://kit.fontawesome.com/582d1bfdc8.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div id="app">
         <div id="navbar">
             <div id="nav1">
-                <img src="images/close.png" width="20px" alt="">
+                <i class="fa-solid fa-xmark fa-2x" style="cursor: pointer;"></i>
             </div>
 
             <div id="nav2">
-                <img src="images/arrow.png" alt="">
-                <div>월별</div>
+                <div style="float: left;">월별</div>
+                <span class="nav2_menu"><i class="fa-solid fa-chevron-down" style="float: right; cursor: pointer;"></i></span>
+                <div id="nav2_submenu">
+                    <a href="#">월별</a>
+                    <a href="#">년별</a>
+                </div>
             </div>
         </div>
 
         <div id="basic">
             <div id="spend">
-                <button click>지출</button>
+                <button id="myButton">지출</button>
             </div>
             <div id="income">
                 <button>수입</button>
@@ -32,13 +37,15 @@
 
         <div id="header">
             <div id="left">
-                <img src="images/left.png" alt="">
+                <i class="fa-solid fa-circle-chevron-left" style="cursor: pointer;"></i>
+                <!-- <img src="images/left.png" alt=""> -->
             </div>
             <div>
                 <input type="month" name="" id="">
             </div>
             <div id="right">
-                <img src="images/right.png" alt="">
+                <i class="fa-solid fa-circle-chevron-right" style="cursor: pointer;"></i>
+                <!-- <img src="images/right.png" alt=""> -->
             </div>
         </div>
 

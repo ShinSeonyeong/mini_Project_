@@ -37,22 +37,30 @@
 #app>#navbar>#nav2 {
     position: absolute;
     right: 0;
-    width: 60px;
+    width: 45px;
     height: 50px;
     margin: 5px;
     padding-top: 15px;
 }
 
-#app>#navbar>#nav2>img {
-    width: 25px;
-    height: 25px;
-    float: right;
+.nav2_menu{
+    position: relative;
+    display: inline-block;
 }
 
-#app>#navbar>#nav2>div {
-    width: 30px;
-    height: 25px;
-    float: right;
+.nav2_submenu{
+    display: none;
+    position: absolute;
+    z-index: 1;
+}
+
+.nav2_submenu a{
+    display: block;
+}
+
+.nav2_menu:checked~a{
+    display: block;
+    position: absolute;
 }
 
 #app>#basic {
@@ -61,36 +69,36 @@
     height: 8%;
 }
 
-#app>#basic>#spend>button{
+#app>#basic>#spend>button {
+    border: rgb(235, 235, 235);
     font-size: 25px;
     width: 80px;
     border-radius: 10px 0 0 10px;
     padding: 5px;
-    border: gray;
     margin-left: 120px;
     margin-top: 3%;
     float: left;
 }
 
-#app>#basic>#spend>button:focus{
+#app>#basic>#spend>button:focus {
     background-color: lightcoral;
     color: white;
 }
 
-#app>#basic>#income>button{
+#app>#basic>#income>button {
     background-color: rgb(235, 235, 235);
+    border: rgb(235, 235, 235);
     text-align: center;
     float: left;
     font-size: 25px;
     width: 80px;
     border-radius: 0 10px 10px 0;
     padding: 5px;
-    border: gray;
     margin-right: 100px;
     margin-top: 3%;
 }
 
-#app>#basic>#income>button:focus{
+#app>#basic>#income>button:focus {
     background-color: lightcoral;
     color: white;
 }
@@ -129,21 +137,21 @@
     margin-top: 5%;
 }
 
-#app>#header>#left>img {
+/* #app>#header>#left>img {
     width: 25px;
     height: 25px;
-}
+} */
 
 #app>#header>#right {
     float: right;
-    margin-right: 95px;
+    margin-right: 110px;
     margin-top: 5%;
 }
 
-#app>#header>#right>img {
+/* #app>#header>#right>img {
     width: 25px;
     height: 25px;
-}
+} */
 
 input[type="month"] {
     border: 0;
@@ -215,10 +223,11 @@ input[type="month"] {
     width: 393px;
     height: 45%;
     background-color: rgb(235, 235, 235);
+    padding-top: 5px;
 }
 
-#app>#footer>div{
-    margin-top: 5px;
+#app>#footer>div {
+    margin: 5px 0;
 }
 
 #app>#footer>#one {
@@ -227,9 +236,7 @@ input[type="month"] {
     border-radius: 10px;
     width: 390px;
     height: 50px;
-}
-
-#app>#footer>#one>div {
+    margin: 2px;
 }
 
 #app>#footer>#one>img {
@@ -241,7 +248,6 @@ input[type="month"] {
 
 #app>#footer>#two {
     background-color: white;
-    border: 1px solid white;
     border-radius: 10px;
     width: 390px;
     height: 50px;
@@ -256,7 +262,6 @@ input[type="month"] {
 
 #app>#footer>#three {
     background-color: white;
-    border: 1px solid white;
     border-radius: 10px;
     width: 390px;
     height: 50px;
@@ -271,7 +276,6 @@ input[type="month"] {
 
 #app>#footer>#four {
     background-color: white;
-    border: 1px solid white;
     border-radius: 10px;
     width: 390px;
     height: 50px;
@@ -286,7 +290,6 @@ input[type="month"] {
 
 #app>#footer>#five {
     background-color: white;
-    border: 1px solid white;
     border-radius: 10px;
     width: 390px;
     height: 50px;
@@ -301,7 +304,6 @@ input[type="month"] {
 
 #app>#footer>#six {
     background-color: white;
-    border: 1px solid white;
     border-radius: 10px;
     width: 390px;
     height: 50px;
