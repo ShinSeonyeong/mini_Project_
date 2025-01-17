@@ -13,13 +13,14 @@
 }
 
 #app {
-    position: relative;
     width: 393px;
     height: 852px;
     margin: 0 auto;
 }
 
 #app>#navbar {
+    position: relative;
+    display: inline-block;
     width: 393px;
     height: 8%;
 }
@@ -43,24 +44,21 @@
     padding-top: 15px;
 }
 
-.nav2_menu{
-    position: relative;
-    display: inline-block;
-}
-
 .nav2_submenu{
     display: none;
     position: absolute;
     z-index: 1;
 }
 
-.nav2_submenu a{
-    display: block;
+.nav2_submenu>div{
+    display: inline-block; 
+    margin-top: 30px; 
+    text-align: center; 
+    width: 50px;
 }
 
-.nav2_menu:checked~a{
+#app>#navbar>#nav2:hover .nav2_submenu{
     display: block;
-    position: absolute;
 }
 
 #app>#basic {
