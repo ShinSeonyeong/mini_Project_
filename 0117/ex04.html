@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>::before 연습</title>
+    <style>
+        li{
+            position: relative;
+        }
+        li.hot::after{
+            position: absolute;
+            top: 3px;
+            content: "NEW!!";
+            margin-left: 4px;
+            background-color: rgb(255,60,60);
+            color: rgb(236,240,240);
+            padding: 2px 5px;
+            font-size: 0.6rem;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li class="hot">제품A</li>
+        <li>제품B</li>
+        <li>제품C</li>
+        <li class="hot">제품D</li>
+    </ul>
+</body>
+</html>

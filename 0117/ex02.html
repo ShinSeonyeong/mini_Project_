@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nth-child(n)연습</title>
+    <style>
+        table {
+            width: 100%;
+        }
+
+        table,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table tr:nth-child(2n) {
+            background-color: rgb(100, 200, 100);
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>블루베리</td>
+        </tr>
+        <tr>
+            <td>루베리</td>
+        </tr>
+        <tr>
+            <td>베리</td>
+        </tr>
+        <tr>
+            <td>블리</td>
+        </tr>
+        <tr>
+            <td>블베리</td>
+        </tr>
+        <tr>
+            <td>블루</td>
+        </tr>
+        <tr>
+            <td>블루베</td>
+        </tr>
+        <tr>
+            <td>블베</td>
+        </tr>
+        <tr>
+            <td>블</td>
+        </tr>
+    </table>
+</body>
+
+</html>

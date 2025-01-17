@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nth-child:fisrt/last-child 연습</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ul {
+            display: flex;
+            width: 560px;
+            margin: 20px auto;
+        }
+
+        li {
+            width: 25%;
+            list-style-type: none;
+            background-color: rgb(200, 100, 100);
+            border: 1px solid black;
+            padding-left: 20px;
+        }
+
+        li:first-child {
+            border-radius: 20px 0 0 20px;
+        }
+
+        li:last-child {
+            border-radius: 0 20px 20px 0;
+        }
+
+        a {
+            display: block;
+            width: 100%;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li><a href="">HOME</a></li>
+        <li><a href="">HTML</a></li>
+        <li><a href="">CSS</a></li>
+        <li><a href="">Jquery</a></li>
+    </ul>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background-color: rgb(200, 160, 180);
+            margin: 10px;
+        }
+
+        .aa {
+            /* animation-name: qwer;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+            animation-direction: alternate; */
+            animation: qwer 3s infinite, asdf 2s infinite;
+        }
+
+        #bb {
+            animation-name: asdf;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes qwer {
+            from {
+                background-color: rgb(200, 160, 180);
+                border: 1px solid black;
+                transform: translate(0, 0);
+            }
+
+            to {
+                background-color: rgb(10, 200, 180);
+                border: 1px solid black;
+                border-radius: 50%;
+                transform: translate(200px, 0);
+            }
+        }
+
+        @keyframes asdf {
+            from {
+                background-color: rgb(200, 160, 180);
+                border: 1px solid black;
+                transform: rotate(0deg);
+            }
+
+            to {
+                background-color: rgb(10, 200, 180);
+                border: 1px solid black;
+                border-radius: 50%;
+                transform: rotate(180deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="aa"></div>
+    <div class="aa"></div>
+    <div id="bb"></div>
+</body>
+
+</html>

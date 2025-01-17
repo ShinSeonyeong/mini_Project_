@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사진옮기기</title>
+    <style>
+        div {
+            background-color: rgb(100, 100, 100);
+        }
+
+        .img1 {
+            transform: translate(50px, 100px);
+            animation-name: aa;
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+        }
+
+        .img2 {
+            transform: translate(50px, 100px);
+            animation-name: bb;
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+        }
+
+        .img3 {
+            transform: translate(50px, 100px);
+            animation-name: aa;
+            animation-duration: 5s;
+            /* animation-iteration-count: infinite; */
+        }
+
+        .img3:hover {
+            animation-name: cc;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes aa {
+            from {
+                transform: rotate(0, 0)
+            }
+
+            to {
+                transform: translate(150px, 200px);
+            }
+        }
+
+        @keyframes bb {
+            from {
+                transform: rotate(200px, 200px)
+            }
+
+            to {
+                transform: translate(100px, 100px);
+            }
+        }
+
+        @keyframes cc {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: translate(200px, 200px) scale(3) rotate(180deg);
+            }
+
+            100% {
+                transform: translate(300px, 300px) scale(3) rotate(270deg);
+            }
+        }
+    </style>
+</head>
+
+<body onkeydown="keydown(this)">
+    <div>
+        <img class="img1" src="../images/pepe.jfif" alt="">
+        <img class="img2" src="../images/모찌-모모찌-울기.gif" alt="">
+        <img class="img3" src="../images/모모냥-모모찌wlq.gif" alt="">
+    </div>
+</body>
+
+</html>
+<script>
+    function keydown(e) {
+        alert(e)
+    }
+</script>
