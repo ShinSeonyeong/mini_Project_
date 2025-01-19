@@ -42,6 +42,7 @@
     height: 50px;
     margin: 5px;
     padding-top: 15px;
+    cursor: pointer;
 }
 
 .nav2_submenu{
@@ -76,9 +77,10 @@
     margin-left: 120px;
     margin-top: 3%;
     float: left;
+    cursor: pointer;
 }
 
-#app>#basic>#spend>button:focus {
+#app>#basic>#spend>button:focus{
     background-color: lightcoral;
     color: white;
 }
@@ -94,6 +96,7 @@
     padding: 5px;
     margin-right: 100px;
     margin-top: 3%;
+    cursor: pointer;
 }
 
 #app>#basic>#income>button:focus {
@@ -225,89 +228,19 @@ input[type="month"] {
 }
 
 #app>#footer>div {
-    margin: 5px 0;
+    margin: 8px 0;
 }
 
-#app>#footer>#one {
+#app>#footer #detail {
     background-color: white;
     border: 1px solid white;
     border-radius: 10px;
     width: 390px;
     height: 50px;
-    margin: 2px;
+    cursor: pointer;
 }
 
-#app>#footer>#one>img {
-    width: 50px;
-    height: 50px;
-    padding: 5px;
-    float: left;
-}
-
-#app>#footer>#two {
-    background-color: white;
-    border-radius: 10px;
-    width: 390px;
-    height: 50px;
-}
-
-#app>#footer>#two>img {
-    width: 50px;
-    height: 50px;
-    padding: 5px;
-    float: left;
-}
-
-#app>#footer>#three {
-    background-color: white;
-    border-radius: 10px;
-    width: 390px;
-    height: 50px;
-}
-
-#app>#footer>#three>img {
-    width: 50px;
-    height: 50px;
-    padding: 5px;
-    float: left;
-}
-
-#app>#footer>#four {
-    background-color: white;
-    border-radius: 10px;
-    width: 390px;
-    height: 50px;
-}
-
-#app>#footer>#four>img {
-    width: 50px;
-    height: 50px;
-    padding: 5px;
-    float: left;
-}
-
-#app>#footer>#five {
-    background-color: white;
-    border-radius: 10px;
-    width: 390px;
-    height: 50px;
-}
-
-#app>#footer>#five>img {
-    width: 50px;
-    height: 50px;
-    padding: 5px;
-    float: left;
-}
-
-#app>#footer>#six {
-    background-color: white;
-    border-radius: 10px;
-    width: 390px;
-    height: 50px;
-}
-
-#app>#footer>#six>img {
+#app>#footer img {
     width: 50px;
     height: 50px;
     padding: 5px;
