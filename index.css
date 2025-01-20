@@ -49,11 +49,22 @@
     display: none;
     position: absolute;
     z-index: 1;
+    right: 50px;
+}
+
+.nav2_submenu a {
+    display: inline-block;
+    border: 2px solid rgb(189, 186, 186);
+    border-radius: 5px;
+    text-decoration: none;
+    color: black;
+    width: 100px;
+    margin-top: 1px;
 }
 
 .nav2_submenu>div{
     display: inline-block; 
-    margin-top: 30px; 
+    margin-top: 25px;
     text-align: center; 
     width: 50px;
 }
