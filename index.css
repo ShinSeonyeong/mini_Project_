@@ -1,6 +1,6 @@
 @font-face {
-    font-family: 'Ownglyph_meetme-Rg';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2') format('woff2');
+    font-family: 'GmarketSansMedium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -9,7 +9,17 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Ownglyph_meetme-Rg';
+    font-family: 'GmarketSansMedium';
+    font-size: 10px;
+}
+
+a {
+    color: black;
+}
+
+a:visited {
+    color : black;
+    text-decoration: none;
 }
 
 #app {
@@ -64,7 +74,7 @@
 
 .nav2_submenu>div{
     display: inline-block; 
-    margin-top: 25px;
+    margin-top: 20px;
     text-align: center; 
     width: 50px;
 }
@@ -81,7 +91,7 @@
 
 #app>#basic>#spend>button {
     border: rgb(235, 235, 235);
-    font-size: 25px;
+    font-size: 20px;
     width: 80px;
     border-radius: 10px 0 0 10px;
     padding: 5px;
@@ -101,7 +111,7 @@
     border: rgb(235, 235, 235);
     text-align: center;
     float: left;
-    font-size: 25px;
+    font-size: 20px;
     width: 80px;
     border-radius: 0 10px 10px 0;
     padding: 5px;
@@ -114,20 +124,6 @@
     background-color: lightcoral;
     color: white;
 }
-
-/* #app>#basic>#income {
-    background-color: rgb(235, 235, 235);
-    color: rgb(150, 140, 140);
-    text-align: center;
-    float: left;
-    font-size: 25px;
-    width: 80px;
-    border-radius: 0 10px 10px 0;
-    padding: 5px;
-    border: gray;
-    margin-right: 100px;
-    margin-top: 3%;
-} */
 
 #app>#header {
     width: 393px;
@@ -146,30 +142,20 @@
 #app>#header>#left {
     float: left;
     margin-left: 120px;
-    margin-top: 5%;
+    margin-top: 8%;
 }
-
-/* #app>#header>#left>img {
-    width: 25px;
-    height: 25px;
-} */
 
 #app>#header>#right {
     float: right;
     margin-right: 110px;
-    margin-top: 5%;
+    margin-top: 8%;
 }
-
-/* #app>#header>#right>img {
-    width: 25px;
-    height: 25px;
-} */
 
 input[type="month"] {
     border: 0;
     cursor: pointer;
     text-align: center;
-    font-size: 15px;
+    font-size: 12px;
     margin-top: 20%;
     margin-left: 15px;
 }
@@ -195,7 +181,7 @@ input[type="month"] {
 
 #app>#content>#month_detail>span {
     margin: 1px 3px 0 0;
-    font-size: 15px;
+    font-size: 10px;
 }
 
 #app>#content>#month_detail>span:before {
@@ -231,20 +217,20 @@ input[type="month"] {
 }
 
 #app>#footer {
-    margin: 20px 0;
+    margin: 10px 0;
     width: 393px;
+    height: 50%;
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
     background-color: rgb(235, 235, 235);
-    padding: 1px 1px;
 }
 
-#app>#footer>div {
-    margin: 8px 0;
-}
-
-#app>#footer #detail {
+#app>#footer>a #detail {
     background-color: white;
     border: 1px solid white;
     border-radius: 10px;
+    margin: 8px auto;
     width: 390px;
     height: 50px;
     cursor: pointer;
@@ -258,13 +244,16 @@ input[type="month"] {
 }
 
 #app>#footer-ad div{
+    position: absolute;
+    bottom: -50;
+    width: 393px;
     text-align: center;
     padding: 1px 1px;
 }
 
 #app>#footer-ad img{
     text-align: center;
-    width: 100%;
+    width: 393px;
     height: 100%;
     cursor: pointer;
 }
