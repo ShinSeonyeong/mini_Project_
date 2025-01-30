@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>년별사용금액</title>
+    <title>월별사용금액</title>
     <link rel="stylesheet" href="index.css">
     <script src="https://kit.fontawesome.com/582d1bfdc8.js" crossorigin="anonymous"></script>
 </head>
@@ -17,7 +17,7 @@
             </div>
 
             <div id="nav2">
-                <div style="float: left; font-size: 13px;">년별</div>
+                <div style="float: left; font-size: 13px;">월별</div>
                 <span id="nav2_menu"><i class="fa-solid fa-chevron-down"
                         style="float: right; cursor: pointer;"></i></span>
                 <div class="nav2_submenu">
@@ -28,25 +28,35 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="basic">
             <div id="spend">
-                <input type="radio" name="active" id="spendRadio" class="hidden_radio" checked>
-                <label for="spendRadio" onclick="location.href='year_spend.html'">지출</label>
+                <input type="radio" name="active" id="spendRadio" class="hidden_radio">
+                <label for="spendRadio" onclick="location.href='month_spend.html'">지출</label>
             </div>
             <div id="income">
-                <input type="radio" name="active" id="incomeRadio" class="hidden_radio">
-                <label for="incomeRadio" onclick="location.href='year_income.html'">수입</label>
+                <input type="radio" name="active" id="incomeRadio" class="hidden_radio" checked>
+                <label for="incomeRadio" onclick="location.href='month_income.html'">수입</label>
             </div>
         </div>
+        
+
+        <!-- <div id="basic">
+            <div id="spend">
+                <a href="month_income.html"><button>지출</button></a>
+            </div>
+            <div id="income">
+                <a href="month_spend.html"><button>수입</button></a>
+            </div>
+        </div> -->
 
         <div id="header">
             <div id="left">
                 <i class="fa-solid fa-circle-chevron-left" style="cursor: pointer;"></i>
-                <!-- <img src="images/left.png" alt=""> -->
+                <!-- <img src="images/left.png" alt="" style="cursor: pointer;"> -->
             </div>
-            <div style="margin-left:50px; margin-top: 30px;">
-                <h3 style="text-align:center;">2025년</h3>
+            <div>
+                <input type="month" name="" id="">
             </div>
             <div id="right">
                 <i class="fa-solid fa-circle-chevron-right" style="cursor: pointer;"></i>
@@ -56,27 +66,25 @@
 
         <div id="content">
             <div id="month_data">
-                <img src="images/year_data.png" alt="">
+                <img src="images/income.png" alt="" style="height: 200px;">
             </div>
             <div id="month_detail">
-                <span class="detail_five">카페</span>
+                <span class="detail_spend">적금</span>
             </div>
-            <br />
-            <h5>지출 : <span style="color: lightcoral;">3,500원</span></h5>
         </div>
 
         <div id="footer">
-            <a href="ex05.html">
+            <a href="detaile_spend.html">
                 <div id="detail">
-                    <img src="images/caffee.png" alt="">
+                    <img src="images/Vector.png" alt="">
                     <div>
                         <div style="float: left; margin: 17px 20px;">
-                            <h5 style="float: left;">카페</h5>
-                            <h5 style="margin-left: 30px;">2.8%</h5>
+                            <h5 style="float: left;">적금</h5>
+                            <h5 style="margin-left: 30px;">100%</h5>
                         </div>
                         <div style="float: right; margin: 10px 20px;">
                             <h6 style="margin-left: 30px; color: lightgrey;">1건</h6>
-                            <h5>3,500원</h5>
+                            <h5>1,000,000원</h5>
                         </div>
                     </div>
                 </div>
