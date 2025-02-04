@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/reservation.css">
+</head>
+<body>
+<div data-include-path="header.html" class="$includePath"></div>
+<main>
+    <div class="container">
+    </div>
+    <form action="detail.html" method="get" class="form_detail">
+        <div class="form_detail">
+            <label for="company">업체명</label>
+            <input type="text" name="company" id="company" required>
+        </div>
+        <div class="form_detail">
+            <label for="user_name">예약자명</label>
+            <input type="text" name="user_name" id="user_name" required>
+        </div>
+        <div class="form_detail">
+            <label for="user_num">연락처</label>
+            <input type="tel" placeholder="010-1234-5678" pattern="[0-9]{2, 3}-[0-9]{3,4}-[0-9]{4}" name="user_num" id="user_num" required>
+        </div>
+        <div class="form_detail">
+            <label for="user_email">이메일(선택입력)</label>
+            <input type="text" name="user_email" id="user_email" required>
+        </div>
+        <div class="form_detail">
+            <label for="user_place">장소</label>
+            <input type="text" name="user_place" id="user_place" required>
+        </div>
+        <div class="form_detail">
+            <label for="user_date">날짜</label>
+            <input type="text" name="user_date" id="user_date" required>
+        </div>
+        <div class="form_detail">
+            <label for="user_time">시간</label>
+            <input type="text" name="user_time" id="user_time" required>
+        </div>
+        <div class="form_detail">
+            <label for="user_ice">제빙기 종류</label>
+            <input type="text" name="user_ice" id="user_ice" required>
+        </div>
+        <div class="form_detail">
+            <label for="user_price">예상요금 견적</label>
+            <input type="text" name="user_price" id="user_price" required>
+        </div>
+        <button type="submit">예약하기</button>
+    </form>
+</main>
+<div data-include-path="footer.html" class="$includePath"></div>
+<script>
+    /*  layout();
+     function layout(){ DOM
+     }
+      | window*/
+    window.addEventListener("load", function () {
+        let allElements = document.getElementsByClassName('$includePath');
+        let includePath;
+        let xhttp;
+        Array.prototype.forEach.call(allElements, function (el) {
+            includePath = el.dataset.includePath;
+            if (includePath) {
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        el.outerHTML = this.responseText;
+                    }
+                };
+                xhttp.open('GET', includePath, true);
+                xhttp.send();
+            }
+        });
+    });
+</script>
+<script src="js/common.js"></script>
+</body>
+</html>

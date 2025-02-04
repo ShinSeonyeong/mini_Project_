@@ -1,2 +1,2 @@
-# mini_project02
-mini_project02
+# iceClean
+제빙기 청소 웹사이트
