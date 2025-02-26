@@ -1,0 +1,339 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hidden {
+    opacity: 0;
+    transform: translateY(30px); /* 아래에서 위로 */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#service_menu, #service_price, #service_trust, #img_slider {
+    margin: 15px;
+}
+
+#content > #img_main {
+    position: relative;
+    overflow: hidden;
+    height: 60vh;
+}
+
+#content > #img_main > img {
+    position: absolute;
+    object-fit: cover;
+    width: 100vw;
+    height: 100%;
+    /*background-color: rgb(100, 100, 100);*/
+    opacity: 0.8;
+}
+
+.img_text {
+    position: absolute;
+    color: white;
+    line-height: 1.5;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    white-space: nowrap;
+}
+
+.clean_btn {
+    position: absolute;
+    background-color: #1481e0;
+    color: white;
+    font-size: 1.2rem;
+    border: 2px solid #1481e0;
+    border-radius: 5px;
+    cursor: pointer;
+    transform: translateX(33%);
+}
+
+.clean_btn:hover {
+    background-color: #85c6ff;
+}
+
+.down_img {
+    position: absolute;
+    top: 53vh;
+    bottom: 5%;
+    left: 50%;
+    width: 30px;
+    animation: motion 0.75s linear 0s infinite alternate;
+}
+
+#sub_content {
+    display: flex;
+    gap: 20px;
+    height: 300px;
+    padding: 20px;
+}
+
+#service_menu {
+    position: relative;
+    height: 400px;
+    width: 100vw;
+    background-color: rgb(245, 245, 245);
+}
+
+.service_title {
+    padding: 20px;
+    width: 800px;
+    margin: auto;
+}
+
+#service_menu > .service_div > div {
+    margin: 10px 10px;
+}
+
+.service_div {
+    display: flex;
+}
+
+#service_menu > .service_div > div > div > img {
+    width: 80px;
+    display: block;
+    margin: auto;
+}
+
+.service_calendar,
+.service_glasses,
+.service_evaluation,
+.trust_payment,
+.trust_insurance,
+.trust_customer {
+    width: 500px;
+    height: 200px;
+    background-color: white;
+    border: 5px solid dimgray;
+    border-radius: 10px;
+}
+
+
+.sub_service_calendar,
+.sub_service_glasses,
+.sub_service_evaluation,
+.sub_trust_payment,
+.sub_trust_insurance,
+.sub_trust_customer {
+    margin: 10px 10px;
+    height: 80px;
+    white-space: nowrap;
+}
+
+
+#service_trust > .trust_div > div > div > img {
+    display: block;
+    margin: 10px auto;
+}
+
+.price_div {
+    width: 800px;
+    margin: auto;
+}
+
+.price_title {
+    padding: 20px;
+    white-space: nowrap;
+}
+
+.price_table {
+    padding: 20px;
+}
+
+thead {
+    background-color: rgb(210, 210, 210);
+}
+
+#service_trust {
+    height: 350px;
+    width: 100vw;
+    background-color: rgb(245, 245, 245);
+}
+
+.trust_title {
+    padding: 20px;
+    white-space: nowrap;
+    width: 800px;
+    margin: auto;
+}
+
+.trust_div {
+    display: flex;
+    white-space: nowrap;
+    padding: 20px 20px;
+    gap: 40px;
+    width: 800px;
+    margin: auto;
+}
+
+.payment,
+.insurance,
+.customer {
+    width: 50px;
+    height: 50px;
+
+}
+
+#img_slider {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin: 10px 10px;
+    &:hover{
+        cursor: grab;
+        &:active{
+            cursor: grabbing;
+        }
+    }
+}
+
+.sub_review {
+    width: 100%;
+}
+
+.review_text {
+    margin: 15px;
+    line-height: 2;
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.img_slide {
+    font-size: 18px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img_slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@keyframes motion {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(12px);
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .img_text {
+        position: absolute;
+        transform: translateX(33%);
+        top: 30%;
+        line-height: 1.5;
+        font-size: clamp(21px, 2.5vw, 40px);
+        background: rgba(0, 0, 0, 0.1);
+        white-space: nowrap;
+        color: white;
+    }
+
+    .clean_btn {
+        transform: translateX(28%);
+        top: 75%;
+        width: 60%;
+        height: 50px;
+    }
+
+    .sub_choice {
+        position: absolute;
+        left: 80px;
+        padding-top: 50px;
+        font-size: clamp(14px, 1.5vw, 24px);
+    }
+
+    .sub_order {
+        position: absolute;
+        left: 80px;
+        padding-top: 150px;
+        font-size: clamp(14px, 1.5vw, 24px);
+    }
+
+    .sub_customer {
+        position: absolute;
+        display: inline-block;
+        left: 230px;
+        padding-top: 150px;
+        font-size: clamp(14px, 1.5vw, 24px);
+    }
+
+    table, th, td {
+        text-align: center;
+        padding: 20px;
+        border-collapse: collapse;
+        border: 1px solid rgb(190, 190, 190);
+        height: 70px;
+        white-space: nowrap;
+    }
+}
+
+@media screen and (min-width: 751px) {
+    .img_text {
+        position: absolute;
+        transform: translateX(20%);
+        top: 20%;
+        font-size: clamp(18px, 2.5vw, 30px);
+        white-space: nowrap;
+    }
+
+    .clean_btn {
+        top: 80%;
+        width: 300px;
+        height: 50px;
+    }
+
+    .sub_choice {
+        position: absolute;
+        left: 80px;
+        padding-top: 50px;
+        font-size: clamp(14px, 1.5vw, 24px);
+    }
+
+    .sub_order {
+        position: absolute;
+        left: 80px;
+        padding-top: 180px;
+        font-size: clamp(14px, 1.5vw, 24px);
+    }
+
+    .sub_customer {
+        position: absolute;
+        display: inline-block;
+        left: 300px;
+        padding-top: 180px;
+        font-size: clamp(14px, 1.5vw, 24px);
+    }
+
+    .service_div {
+        width: 800px;
+        margin: auto;
+    }
+
+    #service_price {
+        display: flex;
+    }
+
+    table, th, td {
+        text-align: center;
+        padding: 20px;
+        border-collapse: collapse;
+        border: 1px solid rgb(190, 190, 190);
+        height: 70px;
+        white-space: nowrap;
+    }
+}

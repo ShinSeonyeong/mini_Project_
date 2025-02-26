@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollToPlugin.min.js"></script>
+    <style>
+        #page {
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #page h1 {
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        #page hr {
+            width: 700px;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        .question-container {
+            width: 500px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 10px 0;
+        }
+
+        .question-container div {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .question-container img {
+            margin-right: 10px;
+        }
+
+        .answer {
+            display: none;
+            width: 500px;
+            height: auto;
+            background-color: white;
+            border: 1px solid #959595;
+            border-radius: 5px;
+            text-align: left;
+            line-height: 1.5;
+            margin-top: 10px;
+            padding: 15px 25px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.3s ease-in-out;
+            word-wrap: break-word;
+        }
+
+        .answer img {
+            margin-right: 5px;
+            align-self: flex-start;
+            height: 13px;
+        }
+
+        .w-\[800px\] {
+            width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .PaginationNavstyle__Buttons-sc-1ye3koq-0 {
+            text-align: center;
+        }
+
+        .fix_btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div data-include-path="/header.html" class="$includePath"></div>
+
+<main>
+    <div id="page">
+        <h1>1대 1 문의</h1>
+        <hr>
+        <div class="w-[800px]">
+            <div class="question-container">
+                <div class="question"><img src="../iceClean/image/q.png" alt="">비밀글</div>
+            </div>
+            <div class="answer"> <img src="../iceClean/image/A.png" alt=""><span class="text">비밀글입니다</span></div>
+
+            <div class="question-container">
+                <div class="question"><img src="../iceClean/image/q.png" alt="">예약시간을 바꾸고싶어요</div>
+            </div>
+            <div class="answer">
+                <img src="../iceClean/image/A.png" alt=""><span class="text">안녕하세요 고객님 예약 시간 변경 관련하여 문의주신것으로 확입됩니다. <br>
+                예약할때 등록하신 연락처로 담당 기사님께서 연락하실 예정이니 담당 기사님과 조율 부탁드리겠습니다 감사합니다.</span>
+            </div>
+
+            <div class="question-container">
+                <div class="question"><img src="../iceClean/image/q.png" alt="">서울도 가능한가요?</div>
+            </div>
+            <div class="answer"><img src="../iceClean/image/A.png" alt=""><span class="text">죄송합니다. 고객님 저희 제빙기 청소 출장 서비스는 현재 경북 내에서만 서비스 중에 있습니다. <br>
+            빠른 시일내에 서울 및 수도권까지 가능하도록 최선을 다하겠습니다.</span></div>
+
+            <div class="question-container">
+                <div class="question"><img src="../iceClean/image/q.png" alt="">청소가 깨끗하게 안되있어요..</div>
+            </div>
+            <div class="answer"><img src="../iceClean/image/A.png" alt=""><span class="text">믿고 맡겨주셨을텐데 청소가 제대로 되어있지않았다니 너무 죄송합니다 고객님. <br>
+            해당 부분에 대해서는 담당직원 확인 후 한번 더 방문해 무상으로 처리해드리도록하겠습니다 <br>
+            불편드려 다시한번 죄송합니다 고객님</span></div>
+
+            <div class="question-container">
+                <div class="question"><img src="../iceClean/image/q.png" alt="">당일 취소 했는데 왜 취소 수수료가 부과되나요</div>
+            </div>
+            <div class="answer"><img src="../iceClean/image/A.png" alt=""><span class="text">안녕하세요 고객님 해당 문의는 취소 수수료에 관한 문의로 확인됩니다. <br>
+            고객님께서 알고계신것처럼 당일 취소는 따로 수수료가 부과되지 않습니다.<br>
+            다만, 방문일자가 이틀 이내 일 경우 예외적으로 취소 수수료가 부담되고있습니다.<br>
+            해당 부분에 대해서는 고객님 메신저를 통해 다시 한번 자세히 남겨드리겠습니다. 감사합니다 좋은하루되십시요.</span></div>
+
+            <div class="question-container">
+                <div class="question"><img src="../iceClean/image/q.png" alt="">비밀글</div>
+            </div>
+            <div class="answer"><img src="../iceClean/image/A.png" alt=""><span class="text">비밀글입니다</span></div>
+
+            <div class="question-container">
+                <div class="question"><img src="../iceClean/image/q.png" alt="">비밀글</div>
+            </div>
+            <div class="answer"><img src="../iceClean/image/A.png" alt=""><span class="text">비밀글입니다</span></div>
+
+            <div class="question-container">
+                <div class="question"><img src="../iceClean/image/q.png" alt="">신용카드 결제가 안돼요</div>
+            </div>
+            <div class="answer"><img src="../iceClean/image/A.png" alt=""><span class="text">안녕하세요 고객님 카드 결제 문제에 대한 문의로 확인됩니다. <br>
+            최근 특정 카드사로 결제 시 결제 과정에서 문제가 생기는것을 확인했습니다.<br>
+            빠른 시일내로 정상적으로 이용 하실 수 있도록 확인 중에 있으니 시간 양해 부탁드립니다.</span></div>
+
+            <div class="question-container">
+                <div class="question"><img src="../iceClean/image/q.png" alt="">청소 예약했는데 취소해주세요</div>
+            </div>
+            <div class="answer"><img src="../iceClean/image/A.png" alt=""><span class="text">안녕하세요 고객님 예약 취소 문의로 확인됩니다.<br>
+            취소 관련하여 고객님께서 등록하신 메신저로 연락 남겨드리겠습니다. 감사합니다.</span></div>
+        </div>
+
+        <div class="PaginationNavstyle__Buttons-sc-1ye3koq-0 jDoiya">
+            <button class="PaginationNavstyle__ArrowEnd-sc-1ye3koq-2 fWEGtA start" aria-label="처음 페이지"></button>
+            <button class="PaginationNavstyle__Arrow-sc-1ye3koq-3 drGwOp prev" aria-label="이전 페이지"></button>
+            <span class="PaginationNavstyle__PageButtonContainer-sc-1ye3koq-1 fchhWP"><button
+                    data-testid="page-inactive" class="PaginationNavstyle__PageButton-sc-1ye3koq-4 bmLFIC"><font
+                    style="vertical-align: inherit;"><font style="vertical-align: inherit;">1</font></font></button><button
+                    data-testid="page-active" class="PaginationNavstyle__PageButton-sc-1ye3koq-4 iGiYtR"><font
+                    style="vertical-align: inherit;"><font style="vertical-align: inherit;">2</font></font></button><button
+                    data-testid="page-inactive" class="PaginationNavstyle__PageButton-sc-1ye3koq-4 bmLFIC"><font
+                    style="vertical-align: inherit;"><font style="vertical-align: inherit;">3</font></font></button><button
+                    data-testid="page-inactive" class="PaginationNavstyle__PageButton-sc-1ye3koq-4 bmLFIC"><font
+                    style="vertical-align: inherit;"><font style="vertical-align: inherit;">4</font></font></button><button
+                    data-testid="page-inactive" class="PaginationNavstyle__PageButton-sc-1ye3koq-4 bmLFIC"><font
+                    style="vertical-align: inherit;"><font
+                    style="vertical-align: inherit;">5</font></font></button></span>
+            <button class="PaginationNavstyle__Arrow-sc-1ye3koq-3 drGwOp next" aria-label="다음 페이지"></button>
+            <button class="PaginationNavstyle__ArrowEnd-sc-1ye3koq-2 fWEGtA last" aria-label="마지막 페이지"></button>
+        </div>
+    </div>
+
+    <div>
+        <button class="fix_btn">청소 예약하기</button>
+    </div>
+</main>
+
+<div data-include-path="/footer.html" class="$includePath"></div>
+
+<script>
+    window.addEventListener("load", function () {
+        let allElements = document.getElementsByClassName('$includePath');
+        let includePath;
+        let xhttp;
+        Array.prototype.forEach.call(allElements, function (el) {
+            includePath = el.dataset.includePath;
+            if (includePath) {
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        el.outerHTML = this.responseText;
+                    }
+                };
+                xhttp.open('GET', includePath, true);
+                xhttp.send();
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let questionContainers = document.querySelectorAll(".question-container");
+
+        questionContainers.forEach(container => {
+            let question = container.querySelector(".question");
+            let answer = container.nextElementSibling;
+
+            question.addEventListener("click", function () {
+                document.querySelectorAll(".answer").forEach(function (ans) {
+                    ans.style.display = "none";
+                });
+
+                if (answer.style.display === "none" || answer.style.display === "") {
+                    answer.style.display = "block";
+                } else {
+                    answer.style.display = "none";
+                }
+            });
+        });
+    });
+</script>
+
+<script src="js/common.js"></script>
+<script src="js/index.js"></script>
+
+</body>
+</html>
