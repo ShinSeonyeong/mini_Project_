@@ -1,0 +1,268 @@
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'GmarketSansMedium';
+    font-size: 10px;
+}
+
+a {
+    color: black;
+}
+
+a:visited {
+    color : black;
+    text-decoration: none;
+}
+
+#app {
+    width: 393px;
+    height: 852px;
+    margin: 0 auto;
+}
+
+#app>#navbar {
+    position: relative;
+    display: inline-block;
+    width: 393px;
+    height: 8%;
+}
+
+#app>#navbar>#nav1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    padding: 3px;
+}
+
+#app>#navbar>#nav2 {
+    position: absolute;
+    right: 0;
+    width: 45px;
+    height: 50px;
+    margin: 5px;
+    padding-top: 15px;
+    cursor: pointer;
+}
+
+.nav2_submenu{
+    display: none;
+    position: absolute;
+    z-index: 1;
+    right: 50px;
+}
+
+.nav2_submenu a {
+    display: inline-block;
+    border: 2px solid rgb(189, 186, 186);
+    border-radius: 5px;
+    text-decoration: none;
+    color: black;
+    width: 100px;
+    margin-top: 1px;
+}
+
+.nav2_submenu>div{
+    display: inline-block; 
+    margin-top: 20px;
+    text-align: center; 
+    width: 50px;
+}
+
+#app>#navbar>#nav2:hover .nav2_submenu{
+    display: block;
+}
+
+#app>#basic {
+    overflow: hidden;
+    width: 393px;
+    height: 8%;
+}
+
+.hidden_radio{
+    display: none;
+}
+
+#app>#basic>#spend label {
+    border: rgb(235, 235, 235);
+    font-size: 20px;
+    width: 80px;
+    border-radius: 10px 0 0 10px;
+    padding: 5px;
+    margin-left: 120px;
+    margin-top: 3%;
+    float: left;
+    cursor: pointer;
+    text-align: center;
+}
+
+#spendRadio:checked + label {
+    background-color: lightcoral;
+    color: white;
+}
+
+#app>#basic>#income label {
+    /* background-color: rgb(235, 235, 235); */
+    border: rgb(235, 235, 235);
+    text-align: center;
+    float: left;
+    font-size: 20px;
+    width: 80px;
+    border-radius: 0 10px 10px 0;
+    padding: 5px;
+    margin-right: 100px;
+    margin-top: 3%;
+    cursor: pointer;
+    text-align: center;
+}
+
+#incomeRadio:checked + label {
+    background-color: #205380;
+    color: white;
+}
+
+#app>#header {
+    width: 393px;
+    height: 8%;
+    clear: both;
+}
+
+#app>#header {
+    overflow: hidden;
+}
+
+#app>#header>div {
+    float: left;
+}
+
+#app>#header>#left {
+    float: left;
+    margin-left: 120px;
+    margin-top: 8%;
+}
+
+#app>#header>#right {
+    float: right;
+    margin-right: 110px;
+    margin-top: 8%;
+}
+
+input[type="month"] {
+    border: 0;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 20%;
+    margin-left: 15px;
+}
+
+#app>#content {
+    overflow: hidden;
+}
+
+#app>#content>#month_data {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#app>#content>#month_detail {
+    width: 393px;
+    height: 36%;
+
+}
+
+#app>#content>#month_detail>ul {
+    list-style-type: none;
+}
+
+#app>#content>#month_detail>span {
+    margin: 1px 3px 0 0;
+    font-size: 10px;
+}
+
+#app>#content>#month_detail>span:before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+.detail_one:before {
+    background: rgb(122, 194, 101);
+}
+
+.detail_two:before {
+    background: rgb(92, 91, 150);
+}
+
+.detail_three:before {
+    background: rgb(189, 186, 186);
+}
+
+.detail_four:before {
+    background: rgb(250, 242, 166);
+}
+
+.detail_five:before {
+    background: rgb(245, 220, 220);
+}
+
+.detail_six:before {
+    background: rgb(130, 207, 218);
+}
+
+.detail_spend:before {
+    background: #205380;
+}
+
+#app>#footer {
+    margin: 10px 0;
+    width: 393px;
+    height: 50%;
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: rgb(235, 235, 235);
+}
+
+#app>#footer>a #detail {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin: 8px auto;
+    width: 390px;
+    height: 50px;
+    cursor: pointer;
+}
+
+#app>#footer img {
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+    float: left;
+}
+
+#app>#footer-ad div{
+    position: absolute;
+    width: 393px;
+    text-align: center;
+    padding: 1px 1px;
+}
+
+#app>#footer-ad img{
+    text-align: center;
+    width: 393px;
+    height: 100%;
+    cursor: pointer;
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 화면</title>
+    <style>
+        @font-face {
+            font-family: 'GowunDodum-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunDodum-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'GowunDodum-Regular', Courier, monospace;
+        }
+
+        #app {
+            position: relative;
+            width: 560px;
+            padding: 30px;
+            height: 100vh;
+            margin: 0 auto;
+        }
+
+        #app>#nav {
+            background-color: rgb(238, 238, 238);
+            padding-left: 50px;
+        }
+
+        #app>#nav>#menu {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 50px;
+        }
+
+        #app>#content {
+            padding: 30px;
+        }
+
+        #app>#content>#section1 {
+            margin-bottom: 100px;
+        }
+
+        #app>#content>#section1>h1 {
+            margin-bottom: 30px;
+        }
+
+        #app>#content>#section1>input {
+            border: 0;
+            width: 100%;
+            border-bottom: 1px solid black;
+            border-radius: 5px 5px 0 0;
+            height: 40px;
+            font-size: 1.5rem;
+            padding: 10px;
+            margin-bottom: 30px;
+        }
+
+        #app>#footer {
+            background-color: rgb(238, 238, 238);
+            margin-top: 10px;
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="nav">
+            <div>
+                <a href="index.html"><img src="image.png" alt=""></a>
+            </div>
+
+            <div id="menu">
+                <a href="signIn.html">로그인</a>
+                <a href="signUp.html">회원가입</a>
+            </div>
+        </div>
+        <div id="content">
+            <div id="section1">
+                <h1>아이디</h1>
+                <input type="text" name="" id="" placeholder="아이디">
+                <h1>비밀번호</h1>
+                <input type="text" name="" id="" placeholder="비밀번호">
+            </div>
+            <div>
+                <h1>간편로그인</h1>
+            </div>
+        </div>
+        <div id="footer">
+            <h1>COPY RIGHT 신선영</h1>
+        </div>
+    </div>
+</body>
+
+</html>
