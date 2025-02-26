@@ -1,0 +1,12 @@
+label {
+    display: inline-block;
+    text-align: right;
+    width: 120px;
+    font-weight: bold;
+}
+
+.form_detail{
+    margin: 5px;
+    padding: 10px;
+}
+

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/common.css">
+</head>
+<body>
+    <div data-include-path="header.html" class="$includePath"></div>
+    <main>
+        <div>
+            body 내용 입력 header footer는 통일
+        </div>
+    </main>
+    <div data-include-path="footer.html" class="$includePath"></div>
+    <script>
+       /*  layout();
+        function layout(){ DOM
+        }
+         | window*/
+        window.addEventListener("load",function(){
+            let allElements = document.getElementsByClassName('$includePath');
+            let includePath;
+            let xhttp;
+            Array.prototype.forEach.call(allElements,function(el){
+                includePath = el.dataset.includePath;
+                if(includePath){
+                    xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status == 200){
+                            el.outerHTML = this.responseText;
+                        }
+                    };
+                    xhttp.open('GET',includePath,true);
+                    xhttp.send();
+                }
+            });
+        });
+    </script>
+    <script src="js/common.js"></script>
+</body>
+</html>
