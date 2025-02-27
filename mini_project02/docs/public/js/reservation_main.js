@@ -18,9 +18,3 @@ function searchAddress() {
         }
     }).open();
 }
-
-const $submitReserve = document.querySelector('#submit-reserve');
-
-$submitReserve.addEventListener('click', async function (e) {
-    alert('예약되었습니다.');
-})

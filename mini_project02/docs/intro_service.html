@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서비스 소개</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/intro_service.css">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+    <script type="text/javascript" src="/js/intro_service.js"></script>
+</head>
+<body>
+<div data-include-path="/header.html" class="$includePath"></div>
+<main>
+    <div class="container">
+        <div class="con_head">
+            <ul>
+                <li>회사소개</li>
+                <li onclick="location.href='/history.html'" class="curHeader">연혁</li>
+                <li onclick="location.href='/intro_service.html'" class="curHeader">서비스 설명</li>
+            </ul>
+        </div>
+        <section id="main_img" style="background-color:white; position:relative;">
+            <div style="position:absolute; top:40%; z-index:99; left:45%; display:flex; flex-direction: column; justify-content: center;">
+                <h1>Company Introduction</h1>
+                <h2>회사소개</h2>
+            </div>
+            <img src="/image/dia_background.png" width="100%" alt="" style="height:50vh; opacity:0.6; z-index:-1;">
+        </section>
+        <section id="main_content"
+                 style="display:flex; justify-content:center; flex-direction: column; align-items: center; height:auto;">
+            <div id="downBtn" class="arrowBtn" onclick="window.scrollTo({top:document.body.clientHeight,behavior:'smooth'})">⬇</div>
+            <div id="upBtn" class="arrowBtn none" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆</div>
+            <div id="poster_images">
+
+                <div class="poster_img" id="poster_img1" style="position:sticky;top:10%;z-index:0;">
+
+                    <img src="/image/poster.png" width="30%" alt="" style="filter:brightness(1.2);">
+                    <div class="poster_txt">
+
+                        <h1>배너 <span style="color:black;">및</span> 포스터 <span style="color:black;">증정</span></h1>
+                        <p>정기구독을 통해 홍보해보세요.</p>
+
+
+                    </div>
+
+                </div>
+
+                <div class="poster_img" id="poster_img2">
+                    <img src="/image/poster2.png" width="30%" alt="" style="z-index:3;">
+                    <div class="poster_txt">
+                        <p>누구보다도</p>
+                        <h1><span style="color:white;">청결</span>하게 관리해요</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="text_content">
+                <ul role="tablist" style="list-style-type:none; display:flex; gap:2em;">
+                    <li id="service_intro_tap" class="intro_tap" aria-controls="service_intro_pannel" role="tab"
+                        aria-selected="true"
+                        aria-expanded="true" onclick="activateTab(this)">서비스 설명
+                    </li>
+                    <li id="price_intro_tap" class="intro_tap" aria-controls="price_intro_pannel" role="tab"
+                        aria-selected="false"
+                        aria-expanded="false" onclick="activateTab(this)">가격 정보
+                    </li>
+                </ul>
+                <hr>
+                <div id="service_intro_pannel" class="depth2 on" role="tabpanel" aria-labelledby="service_intro_tap"
+                     tabindex="0" aria-selected="true">
+                    <div style="display:flex; flex-direction: column; gap: 2em;">
+                        <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 2em;">
+                            <h3>전문가 소개</h3>
+                            <ul>
+                                <li>✔ 타플랫폼 고용 100회 이상 별점 5점 청소업체</li>
+                                <li>✔ 도급을 주지 않고 직접 방문하여 서비스 제공</li>
+                                <li>✔ 상판분해+고온▪고압스팀살균</li>
+                                <li>✔ 바이오 살균제(식약처에 등록된 살균소독제)</li>
+                            </ul>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 2em;">
+                            <h3>추가 혜택</h3>
+                            <ul>
+                                <li>✔ 제빙기 청소 완료 시 매장에 배너를 달아드립니다.</li>
+                            </ul>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 2em;">
+                            <h3>진행 순서</h3>
+                            <ul>
+                                <li>✔ 청소문의 ➡ 상담 및 일정 조율 ➡ 출장방문 ➡ 세척진행</li>
+                                <li>✔ 제빙기 분해 후 오염도, 손상 확인</li>
+                                <li>✔ 제빙기 분해청소+살균 진행</li>
+                                <li>✔ 제빙기 부품조립 및 정상작동 테스트</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="price_intro_pannel" class="depth2" role="tabpanel" aria-labelledby="price_intro_tap"
+                     tabindex="-1" aria-selected="false">
+                    <div style="border-radius:1em; border:1px solid #D6C5FF; background-color:#FAF5FF; padding:1em; margin-bottom:1em;display:flex; flex-direction: column;gap:0.8em;">
+                        <h3 style="color:#8646EB">✨패키지 별 주요 특징을 비교해보세요ℹ️</h3>
+                        <ul>
+                            <h3>공통점</h3>
+                            <li style="list-style-type:disc; margin-left:5%;">모든 패키지는 1일동안 제공되며, 수정이 불가능합니다.</li>
+                        </ul>
+                        <ul>
+                            <h3>주요특징</h3>
+                            <li style="list-style-type:disc; margin-left:5%;">STANDARD : 소형제빙기(50kg 미만) 지원, 가격 :
+                                79,000원
+                            </li>
+                            <li style="list-style-type:disc; margin-left:5%;">DELUXE : 중형제빙기(100kg 미만) 지원, 가격 :
+                                109,000원
+                            </li>
+                            <li style="list-style-type:disc; margin-left:5%;">PREMIUM : 대형제빙기(200kg 미만) 지원, 가격 :
+                                139,000원
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap: 2em; border-radius:1em; border:1px solid #E4E5ED; padding:1em;">
+                        <div></div>
+                        <div style="text-align: center; background-color:#FAFAFC; border-radius:5px; padding:1em 2em 1em 2em;">
+                            <h4>STANDARD</h4>
+                            <h3>79,000원</h3>
+                        </div>
+                        <div style="text-align: center; background-color:#FAFAFC; border-radius:5px; padding:1em 2em 1em 2em;">
+                            <h4>DELUXE</h4>
+                            <h3>109,000원</h3>
+                        </div>
+                        <div style="text-align: center; background-color:#FAFAFC; border-radius:5px; padding:1em 2em 1em 2em;">
+                            <h4>PREMIUM</h4>
+                            <h3>139,000원</h3>
+                        </div>
+                        <div>
+                            <h5>패키지 설명</h5>
+                        </div>
+                        <div>
+                            <h4>소형</h4>
+                            <h5>제빙기 50kg미만</h5>
+                        </div>
+                        <div>
+                            <h4>중형</h4>
+                            <h5>제빙기 100kg미만</h5>
+                        </div>
+                        <div>
+                            <h4>대형</h4>
+                            <h5>제빙기 200kg미만</h5>
+                        </div>
+                        <div>
+                            <h5>작업일</h5>
+                        </div>
+                        <div>
+                            <h5 style="text-align:center;">1일</h5>
+                        </div>
+                        <div>
+                            <h5 style="text-align:center;">1일</h5>
+                        </div>
+                        <div>
+                            <h5 style="text-align:center;">1일</h5>
+                        </div>
+                        <div>
+                            <h5>수정 횟수</h5>
+                        </div>
+                        <div>
+                            <h5 style="text-align:center;">0회</h5>
+                        </div>
+                        <div>
+                            <h5 style="text-align:center;">0회</h5>
+                        </div>
+                        <div>
+                            <h5 style="text-align:center;">0회</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+    <div>
+        <button class="fix_btn">청소 예약하기</button>
+    </div>
+</main>
+<div data-include-path="/footer.html" class="$includePath"></div>
+<div id="google_translate_element"></div>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+    let $bodyEl = document.querySelector('body');
+    window.addEventListener("load", function () {
+        let allElements = document.getElementsByClassName('$includePath');
+        let includePath;
+        let xhttp;
+        Array.prototype.forEach.call(allElements, function (el) {
+            includePath = el.dataset.includePath;
+            if (includePath) {
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        el.outerHTML = this.responseText;
+                    }
+                };
+                xhttp.open('GET', includePath, true);
+                xhttp.send();
+            }
+        });
+
+    });
+
+
+    function closePopUp(){
+        $bodyEl.classList.remove("scroll_lock");
+        document.querySelector('#pop_up').style.display = 'none';
+    }
+    function changeLang(){
+        let el = event.target;
+        if(!!el.value){
+            if(document.querySelector('.goog-te-combo')==null) {
+                googleTranslateElementInit();
+            }
+            const tolang = el.value; // 변경할 언어 코드 얻기
+            const gtcombo = document.querySelector('.goog-te-combo');
+            console.log(gtcombo);
+            if (gtcombo == null) {
+                return false;
+            }
+            gtcombo.value = tolang; // 변경할 언어 적용
+            if(!!tolang) {
+                gtcombo.dispatchEvent(new Event('change')); // 변경 이벤트 트리거
+            };
+        }
+        return false;
+    };
+
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'ko',
+            includedLanguages: 'ko,en',
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script>
+</body>
+</html>
+<script src="/js/common.js"></script>
+

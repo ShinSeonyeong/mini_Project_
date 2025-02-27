@@ -4,24 +4,26 @@
     box-sizing: border-box;
 }
 
+#step02 {
+    display: none;
+}
 .reserve {
-    height: 1200px;
-    background-image: url(../image/ssy_clean.jpg);
-    background-repeat: repeat;
+    background-color: lightskyblue;
+    min-height: 80vh;
+    padding-bottom: 10vh;
+    padding-top: 10px;
 }
 
 .reserve_title {
-    background-color: rgba(255, 255, 255, 0.7);
     text-align: center;
     padding-top: 50px;
     padding-bottom: 50px;
-    margin-bottom: 5vh;
 }
 
 .reserve_div {
     background-color: white;
-    width: 1200px;
-    height: 950px;
+    width: 800px;
+    height: auto;
     border-radius: 5px;
     margin: auto;
     padding: 30px;
@@ -48,7 +50,7 @@
     border: 1px solid grey;
     box-shadow: 1px 1px 1px lightgrey;
     border-radius: 10px;
-    width: 1000px;
+    width: 500px;
     display: flex;
     align-items: center;
     padding-left: 1vh;
@@ -71,44 +73,9 @@
     outline: none;
 }
 
-.address_btn{
-    border: 1px solid lightskyblue;
-    background-color: lightskyblue;
-    color: white;
-    border-radius: 5px;
-    width: 100px;
-    height: 35px;
-    margin-left: 10px;
-    cursor: pointer;
-}
-
-select{
-    width: 250px;
-    height: 35px;
-    padding-left: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.rf_dateTime{
-    border: 1px solid grey;
-    cursor: pointer;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
-}
-
-.rf_question_main{
-    height: 100px;
-}
-
 .rf_question{
-    width: 98%;
-    height: 80%;
+    width: 100%;
     resize: none;
-    font-weight: bold;
-    padding: 10px;
 }
 
 .confirm_btn {
@@ -116,25 +83,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: lightskyblue;
     color: white;
     border-radius: 5px;
-    width: 100px;
+    width: 150px;
     height: 70px;
     margin: auto;
     cursor: pointer;
     margin-top: 25px;
-}
-
-.check_btn {
-    border: 1px solid lightskyblue;
-    background-color: lightskyblue;
-    color: white;
-    border-radius: 5px;
-    width: 150px;
-    height: 70px;
-    cursor: pointer;
-    margin-top: 25px;
-}
-
-.cleanchar{
-    width: 70px;
-    height: 70px;
 }

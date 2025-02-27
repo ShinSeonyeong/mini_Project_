@@ -5,17 +5,17 @@
 }
 
 .reserve {
+    /*padding-top: 10px;*/
     height: 1200px;
     background-image: url(../image/ssy_clean.jpg);
     background-repeat: repeat;
+    /*object-fit: cover;*/
 }
 
 .reserve_title {
-    background-color: rgba(255, 255, 255, 0.7);
     text-align: center;
     padding-top: 50px;
     padding-bottom: 50px;
-    margin-bottom: 5vh;
 }
 
 .reserve_div {
@@ -116,7 +116,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: lightskyblue;
     color: white;
     border-radius: 5px;
-    width: 100px;
+    width: 150px;
     height: 70px;
     margin: auto;
     cursor: pointer;
@@ -132,9 +132,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 70px;
     cursor: pointer;
     margin-top: 25px;
-}
-
-.cleanchar{
-    width: 70px;
-    height: 70px;
 }
