@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/reservation.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollToPlugin.min.js"></script>
+
+</head>
+<body>
+<div data-include-path="header.html" class="$includePath"></div>
+<main>
+    <div id="container">
+        <div id="content">
+            <div id="img_main">
+                <img src="/image/ssy_ice.jpg" alt="이미지를 불러올 수 없습니다." id="img">
+                <div class="img_text hidden">
+                    <h1>여름 오기 전</h1>
+                    <h1>제빙기 청소</h1>
+                    <h1>30% 할인 이벤트</h1>
+                </div>
+                <div>
+                    <button class="clean_btn" onclick="location.href='reservation_main.html'">청소 예약하기</button>
+                </div>
+                <div>
+                    <img class="down_img" src="/image/ssy_down.png" alt="이미지를 불러올 수 없습니다." id="img_s">
+                </div>
+            </div>
+        </div>
+
+        <div id="sub_content" class="hidden">
+            <div class="sub_choice">
+                <h1>1,000만이 선택한</h1>
+                <h1>청소 서비스</h1>
+            </div>
+            <div class="sub_order">
+                <h5>누적 주문</h5>
+                <h2>1,000만 +</h2>
+            </div>
+            <div class="sub_customer">
+                <h5>이용객 만족</h5>
+                <h2>10명 중 9명</h2>
+            </div>
+        </div>
+
+        <div id="service_menu">
+            <div class="service_title hidden">
+                <h3><span style="color: grey;">서비스 절차</span></h3>
+                <h1>가치 있는 일상에</h1>
+                <h1>집중할 수 있도록</h1>
+            </div>
+            <div class="service_div hidden">
+                <div class="service_calendar">
+                    <div class="sub_service_calendar">
+                        <h3>간단한 절차</h3>
+                        <h5 style="padding-top: 10px">원하는 시간, 일정만 입력하면</h5>
+                        <h5>찾아가 청소해 드려요.</h5>
+                    </div>
+                    <div>
+                        <img src="/image/ssy_calendar.gif" alt="이미지를 불러올 수 없습니다." id="calendar">
+                    </div>
+                </div>
+                <div class="service_glasses">
+                    <div class="sub_service_glasses">
+                        <h3>맞춤 클리너</h3>
+                        <h5 style="padding-top: 10px">장소와 시간 데이터를 분석해</h5>
+                        <h5>최적의 클리너를 보내드려요.</h5>
+                    </div>
+                    <div>
+                        <img src="/image/ssy_glasses.gif" alt="이미지를 불러올 수 없습니다." id="glasses">
+                    </div>
+                </div>
+                <div class="service_evaluation">
+                    <div class="sub_service_evaluation">
+                        <h3>평가 시스템</h3>
+                        <h5 style="padding-top: 10px">실제 후기와 평점을 반영해 높은</h5>
+                        <h5>평점의 클리너를 만날 수 있어요.</h5>
+                    </div>
+                    <div>
+                        <img src="/image/ssy_evaluation.gif" alt="이미지를 불러올 수 없습니다." id="evaluation">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="service_price">
+            <div class="price_div">
+                <div class="price_title hidden">
+                    <h3><span style="color: grey;">서비스 요금</span></h3>
+                    <h1>제빙기 분해 청소</h1>
+                    <h1>살균 서비스 제공</h1>
+                </div>
+                <div class="price_table hidden">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>STANDARD</th>
+                            <th>DELUXE</th>
+                            <th>PREMIUM</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><h4>요금</h4></td>
+                            <td><h4>79,000원</h4></td>
+                            <td><h4>109,000원</h4></td>
+                            <td><h4>139,000원</h4></td>
+                        </tr>
+                        <tr>
+                            <td><h4>패키지 설명</h4></td>
+                            <td>
+                                <h4>소형</h4>
+                                <h5>제빙기 50kg 미만</h5>
+                            </td>
+                            <td>
+                                <h4>중형</h4>
+                                <h5>제빙기 100kg 미만</h5>
+                            </td>
+                            <td>
+                                <h4>대형</h4>
+                                <h5>제빙기 200kg 미만</h5>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p style="text-align: left; margin-top: 20px">* 모든 패키지는 1일동안 제공되며, 수정이 불가능합니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="service_trust">
+            <div class="trust_title hidden">
+                <h1>우리 업체가 더 신뢰되는 이유</h1>
+            </div>
+            <div class="trust_div hidden">
+                <div class="trust_payment">
+                    <div>
+                        <img src="/image/ssy_payment.png" alt="이미지를 불러올 수 없습니다." id="payment" class="payment">
+                    </div>
+                    <div class="sub_trust_payment">
+                        <h3 style="padding-top: 20px">결제는 안전하게</h3>
+                        <h5 style="padding-top: 10px">서비스 예약 시 등록된</h5>
+                        <h5>카드로 안전하게 결제되어요.</h5>
+                    </div>
+                </div>
+                <div class="trust_insurance">
+                    <div>
+                        <img src="/image/ssy_insurance.png" alt="이미지를 불러올 수 없습니다." id="insurance" class="insurance">
+                    </div>
+                    <div class="sub_trust_insurance">
+                        <h3 style="padding-top: 20px">영업배상 책임보험 가입</h3>
+                        <h5 style="padding-top: 10px">영업배상 책임보험에 가입되어있으니</h5>
+                        <h5>안심하고 이용하세요.</h5>
+                    </div>
+                </div>
+                <div class="trust_customer">
+                    <div>
+                        <img src="/image/ssy_customer.png" alt="이미지를 불러올 수 없습니다." id="customer" class="customer">
+                    </div>
+                    <div class="sub_trust_customer">
+                        <h3 style="padding-top: 20px">연중무휴 고객센터</h3>
+                        <h5 style="padding-top: 10px">언제든지 도움을 요청할 수 있도록</h5>
+                        <h5> 365일 열려있어요.</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="img_slider">
+            <div class="sub_review">
+                <div class="sub_review_div">
+                    <div class="review_text hidden">
+                        <h3><span style="color: grey;">후기</span></h3>
+                        <h1>실제 후기 살펴 볼까요?</h1>
+                        <h3><span style="color: grey;">5점 만점에</span> <span style="font-weight: bold">4.8점</span>
+                        </h3>
+                    </div>
+                    <div class="swiper mySwiper hidden">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide img_slide"><img src="/image/ssy_review01.png" alt="후기를 불러올 수 없습니다."
+                                                                     id="review01">
+                            </div>
+                            <div class="swiper-slide img_slide"><img src="/image/ssy_review02.png" alt="후기를 불러올 수 없습니다."
+                                                                     id="review02">
+                            </div>
+                            <div class="swiper-slide img_slide"><img src="/image/ssy_review03.png" alt="후기를 불러올 수 없습니다."
+                                                                     id="review03">
+                            </div>
+                            <div class="swiper-slide img_slide"><img src="/image/ssy_review04.png" alt="후기를 불러올 수 없습니다."
+                                                                     id="review04">
+                            </div>
+                            <div class="swiper-slide img_slide"><img src="/image/ssy_review05.png" alt="후기를 불러올 수 없습니다."
+                                                                     id="review05">
+                            </div>
+                            <div class="swiper-slide img_slide"><img src="/image/ssy_review06.png" alt="후기를 불러올 수 없습니다."
+                                                                     id="review06">
+                            </div>
+                            <div class="swiper-slide img_slide"><img src="/image/ssy_review07.png" alt="후기를 불러올 수 없습니다."
+                                                                     id="review07">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div data-include-path="footer.html" class="$includePath"></div>
+<script>
+    window.addEventListener("load", function () {
+        let allElements = document.getElementsByClassName('$includePath');
+        let includePath;
+        let xhttp;
+        Array.prototype.forEach.call(allElements, function (el) {
+            includePath = el.dataset.includePath;
+            if (includePath) {
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        el.outerHTML = this.responseText;
+                    }
+                };
+                xhttp.open('GET', includePath, true);
+                xhttp.send();
+            }
+        });
+    });
+</script>
+<script src="/js/reservation.js"></script>
+<script src="/js/common.js"></script>
+
+</body>
+</html>

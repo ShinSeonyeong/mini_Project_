@@ -1,0 +1,143 @@
+main{
+    display:flex;
+    justify-content: center;
+}
+main .container{
+    width:100%;
+}
+main .container .con_head{
+    width:100%;
+    border-bottom:1px solid black;
+}
+main .container .con_head ul{
+    display:flex;
+    justify-content: flex-end;
+}
+main .container .con_head li{
+    width:min(10%, 180px);
+    text-align:center;
+}
+main .container .con_head li:nth-child(2),li:nth-child(3):hover{
+    cursor:pointer;
+}
+main .container .con_head li:nth-child(3){
+    color:rgb(60,200,255);
+}
+
+main .container .con_head li:first-child{
+    font-size:1.1rem;
+    font-weight:bold;
+}
+.intro_tap{
+    position:relative;
+
+
+    &::after{
+        content: ' ';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width:0;
+        height: 3px;
+        background-color: black;
+        z-index: 1;
+        transition-duration: 500ms;
+    }
+    &:hover {
+        cursor: pointer;
+
+        &::after {
+            content: ' ';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width:100%;
+            background-color: black;
+            z-index: 1;
+        }
+    }
+
+}
+#poster_images{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: column;
+    background-color:#85c6ff;
+    padding:3rem;
+}
+.poster_img{
+    opacity:0;
+ height:80vh;
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    gap:1rem;
+    width:100%;
+}
+.poster_img:nth-child(1) h1{
+    color:white;
+}
+.poster_img:nth-child(1){
+    opacity:1;
+    height:80vh;
+}
+.poster_txt{
+    width:100%;
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+    line-height: 2rem;
+}
+.poster_txt p{
+    font-weight:700;
+}
+.text_content {
+    margin:2rem;
+    ul {
+        display:block;
+        li {
+
+            &.on a,
+            &.on button {
+                color: lightblue;
+                font-weight: bold;
+            }
+        }
+    }
+    .depth2 {
+        display: none;
+        margin:calc(2rem - 1vh);
+        &.on {
+            display: block;
+        }
+        li {
+
+        }
+    }
+}
+
+.intro_tap{
+    padding:20px;
+}
+
+.arrowBtn{
+    border-radius:4px;
+    width:2vw;
+    height:2vw;
+    border:0.4vw solid black;
+    background-color:transparent;
+    text-align:center;
+    vertical-align:middle;
+    font-size:1vw;
+    position:fixed;
+    top:50vh;
+    right:10vh;
+    transition-duration:500ms;
+    z-index:200;
+}
+.arrowBtn:hover{
+    cursor:pointer;
+    border-color:#1481e0;
+}

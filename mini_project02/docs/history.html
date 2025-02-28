@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회사연혁</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/history.css">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <div data-include-path="/header.html" class="$includePath"></div>
+    <main>
+        <div class="container">
+            <div class="con_head">
+                <ul>
+                    <li>회사소개</li>
+                    <li onclick="location.href='/history.html'" class="curHeader">연혁</li>
+                    <li onclick="location.href='/intro_service.html'" class="curHeader">서비스 설명</li>
+                </ul>
+            </div>
+            <section id="main_img" style="background-color:white; position:relative;">
+                <div style="position:absolute; top:40%; z-index:99; left:45%; display:flex; flex-direction: column; justify-content: center;">
+                    <h1>Company Introduction</h1>
+                    <h2>회사소개</h2>
+                </div>
+                <img src="/image/dia_background.png" width="100%" alt="" style="height:50vh; opacity:0.6; z-index:-1;">
+            </section>
+            <section id="main_section" style="display:flex; justify-content:space-around; position:relative;">
+                <div style="display:flex; justify-content:center;">
+
+                    <div>
+                        <h3>연혁</h3>
+                        <img id="profile_img" src="/image/profile.png" alt="" style="opacity:0; position:absolute; top:30%; left:calc(5% - 40px);">
+                    </div>
+                    <div>
+                        <img id="arrow_img" src="/image/btm_arrow.svg" alt="">
+                    </div>
+                <div>
+                <div id="history1" class="history_texture">
+                    <img id="history1_line" src="/image/thick_Line1.svg" alt="" width="0">
+                    <span class="strong">2020.01.24</span><br>
+                    제빙기 청소 구독권과 제빙기 특수 소독에 대한 특허권 등록</div>
+                <div id="history2" class="history_texture">
+                    <img id="history2_line" src="/image/thick_Line1.svg" alt="" width="0">
+                    <span class="strong">2017.07.24</span><br>
+                    정기 및 단기 구독 서비스 시행</div>
+                <div id="history3" class="history_texture">
+                    <img id="history3_line" src="/image/thick_Line1.svg" alt="" width="0">
+                    <span class="strong">2015.04.12</span><br>
+                    플랫폼 계약 체결 및 독립 서비스 시행</div>
+                <div id="history4" class="history_texture">
+                    <img id="history4_line" src="/image/thick_Line1.svg" alt="" width="0">
+                    <span class="strong">2011.05.13.</span><br>
+                    창립일</div>
+                </div>
+                </div>
+                <div>
+                </div>
+            </section>
+        </div>
+        <div>
+           <button class="fix_btn">청소 예약하기</button>
+        </div>
+    </main>
+    <div data-include-path="/footer.html" class="$includePath"></div>
+    <div id="google_translate_element"></div>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script>
+        let $bodyEl = document.querySelector('body');
+        window.addEventListener("load",function(){
+            let allElements = document.getElementsByClassName('$includePath');
+            let includePath;
+            let xhttp;
+            Array.prototype.forEach.call(allElements,function(el){
+                includePath = el.dataset.includePath;
+                if(includePath){
+                    xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status == 200){
+                            el.outerHTML = this.responseText;
+                        }
+                    };
+                    xhttp.open('GET',includePath,true);
+                    xhttp.send();
+                }
+            });
+
+        });
+
+
+        function closePopUp(){
+            $bodyEl.classList.remove("scroll_lock");
+            document.querySelector('#pop_up').style.display = 'none';
+        }
+        function changeLang(){
+            let el = event.target;
+            if(!!el.value){
+                if(document.querySelector('.goog-te-combo')==null) {
+                    googleTranslateElementInit();
+                }
+                const tolang = el.value; // 변경할 언어 코드 얻기
+                const gtcombo = document.querySelector('.goog-te-combo');
+                console.log(gtcombo);
+                if (gtcombo == null) {
+                    //alert("Error: Could not find Google translate Combolist.");
+                    return false;
+                }
+                gtcombo.value = tolang; // 변경할 언어 적용
+                if(!!tolang) {
+                    gtcombo.dispatchEvent(new Event('change')); // 변경 이벤트 트리거
+                };
+            }
+            return false;
+        };
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'ko',
+                includedLanguages: 'ko,en',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="module" src="/public/js/history.js"></script>
+    <script type="module" src="/public/js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.reserve {
+    /*padding-top: 10px;*/
+    height: 1200px;
+    background-image: url(../image/ssy_clean.jpg);
+    background-repeat: repeat;
+    /*object-fit: cover;*/
+}
+
+.reserve_title {
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.reserve_div {
+    background-color: white;
+    width: 1200px;
+    height: 950px;
+    border-radius: 5px;
+    margin: auto;
+    padding: 30px;
+}
+
+.reserve_form {
+    display: flex;
+    padding: 11px;
+}
+
+.rf_detail {
+    display: flex;
+    background-color: lightskyblue;
+    color: white;
+    border-radius: 10px;
+    width: 300px;
+    height: 70px;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+}
+
+.rf_subdetail {
+    border: 1px solid grey;
+    box-shadow: 1px 1px 1px lightgrey;
+    border-radius: 10px;
+    width: 1000px;
+    display: flex;
+    align-items: center;
+    padding-left: 1vh;
+    margin-left: 1vh;
+}
+
+.rf_input {
+    border: 1px solid grey;
+    box-shadow: 2px 2px 2px lightgrey;
+    border-radius: 10px;
+    width: 250px;
+    height: 35px;
+    padding-left: 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.rf_input:focus{
+    border: 5px solid lightsteelblue;
+    outline: none;
+}
+
+.address_btn{
+    border: 1px solid lightskyblue;
+    background-color: lightskyblue;
+    color: white;
+    border-radius: 5px;
+    width: 100px;
+    height: 35px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+select{
+    width: 250px;
+    height: 35px;
+    padding-left: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.rf_dateTime{
+    border: 1px solid grey;
+    cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.rf_question_main{
+    height: 100px;
+}
+
+.rf_question{
+    width: 98%;
+    height: 80%;
+    resize: none;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.confirm_btn {
+    border: 1px solid lightskyblue;
+    background-color: lightskyblue;
+    color: white;
+    border-radius: 5px;
+    width: 150px;
+    height: 70px;
+    margin: auto;
+    cursor: pointer;
+    margin-top: 25px;
+}
+
+.check_btn {
+    border: 1px solid lightskyblue;
+    background-color: lightskyblue;
+    color: white;
+    border-radius: 5px;
+    width: 150px;
+    height: 70px;
+    cursor: pointer;
+    margin-top: 25px;
+}

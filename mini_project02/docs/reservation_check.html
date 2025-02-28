@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/reservation_check.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+<div data-include-path="header.html" class="$includePath"></div>
+<main>
+    <div class="reserve">
+        <div class="reserve_title">
+            <h1>예약확인</h1>
+            <h4>Reservation confirmation</h4>
+        </div>
+        <div class="reserve_div" id="step01">
+            <div class="reserve_form">
+                <div class="rf_detail">
+                    <label>상호명(이름)</label>
+                </div>
+                <div class="rf_subdetail">
+                    <input type="text" name="" id="name" class="rf_input">
+                </div>
+            </div>
+            <div class="reserve_form">
+                <div class="rf_detail">
+                    <label>연락처</label>
+                </div>
+                <div class="rf_subdetail">
+                    <input type="text" name="" id="phone" class="rf_input" placeholder="010-1234-5678">
+                </div>
+            </div>
+
+            <div class="reserve_form">
+                <button class="confirm_btn" id="confirm-reserve">예약확인</button>
+            </div>
+        </div>
+
+        <div class="reserve_div" id="step02">
+            <div class="reserve_form">
+                <div class="rf_detail">
+                    <label>예약자 상호명(이름)</label>
+                </div>
+                <div class="rf_subdetail">
+                    <input type="text" name="" id="r-name" class="rf_input">
+                </div>
+            </div>
+            <div class="reserve_form">
+                <div class="rf_detail">
+                    <label>예약자 연락처</label>
+                </div>
+                <div class="rf_subdetail">
+                    <input type="text" name="" id="r-phone" class="rf_input" placeholder="010-1234-5678">
+                </div>
+            </div>
+
+            <div class="reserve_form">
+                <div class="rf_detail">
+                    <label>예약자 이메일</label>
+                </div>
+                <div class="rf_subdetail">
+                    <input type="text" name="" id="email" class="rf_input" placeholder="Icemaker@gmail.com">
+                </div>
+            </div>
+
+            <div class="reserve_form">
+                <div class="rf_detail">
+                    <label>예약자 주소</label>
+                </div>
+                <div class="rf_subdetail">
+                    <input type="text" name="" id="address" class="rf_input" style="width: 400px;">
+                </div>
+            </div>
+
+            <div class="reserve_form">
+                <div class="rf_detail">
+                    <label>제빙기 스펙</label>
+                </div>
+                <div class="rf_subdetail">
+                    <p>소형: 제빙기 50kg 미만</p>
+                </div>
+            </div>
+
+            <div class="reserve_form">
+                <div class="rf_detail">
+                    <label>이용날짜</label>
+                </div>
+                <div class="rf_subdetail">
+                    <input type="date" name="" id="dateTime" class="rf_input rf_dateTime">
+                    <img src="image/ssy_calendar2.png" alt="달력이미지" style="width: 40px; margin-left: 5px">
+                </div>
+            </div>
+
+            <div class="reserve_form">
+                <div class="rf_detail">
+                    <label>제빙기 청소시간</label>
+                </div>
+                <div class="rf_subdetail">
+                    <p>오후2시~4시사이</p>
+                </div>
+            </div>
+
+            <div class="reserve_form">
+                <div class="rf_detail rf_question_main">
+                    <label>문의사항</label>
+                </div>
+                <div class="rf_subdetail">
+                    <textarea name="" id="question" class="rf_input rf_question"></textarea>
+                </div>
+            </div>
+
+            <div class="reserve_form">
+                <button class="confirm_btn" id="reset-reserve">다시조회</button>
+            </div>
+        </div>
+    </div>
+</main>
+<div data-include-path="footer.html" class="$includePath"></div>
+<script>
+    window.addEventListener("load", function () {
+        let allElements = document.getElementsByClassName('$includePath');
+        let includePath;
+        let xhttp;
+        Array.prototype.forEach.call(allElements, function (el) {
+            includePath = el.dataset.includePath;
+            if (includePath) {
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        el.outerHTML = this.responseText;
+                    }
+                };
+                xhttp.open('GET', includePath, true);
+                xhttp.send();
+            }
+        });
+    });
+</script>
+<script src="/js/reservation.js"></script>
+<script src="/js/reservation_check.js"></script>
+<script src="/js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제빙기</title>
+    <link rel="stylesheet" href="/public/css/common.css">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollToPlugin.min.js"></script>
+</head>
+<body>
+<!--<div id="smooth-wrapper">
+    <div id="smooth-content">-->
+    <div data-include-path="/header.html" class="$includePath"></div>
+
+    <main>
+        <div>
+            <button class="fix_btn">청소 예약하기</button>
+            <section id="mainImg">
+                <img src="/image/home.png" alt="" width="100%" style="height:90vh;">
+            </section>
+
+            <section id="subImg1" style="display:flex; justify-content:center; opacity:0;">
+                <div>
+                <img src="/image/index1.png" alt="" width="100%" style="opacity:0.7; z-index: -1;">
+                </div>
+            </section>
+            <section id="subImg2" style="display:flex; justify-content:center;opacity:0;">
+                <div>
+                    <img src="/image/index2.png" alt="" style="opacity:0.7; z-index: -1; width:100%;">
+                    <!--<img src="image/Group%2015.png" alt="">-->
+                </div>
+            </section>
+            <section id="subImg3" style="display:flex; justify-content:center; opacity: 0;">
+                <img src="/image/index3.png" alt="" style="width: 100%; z-index: -1; opacity: 0.6;">
+            </section>
+        </div>
+
+    </main>
+    <div data-include-path="/footer.html" class="$includePath"></div>
+<div id="google_translate_element"></div>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script type="module" src="/public/js/common.js"></script>
+    <script>
+        let $bodyEl = document.querySelector('body');
+
+
+        window.addEventListener("load",function(){
+            let allElements = document.getElementsByClassName('$includePath');
+            let includePath;
+            let xhttp;
+            Array.prototype.forEach.call(allElements,async function (el) {
+                includePath = el.dataset.includePath;
+                if (includePath) {
+                    xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            el.outerHTML = this.responseText;
+                        }
+                    };
+                    xhttp.open('GET', includePath, true);
+                    await xhttp.send();
+                }
+            });
+
+        });
+
+        function closePopUp(){
+            $bodyEl.classList.remove("scroll_lock");
+            document.querySelector('#pop_up').style.display = 'none';
+        }
+
+        function changeLang(){
+            let el = event.target;
+            if(!!el.value){
+                if(document.querySelector('.goog-te-combo')==null) {
+                    googleTranslateElementInit();
+                }
+                const tolang = el.value; // 변경할 언어 코드 얻기
+                const gtcombo = document.querySelector('.goog-te-combo');
+            console.log(gtcombo);
+                if (gtcombo == null) {
+                    //alert("Error: Could not find Google translate Combolist.");
+                    return false;
+                }
+                gtcombo.value = tolang; // 변경할 언어 적용
+                if(!!tolang) {
+                    gtcombo.dispatchEvent(new Event('change')); // 변경 이벤트 트리거
+                };
+            }
+            return false;
+        };
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'ko',
+                includedLanguages: 'en,ko',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+    </script>
+</body>
+<script type="module" src="/public/js/index.js"></script>
+
+</html>
