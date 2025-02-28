@@ -3,97 +3,215 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>자주 묻는 질문</title>
-  <link rel="stylesheet" href="/css/common.css">
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollToPlugin.min.js"></script>
+  <link rel="stylesheet" href="./css/common.css">
   <style>
-    #faq-page {
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
       text-align: center;
-      align-items: center;
-      justify-content: center;
     }
-
-    #faq-page h1 {
-      margin-top: 30px;
-      margin-bottom: 20px;
-    }
-
-    #faq-page hr {
-      width: 700px;
-      margin: 0 auto;
-      margin-bottom: 20px;
-    }
-
-    .faq-container {
-      width: 600px;
-      margin: 0 auto;
-      text-align: left;
-      padding: 10px 0;
-    }
-
-    .faq-container div {
+    .categories {
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      gap: 10px;
+    }
+    .category {
+      background-color: #f0f0f0;
+      padding: 8px 12px;
+      border-radius: 20px;
       cursor: pointer;
+      font-size: 14px;
     }
-
-    .faq-container img {
-      margin-right: 10px;
+    .faq {
+      width:60%;
+      margin: auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 33%);
+      gap: 40px;
     }
-
-    .answer {
-      display: none;
-      width: 600px;
-      background-color: white;
-      border: 1px solid #959595;
-      border-radius: 5px;
+    .question-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 65%;
+      gap:1.5em;
+      padding: 12px;
+      padding-left:1vw;
+      border: 1px solid #ddd;
+      background-color: #fff;
+      border-radius: 10px;
       text-align: left;
-      line-height: 1.5;
-      margin-top: 10px;
-      padding: 15px 25px;
-      position: relative;
+      font-size: 14px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      margin:0 auto;
+    }
+    .question-card .tag {
+      display: inline-block;
+      background-color: lightskyblue;
+      color: white;
+      padding: 4px 14px;
+      border-radius: 15px;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      transition: all 0.3s ease-in-out;
-      word-wrap: break-word;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 400px;
+      z-index: 1000;
+      text-align:left;
+    }
+    .modal img {
+      vertical-align: middle;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    .center_inner_title{
+      height: 164px;
+      background-color: rgba(145,206,255,0.7);
+      display:flex;
+      justify-content: center;
+      align-items: center;
+      h1 {
+        color:white;
+      }
     }
   </style>
 </head>
 <body>
 
-<div data-include-path="/header.html" class="$includePath"></div>
-<main>
-  <div id="faq-page">
-    <h1>자주 묻는 질문</h1>
-    <hr>
-    <div class="faq-container">
-      <div class="question"><img src="../images/q.png" alt="">서비스 지역은 어디인가요?</div>
-      <div class="answer"><img src="../images/A.png" alt=""><span>현재 저희 서비스는 서울 및 수도권에서 이용 가능합니다.</span></div>
+<div data-include-path="./header.html" class="$includePath"></div>
 
-      <div class="question"><img src="../images/q.png" alt="">예약 변경이 가능한가요?</div>
-      <div class="answer"><img src="../images/A.png" alt=""><span>네, 예약 변경은 24시간 전까지 가능합니다. 고객센터로 연락주세요.</span></div>
+<main style="display:flex; flex-direction: column;  justify-content: flex-start; gap: 1em;">
+  <div class="center_inner_title">
+  <h1>자주 묻는 질문</h1>
+  </div>
+  <div class="categories">
+    <div class="category">전체</div>
+    <div class="category">계정 관리</div>
+    <div class="category">도용·보안</div>
+    <div class="category">이용 제한</div>
+    <div class="category">결제·환불</div>
+  </div>
+  <div class="test_faq">
+  <div class="faq">
+    <div class="question-card" onclick="openModal('예약시간 변경 문의', '예약 시간 변경은 담당 기사님과 조율 가능합니다.')">
+      <strong>Q 예약시간 변경 문의</strong>
+      <div class="tag">#예약</div>
     </div>
+    <div class="question-card" onclick="openModal('예약 취소 문의', '예약 취소는 마이페이지에서 가능합니다.')">
+      <strong>Q 예약 취소 문의</strong>
+      <div class="tag">#취소</div>
+    </div>
+    <div class="question-card" onclick="openModal('서비스 가능 지역', '현재 서비스는 대구/경북 지역에서만 제공됩니다.')">
+      <strong>Q 서비스 가능 지역</strong>
+      <div class="tag">#지역</div>
+    </div>
+    <div class="question-card" onclick="openModal('결제 오류 문의', '무통장 입금의 경우 은행 점검 시간에 유의하세요.')">
+      <strong>Q 결제 오류 문의</strong>
+      <div class="tag">#결제</div>
+    </div>
+    <div class="question-card" onclick="openModal('고객 센터 번호', '현재 유선 상담 센터는 운영되지 않습니다.')">
+      <strong>Q 고객 센터 번호</strong>
+      <div class="tag">#고객지원</div>
+    </div>
+    <div class="question-card" onclick="openModal('취소 수수료 문의', '취소 수수료는 일정에 따라 다릅니다.')">
+      <strong>Q 취소 수수료 문의</strong>
+      <div class="tag">#수수료</div>
+    </div>
+  </div>
   </div>
 </main>
 
-<div data-include-path="/footer.html" class="$includePath"></div>
+<div data-include-path="./footer.html" class="$includePath"></div>
+
+<div id="modal" class="modal">
+  <img src="./image/q.png" alt="Q" width="13"> <strong id="modal-question"></strong>
+  <br>
+  <br>
+  <img src="./image/A.png" alt="A"> <span id="modal-answer"></span>
+</div>
+<div id="overlay" class="overlay" onclick="closeModal()"></div>
+
+<script>
+  function openModal(question, answer) {
+    document.getElementById('modal-question').innerText = question;
+    document.getElementById('modal-answer').innerText = answer;
+    document.getElementById('modal').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  }
+  function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  }
+</script>
+
+
+<script>
+  window.addEventListener("load", function () {
+    let allElements = document.getElementsByClassName('$includePath');
+    let includePath;
+    let xhttp;
+    Array.prototype.forEach.call(allElements, function (el) {
+      includePath = el.dataset.includePath;
+      if (includePath) {
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            el.outerHTML = this.responseText;
+          }
+        };
+        xhttp.open('GET', includePath, true);
+        xhttp.send();
+      }
+    });
+  });
+</script>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    let faqContainers = document.querySelectorAll(".faq-container .question");
+    let questionContainers = document.querySelectorAll(".question-container");
 
-    faqContainers.forEach(question => {
+    questionContainers.forEach(container => {
+      let question = container.querySelector(".question");
+      let answer = container.nextElementSibling;
+
       question.addEventListener("click", function () {
-        let answer = this.nextElementSibling;
-        document.querySelectorAll(".answer").forEach(ans => ans.style.display = "none");
-        answer.style.display = answer.style.display === "block" ? "none" : "block";
+        document.querySelectorAll(".answer").forEach(function (ans) {
+          ans.style.display = "none";
+        });
+
+        if (answer.style.display === "none" || answer.style.display === "") {
+          answer.style.display = "block";
+        } else {
+          answer.style.display = "none";
+        }
       });
     });
   });
 </script>
-<script src="js/common.js"></script>
-<script src="js/index.js"></script>
+
+<script src="./js/common.js"></script>
+
 </body>
 </html>

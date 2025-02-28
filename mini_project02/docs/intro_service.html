@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>서비스 소개</title>
-    <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/intro_service.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/intro_service.css">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
-    <script type="text/javascript" src="/js/intro_service.js"></script>
+    <script type="text/javascript" src="./js/intro_service.js"></script>
 </head>
 <body>
-<div data-include-path="/header.html" class="$includePath"></div>
+<div data-include-path="./header.html" class="$includePath"></div>
 <main>
     <div class="container">
         <div class="con_head">
@@ -21,12 +21,12 @@
                 <li onclick="location.href='/intro_service.html'" class="curHeader">서비스 설명</li>
             </ul>
         </div>
-        <section id="main_img" style="background-color:white; position:relative;">
+        <section id="main_img" style="position:relative;">
             <div style="position:absolute; top:40%; z-index:99; left:45%; display:flex; flex-direction: column; justify-content: center;">
                 <h1>Company Introduction</h1>
                 <h2>회사소개</h2>
             </div>
-            <img src="/image/dia_background.png" width="100%" alt="" style="height:50vh; opacity:0.6; z-index:-1;">
+            <!--<img src="./image/dia_background.png" width="100%" alt="" style="height:50vh; opacity:0.6; z-index:-1;">-->
         </section>
         <section id="main_content"
                  style="display:flex; justify-content:center; flex-direction: column; align-items: center; height:auto;">
@@ -36,7 +36,7 @@
 
                 <div class="poster_img" id="poster_img1" style="position:sticky;top:10%;z-index:0;">
 
-                    <img src="/image/poster.png" width="30%" alt="" style="filter:brightness(1.2);">
+                    <img src="./image/poster.png" width="30%" alt="" style="filter:brightness(1.2);">
                     <div class="poster_txt">
 
                         <h1>배너 <span style="color:black;">및</span> 포스터 <span style="color:black;">증정</span></h1>
@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="poster_img" id="poster_img2">
-                    <img src="/image/poster2.png" width="30%" alt="" style="z-index:3;">
+                    <img src="./image/poster2.png" width="30%" alt="" style="z-index:3;">
                     <div class="poster_txt">
                         <p>누구보다도</p>
                         <h1><span style="color:white;">청결</span>하게 관리해요</h1>
@@ -180,7 +180,7 @@
         <button class="fix_btn">청소 예약하기</button>
     </div>
 </main>
-<div data-include-path="/footer.html" class="$includePath"></div>
+<div data-include-path="./footer.html" class="$includePath"></div>
 <div id="google_translate_element"></div>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script>
@@ -240,5 +240,5 @@
 </script>
 </body>
 </html>
-<script src="/js/common.js"></script>
+<script src="./js/common.js"></script>
 
