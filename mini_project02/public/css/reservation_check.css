@@ -8,15 +8,13 @@
     display: none;
 }
 .reserve {
-    background-image: url(../image/ssy_clean.jpg);
-    background-repeat: repeat;
+    background-color: lightskyblue;
     min-height: 80vh;
     padding-bottom: 10vh;
+    padding-top: 10px;
 }
 
 .reserve_title {
-    background-color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 5vh;
     text-align: center;
     padding-top: 50px;
     padding-bottom: 50px;
@@ -76,7 +74,7 @@
 }
 
 .rf_question{
-    width: 95%;
+    width: 100%;
     resize: none;
 }
 
