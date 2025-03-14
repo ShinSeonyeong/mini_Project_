@@ -31,40 +31,51 @@
         <p>공지사항</p>
     </div>
     <div class="category">
-        <div class="sub_category">
+        <div class="sub-category">
             <button onclick="noticeSelect();">공지사항</button>
         </div>
-        <div class="sub_category">
+        <div class="sub-category">
             <button>FAQ</button>
         </div>
-        <div class="sub_category">
+        <div class="sub-category">
             <button>Q&A</button>
         </div>
     </div>
     <div class="post_list">
         <div id="board-div" class="content"></div>
-        <button class="post_writing">글쓰기</button>
+        <button onclick="postClick()" class="post-writing">글쓰기</button>
     </div>
 
-    <div id="postModal" class="post_modal hidden"> <!--class="hidden"-->
-        <div class="post_modal_content">
-            <div class="post_detail_div">
+    <div id="post-modal" class="post-modal-c hidden">
+        <div class="post-modal-content">
+            <div class="post-detail">
                 <p>글작성</p>
-                제목<input type="text" id="post-title" placeholder="Please enter a title."/>
+
+                <label for="post-title">제목</label>
+                <input type="text" id="post-title" placeholder="Please enter a title."/>
+
+                <label for="post-category">카테고리</label>
                 <select id="post-category">
                     <option value="공지">공지</option>
                     <option value="FAQ">FAQ</option>
                     <option value="Q&A">Q&A</option>
                 </select>
-                작성자<input type="text" id="update-name" placeholder="Please enter the author name."/><br/>
-                <textarea id="postContent" placeholder="Please enter the contents."></textarea>
-                <input type="password" id="post-password" value="password">
-                <input type="file" id="postImage" accept="image/*">
+
+                <label for="update-name">작성자</label>
+                <input type="text" id="update-name" placeholder="Please enter the author name."/>
+
+                <label for="post-content">내용</label>
+                <textarea id="post-content" placeholder="Please enter the contents."></textarea>
+
+                <label for="post-password">비밀번호</label>
+                <input type="password" id="post-password" value="password"/>
+
+                <label for="post-image">파일업로드</label>
+                <input type="file" id="post-image" name="file" accept="image/*"/>
                 <div>
-                    <div class="post-button">
-                        <button id="submitPost">등록✅</button>
-                        <button id="cancelPost">취소❌</button>
-                        <!--                        <button onclick="postmodalClose();"></button>-->
+                    <div class="post-buttons">
+                        <button id="submit-post">등록</button>
+                        <button onclick="cancelModalClose()" id="cancel-post">취소</button>
                     </div>
                 </div>
             </div>

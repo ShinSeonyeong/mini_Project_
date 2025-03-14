@@ -51,25 +51,13 @@ document.addEventListener('DOMContentLoaded', function(){
     noticeSelect();
 });
 
-// const modal = document.getElementById("postModal");
-// const openModalBtn = document.getElementById("openModal"); // 버튼을 따로 만들 경우
-// const closeModal = document.querySelector(".close");
-// const cancelPost = document.getElementById("cancelPost");
-//
-// openModalBtn.addEventListener("click", () => {
-//     modal.style.display = "flex";
-// });
-//
-// closeModal.addEventListener("click", () => {
-//     modal.style.display = "none";
-// });
-//
-// cancelPost.addEventListener("click", () => {
-//     modal.style.display = "none";
-// });
-//
-// window.addEventListener("click", (event) => {
-//     if (event.target === modal) {
-//         modal.style.display = "none";
-//     }
-// });
+function postClick() {
+    const $openModal = document.querySelector('#post-modal');
+    $openModal.classList.remove('hidden');
+}
+
+function cancelModalClose(){
+    const $cancelModal = document.querySelector('#post-modal');
+    $cancelModal.classList.add('hidden');
+    console.log('닫았다');
+}
