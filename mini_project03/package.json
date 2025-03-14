@@ -1,0 +1,36 @@
+{
+  "name": "renewiceclean",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "bcrypt": "^5.1.1",
+    "esbuild": "^0.25.0",
+    "jsonwebtoken": "^9.0.2",
+    "nanoid": "^3.3.8",
+    "picocolors": "^1.1.1",
+    "postcss": "^8.5.3",
+    "rollup": "^4.34.9",
+    "source-map-js": "^1.2.1",
+    "tailwindcss": "^4.0.12",
+    "@tailwindcss/vite": "^4.0.12",
+    "vite": "^6.2.0"
+  },
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haracedaily/renew_ice_clean.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/haracedaily/renew_ice_clean/issues"
+  },
+  "homepage": "https://github.com/haracedaily/renew_ice_clean#readme"
+}

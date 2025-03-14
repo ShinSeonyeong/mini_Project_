@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/contact_us.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const supabaseUrl = "https://rnzhzcfovaqfsjfxorfq.supabase.co";
+        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuemh6Y2ZvdmFxZnNqZnhvcmZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0MjQ4MzAsImV4cCI6MjA1NTAwMDgzMH0.lC3jUF1yLH5RA0rMZ-ApWOuoTmWHQT7b1ihZXR50xhM";
+
+        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
+    </script>
+</head>
+<body>
+<div id="container">
+    <header class="navbar">
+        <img src="./image/logo.png" alt="아이스케어 로고">
+        <nav>
+            <button>MAIN PAGE</button>
+        </nav>
+    </header>
+
+    <div class="main_text">
+        <p>공지사항</p>
+    </div>
+    <div class="category">
+        <div class="sub_category">
+            <button onclick="noticeSelect();">공지사항</button>
+        </div>
+        <div class="sub_category">
+            <button>FAQ</button>
+        </div>
+        <div class="sub_category">
+            <button>Q&A</button>
+        </div>
+    </div>
+    <div class="post_list">
+        <div id="board-div" class="content"></div>
+        <button class="post_writing">글쓰기</button>
+    </div>
+
+    <div id="postModal" class="post_modal hidden"> <!--class="hidden"-->
+        <div class="post_modal_content">
+            <div class="post_detail_div">
+                <p>글작성</p>
+                제목<input type="text" id="post-title" placeholder="Please enter a title."/>
+                <select id="post-category">
+                    <option value="공지">공지</option>
+                    <option value="FAQ">FAQ</option>
+                    <option value="Q&A">Q&A</option>
+                </select>
+                작성자<input type="text" id="update-name" placeholder="Please enter the author name."/><br/>
+                <textarea id="postContent" placeholder="Please enter the contents."></textarea>
+                <input type="password" id="post-password" value="password">
+                <input type="file" id="postImage" accept="image/*">
+                <div>
+                    <div class="post-button">
+                        <button id="submitPost">등록✅</button>
+                        <button id="cancelPost">취소❌</button>
+                        <!--                        <button onclick="postmodalClose();"></button>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="./js/contact_us.js"></script>
