@@ -56,22 +56,22 @@
 
                 <label for="post-category">카테고리</label>
                 <select id="post-category">
-                    <option value="공지">공지</option>
-                    <option value="FAQ">FAQ</option>
-                    <option value="Q&A">Q&A</option>
+                    <option value="1">공지</option>
+                    <option value="2">FAQ</option>
+                    <option value="3">Q&A</option>
                 </select>
 
-                <label for="update-name">작성자</label>
-                <input type="text" id="update-name" placeholder="Please enter the author name."/>
+                <label for="user-name">작성자</label>
+                <input type="text" id="user-name" placeholder="Please enter the author name."/>
 
                 <label for="post-content">내용</label>
                 <textarea id="post-content" placeholder="Please enter the contents."></textarea>
 
                 <label for="post-password">비밀번호</label>
-                <input type="password" id="post-password" value="password"/>
+                <input type="password" id="post-password" value=""/>
 
-                <label for="post-image">파일업로드</label>
-                <input type="file" id="post-image" name="file" accept="image/*"/>
+                <label for="post-image-url">파일업로드</label>
+                <input type="file" id="post-image-url" name="file" accept="image/*"/>
                 <div>
                     <div class="post-buttons">
                         <button id="submit-post">등록</button>
@@ -79,6 +79,15 @@
                     </div>
                 </div>
             </div>
+<!--            사용자가 수정할 수 있는 기능 추가하기-->
+<!--            <div id="notice-modal" class="update-notice"> &lt;!&ndash;class="hidden"&ndash;&gt;-->
+<!--                <div class="modal-div">-->
+<!--                    <div>-->
+<!--                        <h1>주문수정</h1>-->
+<!--                        <button onclick="noticemodalClose();">X</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
 </div>

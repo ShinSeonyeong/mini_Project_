@@ -231,4 +231,19 @@ textarea {
     display: none;
 }
 
-.hidden{}
+.update-notice{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(230, 230, 230, 0.5);
+}
+
+.modal-div{
+    margin: 0 auto;
+    margin-top: 25vh;
+    height: 400px;
+    width: 500px;
+    background-color: white;
+}
