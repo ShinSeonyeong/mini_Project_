@@ -79,17 +79,22 @@
                     </div>
                 </div>
             </div>
-<!--            사용자가 수정할 수 있는 기능 추가하기-->
-<!--            <div id="notice-modal" class="update-notice"> &lt;!&ndash;class="hidden"&ndash;&gt;-->
-<!--                <div class="modal-div">-->
-<!--                    <div>-->
-<!--                        <h1>주문수정</h1>-->
-<!--                        <button onclick="noticemodalClose();">X</button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
     </div>
+
+    <!--           눌렀을 때 보이는 것 -->
+        <div id="notice-modal" class="update-notice hidden">
+            <div class="modal-div post-modal-content post-detail">
+                <div>
+                    <h1>글수정</h1>
+                    <button onclick="noticemodalClose();">❌</button>
+                </div>
+                <div>
+                    제목 <input id="update-title" type="text" class="update-input">
+                </div>
+            </div>
+        </div>
+
 </div>
 </body>
 </html>

@@ -231,7 +231,7 @@ textarea {
     display: none;
 }
 
-.update-notice{
+.update-notice {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -240,10 +240,15 @@ textarea {
     background-color: rgba(230, 230, 230, 0.5);
 }
 
-.modal-div{
+.modal-div {
+    padding: 20px;
     margin: 0 auto;
     margin-top: 25vh;
-    height: 400px;
+    height: 600px;
     width: 500px;
     background-color: white;
+}
+
+tr:hover {
+    text-decoration: underline;
 }

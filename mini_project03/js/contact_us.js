@@ -38,10 +38,10 @@ document.querySelector('#submit-post').addEventListener('click', async function 
 
     // 슈파베이스 스토리지에 저장
     if (!image_url) {
-        const id = JSON.parse(id).id;
+        // const id = JSON.parse(id).id;
         var res = await supabase
             .from('board')
-            .insert([{title, content, author, password, category_id, image_url}])
+            .insert([{title, content, author, password, category_id, image_url: ""}])
             .select();
     } else {
         const fileUrl = await uploadFile(image_url);
@@ -54,8 +54,17 @@ document.querySelector('#submit-post').addEventListener('click', async function 
     if (res.status === 201) {
         Swal.fire({title: "저장성공", icon: "success", confirmButtonText: '확인', draggable: true})
             .then(() => {
+                // 입력된 필드 초기화
+                document.querySelector('#post-title').value = '';
+                document.querySelector('#post-category').value = '';
+                document.querySelector('#user-name').value = '';
+                document.querySelector('#post-content').value = '';
+                document.querySelector('#post-password').value = '';
+                document.querySelector('#post-image-url').value = '';
+
                 noticeSelect();
             });
+        cancelModalClose();
     } else {
         Swal.fire({title: '저장실패', icon: 'error', confirmButtonText: '확인'});
     }
@@ -118,22 +127,19 @@ async function noticeSelect() {
     $boardDiv.classList.add('show');
 }
 
-// function postRowClick(trTag) {
-//     const $updateUserId = document.querySelector('#update-user-id');
-//     const $updateName = document.querySelector('#update-name');
-//     const $updateEmail = document.querySelector('#update-email');
-//
-//     const userId = trTag.children[0].innerText;
-//     const userName = trTag.children[1].innerText;
-//     const userEmail = trTag.children[2].innerText;
-//
-//     $updateUserId.innerHTML = userId;
-//     $updateName.value = userName;
-//     $updateEmail.value = userEmail;
-//
-//     const $modal = document.querySelector('#user-modal');
-//     $modal.classList.remove('hidden');
-// }
+// 각 항목 눌렀을 때 작성한 내용 보기
+function postRowClick(trTag) {
+    const $updateTitle = document.querySelector('#update-title');
+
+    const title = trTag.children[1].innerText;
+
+    $updateTitle.value = title;
+
+    console.log(title);
+
+    const $noticeModal = document.querySelector('#notice-modal');
+    $noticeModal.classList.remove('hidden');
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     noticeSelect();
@@ -149,4 +155,9 @@ function postClick() {
 function cancelModalClose() {
     const $cancelModal = document.querySelector('#post-modal');
     $cancelModal.classList.add('hidden');
+}
+
+function noticemodalClose() {
+    const $noticeModal = document.querySelector('#notice-modal');
+    $noticeModal.classList.add('hidden');
 }
