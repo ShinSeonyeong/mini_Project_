@@ -105,6 +105,30 @@ body {
     cursor: pointer;
 }
 
+/*페이지*/
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    background-color: #19499E;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #163d82;
+}
+
+
 .show {
     height: auto;
 }
@@ -149,21 +173,52 @@ tr:hover {
     height: 100%;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
 }
 
 .post-modal-content {
     background: white;
-    width: 500px;
+    width: 600px;
     padding: 20px;
     border-radius: 10px;
 }
+
+#post-image-url {
+    display: none;
+}
+
+.file-upload-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 25px;
+    background: linear-gradient(50deg, #427D9D, #164863);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.file-upload-label:hover {
+    background: linear-gradient(50deg, #427D9D, #164863);
+}
+
 
 .post-detail p {
     font-size: 22px;
     font-weight: bold;
     text-align: center;
     margin-bottom: 15px;
+}
+
+.post-detail label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
 }
 
 input[type="text"],
@@ -184,6 +239,7 @@ textarea:focus,
 select:focus {
     border-color: #427D9D;
     outline: none;
+    box-shadow: 0 0 5px rgba(66, 125, 157, 0.5);
 }
 
 textarea {
@@ -191,13 +247,13 @@ textarea {
     resize: none;
 }
 
-.post-buttons {
+.button-container {
     display: flex;
     justify-content: space-around;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
-.post-buttons button {
+.button-container button {
     flex: 1;
     padding: 10px;
     font-size: 16px;
@@ -207,23 +263,23 @@ textarea {
     margin: 0 40px;
 }
 
-#submit-post {
+#submit-post, #submit-update {
     background: #28a745;
     color: white;
     margin-right: 5px;
 }
 
-#submit-post:hover {
+#submit-post, #submit-update:hover {
     background: #218838;
 }
 
-#cancel-post {
+#cancel-post, #cancel-update {
     background: #dc3545;
     color: white;
     margin-left: 5px;
 }
 
-#cancel-post:hover {
+#cancel-post, #cancel-update:hover {
     background: #c82333;
 }
 

@@ -44,6 +44,13 @@
     <div class="post_list">
         <div id="board-div" class="content"></div>
         <button onclick="postClick()" class="post-writing">글쓰기</button>
+
+        <!-- 페이지네이션 버튼 -->
+        <div class="pagination">
+            <button id="prevBtn">이전</button>
+            <span id="pageNumber">1</span>
+            <button id="nextBtn">다음</button>
+        </div>
     </div>
 
     <div id="post-modal" class="post-modal-c hidden">
@@ -61,19 +68,22 @@
                     <option value="3">Q&A</option>
                 </select>
 
-                <label for="user-name">작성자</label>
-                <input type="text" id="user-name" placeholder="Please enter the author name."/>
+                <label for="post-name">작성자</label>
+                <input type="text" id="post-name" placeholder="Please enter the author name."/>
 
                 <label for="post-content">내용</label>
                 <textarea id="post-content" placeholder="Please enter the contents."></textarea>
 
+                <label for="post-image-url" class="file-upload-label"> 📁 파일 선택</label>
+                <input type="file" id="post-image-url" name="file" accept="image/*"/>
+                <span id="file-name">선택된 파일 없음</span>
+
+
                 <label for="post-password">비밀번호</label>
                 <input type="password" id="post-password" value=""/>
 
-                <label for="post-image-url">파일업로드</label>
-                <input type="file" id="post-image-url" name="file" accept="image/*"/>
                 <div>
-                    <div class="post-buttons">
+                    <div class="button-container">
                         <button id="submit-post">등록</button>
                         <button onclick="cancelModalClose()" id="cancel-post">취소</button>
                     </div>
@@ -83,17 +93,35 @@
     </div>
 
     <!--           눌렀을 때 보이는 것 -->
-        <div id="notice-modal" class="update-notice hidden">
-            <div class="modal-div post-modal-content post-detail">
-                <div>
-                    <h1>글수정</h1>
-                    <button onclick="noticemodalClose();">❌</button>
-                </div>
-                <div>
-                    제목 <input id="update-title" type="text" class="update-input">
-                </div>
+    <div id="notice-modal" class="update-notice hidden">
+        <div class="modal-div post-modal-content post-detail">
+            <div>
+                <h1>글수정</h1>
+            </div>
+            <div>
+                No. <h3 id="update-id"></h3>
+
+                제목 <input id="update-title" type="text" class="update-input">
+
+                내용<textarea id="update-content"></textarea>
+
+                작성자<input type="text" id="update-name"/>
+
+                비밀번호 <input type="password" id="update-password"/>
+
+                카테고리
+                <select id="update-category">
+                    <option value="1">공지</option>
+                    <option value="2">FAQ</option>
+                    <option value="3">Q&A</option>
+                </select>
+            </div>
+            <div class="button-container">
+                <button id="submit-update">수정</button>
+                <button onclick="noticemodalClose();" id="cancel-update">취소</button>
             </div>
         </div>
+    </div>
 
 </div>
 </body>
