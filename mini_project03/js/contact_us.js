@@ -90,7 +90,7 @@ async function noticeSelect() {
         return new Date(dateString).toISOString().split('T')[0];
     };
 
-    var res = await supabase.from('board').select().order('updated_at', { ascending: true });
+    var res = await supabase.from('board').select().order('updated_at', {ascending: true});
     let rows = '';
     for (let i = 0; i < res.data.length; i++) {
         rows = rows + `
@@ -102,9 +102,9 @@ async function noticeSelect() {
                 <td>${res.data[i].password}</td>
                 <td>${fomatDate(res.data[i].created_at)}</td>
                 <td>${fomatDate(res.data[i].updated_at)}</td>
-                <td>${res.data[i].views}</td>
+                <td id="views-${res.data[i].id}">${res.data[i].views}</td>
                 <td>${res.data[i].category_id}</td>
-                <td><button onclick='postDeleteClick(event, "${res.data[i].id}")'>삭제</button</td>
+                <td><button class="delete-btn" onclick='postDeleteClick(event, "${res.data[i].id}")'>삭제</button></td>
             </tr>`;
     }
 
@@ -121,6 +121,7 @@ async function noticeSelect() {
                     <th>수정시간</th>
                     <th>조회수</th>
                     <th>category_id</th>
+                    <th>선택</th>
                 </tr>
                 ${rows}
             </table>
@@ -130,7 +131,7 @@ async function noticeSelect() {
 }
 
 // 항목 눌렀을 때 작성한 내용 보기
-function postRowClick(trTag) {
+async function postRowClick(trTag) {
     const $updateId = document.querySelector('#update-id');
     const $updateTitle = document.querySelector('#update-title');
     const $updateContent = document.querySelector('#update-content');
@@ -152,9 +153,39 @@ function postRowClick(trTag) {
     $updatePassword.value = password;
     $updateCategory.value = category_id;
 
+    // 조회수증가
+    try {
+        let {data, error} = await supabase
+            .from('board')
+            .select('views')
+            .eq('id', id)
+            .single();
+
+        if (error) throw error;
+
+        let currentViews = data.views;
+
+        // 조회수 +1
+        let {error: updateError} = await supabase
+            .from('board')
+            .update({views: currentViews + 1})
+            .eq('id', id);
+
+        if (updateError) throw updateError;
+
+        // 화면에 증가된 조회수 반영
+        document.getElementById(`views-${id}`).textContent = currentViews + 1;
+
+        console.log(`게시글 ${id} 조회수 증가: ${currentViews + 1}`);
+    } catch (err) {
+        console.error('조회수 업데이트 오류:', err.message);
+    }
+
+    // 모달창 안 보여주게 하기
     const $noticeModal = document.querySelector('#notice-modal');
     $noticeModal.classList.remove('hidden');
 }
+
 
 document.querySelector('#submit-update').addEventListener('click', async function () {
     const $updateId = document.querySelector('#update-id');
@@ -187,11 +218,11 @@ document.querySelector('#submit-update').addEventListener('click', async functio
     }
 })
 
-function postDeleteClick(ev, id) {
+async function postDeleteClick(ev, id) {
     // stopPropagation 다른 이벤트 실행 막는 것, userRowClick 이벤트 실행X
     ev.stopPropagation();
 
-    Swal.fire({
+    const result = await Swal.fire({
         title: "삭제하시겠습니까?",
         text: "You won't be able to revert this!",
         icon: "warning",
@@ -200,32 +231,32 @@ function postDeleteClick(ev, id) {
         cancelButtonColor: "#d33",
         confirmButtonText: "확인",
         cancelButtonText: "취소"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            supabase.from('users').delete().eq('id',id)
-                .then(()=>{
-                    console.log('삭제되었습니다.')
-                })
-            Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
-                icon: "success"
-            });
-        } else {
-            Swal.fire({
-                title: "Cancel!",
-                text: "취소되었습니다.",
-                icon: "success"
-            });
-        }
     });
+    if (result.isConfirmed) {
+        await supabase.from('board').delete().eq('id', id);
+
+        Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+        });
+
+        noticeSelect();
+    } else {
+        Swal.fire({
+            title: "Cancel!",
+            text: "취소되었습니다.",
+            icon: "success"
+        });
+    }
+
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     noticeSelect();
 });
 
-document.getElementById('post-image-url').addEventListener('change', function(event) {
+document.getElementById('post-image-url').addEventListener('change', function (event) {
     const fileName = event.target.files[0] ? event.target.files[0].name : '선택된 파일 없음';
     document.getElementById('file-name').textContent = fileName;
 });
@@ -297,4 +328,3 @@ function noticemodalClose() {
 //
 // // 초기 실행
 // displayPosts();
-

@@ -1,3 +1,10 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
 body {
     min-height: 100vh;
     display: flex;
@@ -161,11 +168,24 @@ tr:hover {
     cursor: pointer;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
+.delete-btn {
+    background-color: #d33;
+    color: white;
+    border: none;
+    padding: 3px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-btn:hover {
+    background-color: #b02a2a;
+    transform: scale(1.05);
+}
+
+.delete-btn:active {
+    background-color: #8a1f1f;
+    transform: scale(0.95);
 }
 
 .post-modal-c {
