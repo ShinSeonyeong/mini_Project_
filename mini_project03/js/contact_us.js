@@ -104,6 +104,7 @@ async function noticeSelect() {
                 <td>${fomatDate(res.data[i].updated_at)}</td>
                 <td>${res.data[i].views}</td>
                 <td>${res.data[i].category_id}</td>
+                <td><button onclick='postDeleteClick(event, "${res.data[i].id}")'>삭제</button</td>
             </tr>`;
     }
 
@@ -186,6 +187,40 @@ document.querySelector('#submit-update').addEventListener('click', async functio
     }
 })
 
+function postDeleteClick(ev, id) {
+    // stopPropagation 다른 이벤트 실행 막는 것, userRowClick 이벤트 실행X
+    ev.stopPropagation();
+
+    Swal.fire({
+        title: "삭제하시겠습니까?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "확인",
+        cancelButtonText: "취소"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            supabase.from('users').delete().eq('id',id)
+                .then(()=>{
+                    console.log('삭제되었습니다.')
+                })
+            Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success"
+            });
+        } else {
+            Swal.fire({
+                title: "Cancel!",
+                text: "취소되었습니다.",
+                icon: "success"
+            });
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     noticeSelect();
 });
@@ -212,54 +247,54 @@ function noticemodalClose() {
     $noticeModal.classList.add('hidden');
 }
 
-// 페이지
-let posts = [];
-const itemsPerPage = 10;
-let currentPage = 1;
-
-// DB에서 불러온 데이터 넣기 (Supabase)
-async function fetchPosts() {
-    const { data: post } = await supabase
-        .from("board")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-}
-// 게시글 표시 함수
-function displayPosts() {
-    const boardDiv = document.getElementById("board-div");
-    boardDiv.innerHTML = ""; // 기존 내용 초기화
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const pageItems = posts.slice(startIndex, endIndex);
-
-    pageItems.forEach(post => {
-        const div = document.createElement("div");
-        div.textContent = post;
-        div.classList.add("post-item");
-        boardDiv.appendChild(div);
-    });
-
-    // 페이지 숫자 업데이트
-    document.getElementById("pageNumber").textContent = currentPage;
-}
-
-// 페이지 버튼 이벤트
-document.getElementById("prevBtn").addEventListener("click", function () {
-    if (currentPage > 1) {
-        currentPage--;
-        displayPosts();
-    }
-});
-
-document.getElementById("nextBtn").addEventListener("click", function () {
-    if (currentPage * itemsPerPage < posts.length) {
-        currentPage++;
-        displayPosts();
-    }
-});
-
-// 초기 실행
-displayPosts();
+// // 페이지
+// let posts = [];
+// const itemsPerPage = 10;
+// let currentPage = 1;
+//
+// // DB에서 불러온 데이터 넣기 (Supabase)
+// async function fetchPosts() {
+//     const { data: post } = await supabase
+//         .from("board")
+//         .select("*")
+//         .order("created_at", { ascending: false });
+//
+// }
+// // 게시글 표시 함수
+// function displayPosts() {
+//     const boardDiv = document.getElementById("board-div");
+//     boardDiv.innerHTML = ""; // 기존 내용 초기화
+//
+//     const startIndex = (currentPage - 1) * itemsPerPage;
+//     const endIndex = startIndex + itemsPerPage;
+//     const pageItems = posts.slice(startIndex, endIndex);
+//
+//     pageItems.forEach(post => {
+//         const div = document.createElement("div");
+//         div.textContent = post;
+//         div.classList.add("post-item");
+//         boardDiv.appendChild(div);
+//     });
+//
+//     // 페이지 숫자 업데이트
+//     document.getElementById("pageNumber").textContent = currentPage;
+// }
+//
+// // 페이지 버튼 이벤트
+// document.getElementById("prevBtn").addEventListener("click", function () {
+//     if (currentPage > 1) {
+//         currentPage--;
+//         displayPosts();
+//     }
+// });
+//
+// document.getElementById("nextBtn").addEventListener("click", function () {
+//     if (currentPage * itemsPerPage < posts.length) {
+//         currentPage++;
+//         displayPosts();
+//     }
+// });
+//
+// // 초기 실행
+// displayPosts();
 
