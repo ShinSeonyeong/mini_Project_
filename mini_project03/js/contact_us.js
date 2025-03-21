@@ -155,6 +155,7 @@ async function noticeSelect() {
     $boardDiv.classList.add('show');
 }
 
+
 // 항목 눌렀을 때 작성한 내용 보기
 async function postRowClick(trTag) {
     const $updateId = document.querySelector('#update-id');
@@ -165,7 +166,6 @@ async function postRowClick(trTag) {
     const $updateDate = document.querySelector('#update-date');
     const $updateViews = document.querySelector('#update-views');
     const $updateCategory = document.querySelector('#update-category');
-    const $updateImage = document.querySelector('#update-image');
 
     const id = trTag.children[0].innerText;
     const title = trTag.children[1].innerText;
@@ -193,7 +193,6 @@ async function postRowClick(trTag) {
             .single();
 
         if (error) throw error;
-
         let currentViews = data.views;
 
         // 조회수 +1
@@ -204,21 +203,28 @@ async function postRowClick(trTag) {
 
         if (updateError) throw updateError;
 
-        // 화면에 증가된 조회수 반영
-        document.getElementById(`views-${id}`).textContent = currentViews + 1;
-
-        console.log(`res = ${this.res}`);
-        // 이미지 업데이트
-        // if (data.image_url) {
-        //     $updateImage.src = data.image_url;
-        //     $updateImage.style.display = 'block';
-        // } else {
-        //     $updateImage.style.display = 'none';
-        // }
-
+        document.getElementById(`views-${id}`).textContent = currentViews + 1; // 화면에 증가된 조회수 적용
         console.log(`게시글 ${id} 조회수 증가: ${currentViews + 1}`);
     } catch (err) {
         console.error('조회수 업데이트 오류:', err.message);
+    }
+
+    // 이미지 함께 조회
+    const res = await supabase
+        .from('board')
+        .select('image_url, title')
+        .eq('id', id)
+        .single();
+
+    const $updateImage = document.getElementById('update-image');
+
+    if (res.data.image_url && res.data.image_url.trim() !== '') {
+        $updateImage.alt = `Uploaded Image: ${res.data.title}`;
+        $updateImage.src = res.data.image_url;
+        console.log($updateImage.src);
+    } else {
+        $updateImage.alt = '이미지가 없습니다.';
+        $updateImage.src = '';
     }
 
     // 모달창 안 보여주게 하기
@@ -296,9 +302,25 @@ document.addEventListener('DOMContentLoaded', function () {
     noticeSelect();
 });
 
-document.getElementById('post-image-url').addEventListener('change', function (event) {
-    const fileName = event.target.files[0] ? event.target.files[0].name : '선택된 파일 없음';
-    document.getElementById('file-name').textContent = fileName;
+document.getElementById('post-image-url').addEventListener('change', function(event) {
+    const fileInput = event.target;
+    const fileNameDisplay = document.getElementById('file-name');
+    const imagePreview = document.getElementById('image-preview');
+
+    if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        fileNameDisplay.textContent = file.name;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file); // 파일을 URL로 읽음
+    } else {
+        fileNameDisplay.textContent = '선택된 파일 없음'; // 파일이 없으면 기본 메시지 표시
+        imagePreview.style.display = 'none'; // 이미지 미리보기 숨김
+    }
 });
 
 // 글쓰기
