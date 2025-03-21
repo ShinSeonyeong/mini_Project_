@@ -41,7 +41,7 @@ document.querySelector('#submit-post').addEventListener('click', async function 
         // const id = JSON.parse(id).id;
         var res = await supabase
             .from('board')
-            .insert([{title, content, author, password, category_id, image_url: ""}])
+            .insert([{title, content, author, password, category_id, image_url}])
             .select();
     } else {
         const fileUrl = await uploadFile(image_url);
@@ -79,18 +79,43 @@ async function uploadFile(image_url) {
     return res.data.publicUrl;
 }
 
-function boardToggle() {
-    document.querySelector('#order-div').classList.toggle('show');
-}
-
 // 게시판 화면에 표시
 async function noticeSelect() {
+    // const [from, to] = [(pageNum - 1) * 15, (pageNum * 15) - 1];
+
+    const params = new URLSearchParams(window.location.search);
+    const pageNum = parseInt(params.get("pageNum")) || 1;
+    const itemsPerPage = 15; // 페이지 글 개수 15개
+    const totalItems = 50;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    const from = (pageNum - 1) * itemsPerPage;
+    const to = from + itemsPerPage - 1;
+
+    const pagingContainer = document.getElementById("paging-container");
+    pagingContainer.innerHTML = "";
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageLink = document.createElement("a"); // a태그 생성
+        pageLink.href = `?pageNum=${i}`;
+        pageLink.textContent = i;
+
+        // 현재 페이지라면 스타일 변경
+        if (i === pageNum) {
+            pageLink.style.fontWeight = "bold";
+            pageLink.style.color = "#B8001F";
+        }
+
+        pagingContainer.appendChild(pageLink);
+    }
+
+
     // 날짜 형식 변경 0000-00-00
     const fomatDate = (dateString) => {
         return new Date(dateString).toISOString().split('T')[0];
     };
 
-    var res = await supabase.from('board').select().order('updated_at', {ascending: true});
+    var res = await supabase.from('board').select().order('updated_at', {ascending: true}).range(from, to);
     let rows = '';
     for (let i = 0; i < res.data.length; i++) {
         rows = rows + `
@@ -137,23 +162,29 @@ async function postRowClick(trTag) {
     const $updateContent = document.querySelector('#update-content');
     const $updateName = document.querySelector('#update-name');
     const $updatePassword = document.querySelector('#update-password');
+    const $updateDate = document.querySelector('#update-date');
+    const $updateViews = document.querySelector('#update-views');
     const $updateCategory = document.querySelector('#update-category');
+    const $updateImage = document.querySelector('#update-image');
 
     const id = trTag.children[0].innerText;
     const title = trTag.children[1].innerText;
     const content = trTag.children[2].innerText;
     const author = trTag.children[3].innerText;
     const password = trTag.children[4].innerText;
+    const updated_at = trTag.children[6].innerText;
+    const views = trTag.children[7].innerText;
     const category_id = trTag.children[8].innerText;
 
     $updateId.innerText = id;
+    $updateDate.innerText = updated_at;
+    $updateViews.innerText = views;
     $updateTitle.value = title;
     $updateContent.value = content;
     $updateName.value = author;
     $updatePassword.value = password;
     $updateCategory.value = category_id;
 
-    // 조회수증가
     try {
         let {data, error} = await supabase
             .from('board')
@@ -175,6 +206,15 @@ async function postRowClick(trTag) {
 
         // 화면에 증가된 조회수 반영
         document.getElementById(`views-${id}`).textContent = currentViews + 1;
+
+        console.log(`res = ${this.res}`);
+        // 이미지 업데이트
+        // if (data.image_url) {
+        //     $updateImage.src = data.image_url;
+        //     $updateImage.style.display = 'block';
+        // } else {
+        //     $updateImage.style.display = 'none';
+        // }
 
         console.log(`게시글 ${id} 조회수 증가: ${currentViews + 1}`);
     } catch (err) {
@@ -277,54 +317,3 @@ function noticemodalClose() {
     const $noticeModal = document.querySelector('#notice-modal');
     $noticeModal.classList.add('hidden');
 }
-
-// // 페이지
-// let posts = [];
-// const itemsPerPage = 10;
-// let currentPage = 1;
-//
-// // DB에서 불러온 데이터 넣기 (Supabase)
-// async function fetchPosts() {
-//     const { data: post } = await supabase
-//         .from("board")
-//         .select("*")
-//         .order("created_at", { ascending: false });
-//
-// }
-// // 게시글 표시 함수
-// function displayPosts() {
-//     const boardDiv = document.getElementById("board-div");
-//     boardDiv.innerHTML = ""; // 기존 내용 초기화
-//
-//     const startIndex = (currentPage - 1) * itemsPerPage;
-//     const endIndex = startIndex + itemsPerPage;
-//     const pageItems = posts.slice(startIndex, endIndex);
-//
-//     pageItems.forEach(post => {
-//         const div = document.createElement("div");
-//         div.textContent = post;
-//         div.classList.add("post-item");
-//         boardDiv.appendChild(div);
-//     });
-//
-//     // 페이지 숫자 업데이트
-//     document.getElementById("pageNumber").textContent = currentPage;
-// }
-//
-// // 페이지 버튼 이벤트
-// document.getElementById("prevBtn").addEventListener("click", function () {
-//     if (currentPage > 1) {
-//         currentPage--;
-//         displayPosts();
-//     }
-// });
-//
-// document.getElementById("nextBtn").addEventListener("click", function () {
-//     if (currentPage * itemsPerPage < posts.length) {
-//         currentPage++;
-//         displayPosts();
-//     }
-// });
-//
-// // 초기 실행
-// displayPosts();

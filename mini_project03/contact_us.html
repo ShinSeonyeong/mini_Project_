@@ -44,13 +44,6 @@
     <div class="post_list">
         <div id="board-div" class="content"></div>
         <button onclick="postClick()" class="post-writing">글쓰기</button>
-
-        <!-- 페이지네이션 버튼 -->
-        <div class="pagination">
-            <button id="prevBtn">이전</button>
-            <span id="pageNumber">1</span>
-            <button id="nextBtn">다음</button>
-        </div>
     </div>
 
     <div id="post-modal" class="post-modal-c hidden">
@@ -92,7 +85,7 @@
         </div>
     </div>
 
-    <!--           눌렀을 때 보이는 것 -->
+    <!-- 글 조회 -->
     <div id="notice-modal" class="update-notice hidden">
         <div class="modal-div post-modal-content post-detail">
             <div>
@@ -100,6 +93,10 @@
             </div>
             <div>
                 No. <h3 id="update-id"></h3>
+
+                날짜<h3 id="update-date"></h3>
+
+                조회수<h3 id="update-views"></h3>
 
                 제목 <input id="update-title" type="text" class="update-input">
 
@@ -115,6 +112,11 @@
                     <option value="2">FAQ</option>
                     <option value="3">Q&A</option>
                 </select>
+
+                <p>업로드된 파일</p>
+                <img id="update-image" src="" alt="Uploaded Image"/>
+                <p id="update-file"></p>
+
             </div>
             <div class="button-container">
                 <button id="submit-update">수정</button>
@@ -122,6 +124,8 @@
             </div>
         </div>
     </div>
+
+    <div id="paging-container" class="post-paging"></div>
 
 </div>
 </body>

@@ -212,7 +212,7 @@ tr:hover {
 }
 
 .file-upload-label {
-    display: inline-flex;
+    display: inline-block;
     align-items: center;
     justify-content: center;
     gap: 8px;
@@ -267,7 +267,7 @@ select:focus {
 }
 
 textarea {
-    height: 100px;
+    height: 150px;
     resize: none;
 }
 
@@ -314,21 +314,43 @@ textarea {
 .update-notice {
     position: fixed;
     top: 0;
-    bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(230, 230, 230, 0.5);
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.post-modal-content h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
 }
 
 .modal-div {
     padding: 20px;
     margin: 0 auto;
     margin-top: 25vh;
-    height: 600px;
+    height: auto;
     width: 500px;
     background-color: white;
 }
 
-tr:hover {
-    text-decoration: underline;
+#update-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+}
+
+#update-file {
+    font-size: 14px;
+    margin-top: 5px;
+    color: #666;
+}
+
+#paging-container{
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    font-size: 20px;
 }
