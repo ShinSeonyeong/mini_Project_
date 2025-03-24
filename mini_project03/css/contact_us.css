@@ -4,9 +4,12 @@
     padding: 0;
     font-family: 'Arial', sans-serif;
 }
-.scroll-lock{
-/*    다음주에!*/
+
+.scroll-lock {
+    overflow: hidden;
+    height: 100vh;
 }
+
 body {
     min-height: 100vh;
     display: flex;
@@ -204,9 +207,11 @@ tr:hover {
 
 .post-modal-content {
     background: white;
-    width: 600px;
+    width: 800px;
+    height: 700px;
     padding: 20px;
     border-radius: 10px;
+    overflow-y: auto;
 }
 
 #post-image-url {
@@ -232,7 +237,6 @@ tr:hover {
 .file-upload-label:hover {
     background: linear-gradient(50deg, #427D9D, #164863);
 }
-
 
 .post-detail p {
     font-size: 22px;
@@ -321,7 +325,16 @@ textarea {
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
 }
+#notice-modal div span {
+    display: inline-block;
+    margin-right: 15px;
+}
 
+#notice-modal h3 {
+    display: inline-block;
+    margin: 0 10px 0 5px;
+    font-weight: normal;
+}
 .post-modal-content h1 {
     font-size: 24px;
     margin-bottom: 20px;
@@ -329,13 +342,19 @@ textarea {
     font-weight: bold;
 }
 
+.post-modal-content h1 {
+    display: inline-block;
+    margin-right: 10px;
+}
+
 .modal-div {
     padding: 20px;
-    margin: 0 auto;
-    margin-top: 25vh;
-    height: auto;
-    width: 500px;
+    margin: 25vh auto;
     background-color: white;
+    overflow-y: auto;
+    width: 800px;
+    height: 700px;
+    border-radius: 10px;
 }
 
 #update-image {

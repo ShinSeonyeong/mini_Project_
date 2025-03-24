@@ -86,7 +86,7 @@ async function noticeSelect() {
     const params = new URLSearchParams(window.location.search);
     const pageNum = parseInt(params.get("pageNum")) || 1;
     const itemsPerPage = 15; // 페이지 글 개수 15개
-    const totalItems = 50;
+    const totalItems = 150;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     const from = (pageNum - 1) * itemsPerPage;
@@ -94,8 +94,13 @@ async function noticeSelect() {
 
     const pagingContainer = document.getElementById("paging-container");
     pagingContainer.innerHTML = "";
-
-    for (let i = 1; i <= totalPages; i++) {
+    let pageFrom = parseInt((pageNum - 1)/10);
+     let result = await supabase.from('board').select('id').range(pageFrom*totalItems,pageFrom*totalItems+totalItems);
+     if(result.data?.length>=151){
+         // 다음페이지로 이동 넣는다면 여기서 생성!
+         result.data.length=150;
+     }
+    for (let i = 1; i <= Math.ceil(result.data?.length/itemsPerPage); i++) {
         const pageLink = document.createElement("a"); // a태그 생성
         pageLink.href = `?pageNum=${i}`;
         pageLink.textContent = i;
@@ -333,9 +338,11 @@ function postClick() {
 function cancelModalClose() {
     const $cancelModal = document.querySelector('#post-modal');
     $cancelModal.classList.add('hidden');
+    document.body.classList.add('scroll-lock');
 }
 
 function noticemodalClose() {
     const $noticeModal = document.querySelector('#notice-modal');
     $noticeModal.classList.add('hidden');
+    document.body.classList.remove('scroll-lock');
 }

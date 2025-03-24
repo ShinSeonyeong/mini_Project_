@@ -18,7 +18,7 @@
         var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
     </script>
 </head>
-<body>
+<body class="scroll-lock">
 <div id="container">
     <header class="navbar">
         <img src="./image/logo.png" alt="아이스케어 로고">
@@ -35,10 +35,10 @@
             <button onclick="noticeSelect();">공지사항</button>
         </div>
         <div class="sub-category">
-            <button>FAQ</button>
+            <button onclick="noticeSelect();">FAQ</button>
         </div>
         <div class="sub-category">
-            <button>Q&A</button>
+            <button onclick="noticeSelect();">Q&A</button>
         </div>
     </div>
     <div class="post_list">
@@ -92,12 +92,13 @@
                 <h1>글수정</h1>
             </div>
             <div>
-                No. <h3 id="update-id"></h3>
+                <div>
+                    <span>No.<h3 id="update-id"></h3></span>
 
-                날짜<h3 id="update-date"></h3>
+                    <span>날짜<h3 id="update-date"></h3></span>
 
-                조회수<h3 id="update-views"></h3>
-
+                    <span>조회수<h3 id="update-views"></h3></span>
+                </div>
                 제목 <input id="update-title" type="text" class="update-input">
 
                 내용<textarea id="update-content"></textarea>
@@ -114,6 +115,7 @@
                 </select>
 
                 <p>업로드된 파일</p>
+                <label for="post-image-url" class="file-upload-label"> 📁 파일 선택</label>
                 <img id="update-image" src="" alt="Uploaded Image"/>
                 <p id="update-file"></p>
 
