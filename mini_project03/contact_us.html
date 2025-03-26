@@ -22,25 +22,27 @@
 <div id="container">
     <header class="navbar">
         <img src="./image/logo.png" alt="아이스케어 로고">
-        <nav>
-            <button>MAIN PAGE</button>
-        </nav>
+
+        <div class="category">
+            <div class="sub-category">
+                <button onclick="noticeSelect(1);">공지사항</button>
+            </div>
+            <div class="sub-category">
+                <button onclick="noticeSelect(2);">FAQ</button>
+            </div>
+            <div class="sub-category">
+                <button onclick="noticeSelect(3);">Q&A</button>
+            </div>
+            <nav>
+                <button>MAIN PAGE</button>
+            </nav>
+        </div>
     </header>
 
     <div class="main_text">
-        <p>공지사항</p>
+        <p id="changeText">공지사항</p>
     </div>
-    <div class="category">
-        <div class="sub-category">
-            <button onclick="noticeSelect();">공지사항</button>
-        </div>
-        <div class="sub-category">
-            <button onclick="noticeSelect();">FAQ</button>
-        </div>
-        <div class="sub-category">
-            <button onclick="noticeSelect();">Q&A</button>
-        </div>
-    </div>
+
     <div class="post_list">
         <div id="board-div" class="content"></div>
         <button onclick="postClick()" class="post-writing">글쓰기</button>

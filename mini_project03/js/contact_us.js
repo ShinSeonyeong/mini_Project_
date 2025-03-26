@@ -9,26 +9,25 @@ document.querySelector('#submit-post').addEventListener('click', async function 
     const password = document.querySelector('#post-password').value;
     const image_url = document.querySelector('#post-image-url').files[0];
 
-    if (title.length == 0) {
+    if (!title) {
         Swal.fire({icon: "error", title: "등록실패", text: "제목을 입력해주세요."})
             .then(() => {
                 document.querySelector('#post-title').focus();
             });
         return;
-    } else if (author.length == 0) {
+    } else if (!author) {
         Swal.fire({icon: "error", title: "등록실패", text: "작성자를 입력해주세요."})
             .then(() => {
                 document.querySelector('#post-name').focus();
             });
         return;
-    } else if (content.length == 0) {
+    } else if (!content) {
         Swal.fire({icon: "error", title: "등록실패", text: "내용을 입력해주세요."})
             .then(() => {
                 document.querySelector('#post-content').focus();
-                // setTimeout(function () {content.focus();}, 1000)
             });
         return;
-    } else if (password.length == 0) {
+    } else if (!password) {
         Swal.fire({icon: "error", title: "등록실패", text: "비밀번호를 입력해주세요."})
             .then(() => {
                 document.querySelector('#post-password').focus();
@@ -42,13 +41,15 @@ document.querySelector('#submit-post').addEventListener('click', async function 
         var res = await supabase
             .from('board')
             .insert([{title, content, author, password, category_id, image_url}])
-            .select();
+            .select()
+            .eq('category_id', category_id);
     } else {
         const fileUrl = await uploadFile(image_url);
         var res = await supabase
             .from('board')
             .insert([{title, content, author, password, category_id, image_url: fileUrl}])
-            .select();
+            .select()
+            .eq('category_id', category_id);
     }
 
     if (res.status === 201) {
@@ -62,9 +63,10 @@ document.querySelector('#submit-post').addEventListener('click', async function 
                 document.querySelector('#post-password').value = '';
                 document.querySelector('#post-image-url').value = '';
 
-                noticeSelect();
+                noticeSelect(categoryId);
             });
         cancelModalClose();
+
     } else {
         Swal.fire({title: '저장실패', icon: 'error', confirmButtonText: '확인'});
     }
@@ -79,10 +81,7 @@ async function uploadFile(image_url) {
     return res.data.publicUrl;
 }
 
-// 게시판 화면에 표시
-async function noticeSelect() {
-    // const [from, to] = [(pageNum - 1) * 15, (pageNum * 15) - 1];
-
+async function noticeSelect(categoryId) {
     const params = new URLSearchParams(window.location.search);
     const pageNum = parseInt(params.get("pageNum")) || 1;
     const itemsPerPage = 15; // 페이지 글 개수 15개
@@ -94,17 +93,18 @@ async function noticeSelect() {
 
     const pagingContainer = document.getElementById("paging-container");
     pagingContainer.innerHTML = "";
-    let pageFrom = parseInt((pageNum - 1)/10);
-     let result = await supabase.from('board').select('id').range(pageFrom*totalItems,pageFrom*totalItems+totalItems);
-     if(result.data?.length>=151){
-         // 다음페이지로 이동 넣는다면 여기서 생성!
-         result.data.length=150;
-     }
-    for (let i = 1; i <= Math.ceil(result.data?.length/itemsPerPage); i++) {
+    let pageFrom = parseInt((pageNum - 1) / 10);
+    let result = await supabase.from('board').select('id').range(pageFrom * totalItems, pageFrom * totalItems + totalItems);
+    if (result.data?.length >= 151) {
+        // 다음페이지로 이동 넣는다면 여기서 생성!
+        result.data.length = 150;
+    }
+    for (let i = 1; i <= Math.ceil(result.data?.length / itemsPerPage); i++) {
         const pageLink = document.createElement("a"); // a태그 생성
         pageLink.href = `?pageNum=${i}`;
         pageLink.textContent = i;
 
+        pageLink.style.fontFamily = 'pageNum3';
         // 현재 페이지라면 스타일 변경
         if (i === pageNum) {
             pageLink.style.fontWeight = "bold";
@@ -114,13 +114,17 @@ async function noticeSelect() {
         pagingContainer.appendChild(pageLink);
     }
 
-
     // 날짜 형식 변경 0000-00-00
     const fomatDate = (dateString) => {
         return new Date(dateString).toISOString().split('T')[0];
     };
+    var res = await supabase
+        .from('board')
+        .select()
+        .eq('category_id', categoryId)
+        .order('updated_at', {ascending: true})
+        .range(from, to);
 
-    var res = await supabase.from('board').select().order('updated_at', {ascending: true}).range(from, to);
     let rows = '';
     for (let i = 0; i < res.data.length; i++) {
         rows = rows + `
@@ -237,7 +241,6 @@ async function postRowClick(trTag) {
     $noticeModal.classList.remove('hidden');
 }
 
-
 document.querySelector('#submit-update').addEventListener('click', async function () {
     const $updateId = document.querySelector('#update-id');
     const $updateTitle = document.querySelector('#update-title');
@@ -265,8 +268,24 @@ document.querySelector('#submit-update').addEventListener('click', async functio
             icon: "success",
             draggable: true
         });
-        noticeSelect();
+        console.log(`categoryId ${categoryId}`);
+        switch (categoryId) {
+            case 1:
+                noticeSelect(1);
+                break;
+            case 2:
+                noticeSelect(2);
+                break;
+            case 3:
+                noticeSelect(3);
+                break;
+            default:
+                noticeSelect(1);
+                break;
+        }
+
     }
+
 })
 
 async function postDeleteClick(ev, id) {
@@ -292,7 +311,7 @@ async function postDeleteClick(ev, id) {
             icon: "success"
         });
 
-        noticeSelect();
+        noticeSelect(categoryId);
     } else {
         Swal.fire({
             title: "Cancel!",
@@ -303,11 +322,27 @@ async function postDeleteClick(ev, id) {
 
 }
 
+// 카테고리 선택하면 categoryId 값 가져옴
+const urlParams = new URLSearchParams(window.location.search);
+const categoryId = Number(urlParams.get('categoryId'));
 document.addEventListener('DOMContentLoaded', function () {
-    noticeSelect();
+    switch (categoryId) {
+        case 1:
+            noticeSelect(1);
+            break;
+        case 2:
+            noticeSelect(2);
+            break;
+        case 3:
+            noticeSelect(3);
+            break;
+        default:
+            noticeSelect(1);
+            break;
+    }
 });
 
-document.getElementById('post-image-url').addEventListener('change', function(event) {
+document.getElementById('post-image-url').addEventListener('change', function (event) {
     const fileInput = event.target;
     const fileNameDisplay = document.getElementById('file-name');
     const imagePreview = document.getElementById('image-preview');
@@ -317,7 +352,7 @@ document.getElementById('post-image-url').addEventListener('change', function(ev
         fileNameDisplay.textContent = file.name;
 
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             imagePreview.src = e.target.result;
             imagePreview.style.display = 'block';
         };
@@ -346,3 +381,10 @@ function noticemodalClose() {
     $noticeModal.classList.add('hidden');
     document.body.classList.remove('scroll-lock');
 }
+
+// 카테고리별로 이름 가져오기 - 이거 해야함!!!
+// const subcategoryId = document.getElementById("category");
+// const changeText = document.getElementById("changeText");
+// subcategoryId.addEventListener('change', function (event) {
+//     changeText.innerHTML = subcategoryId.value;
+// });
