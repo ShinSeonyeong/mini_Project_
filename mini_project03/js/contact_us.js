@@ -82,6 +82,14 @@ async function uploadFile(image_url) {
 }
 
 async function noticeSelect(categoryId) {
+
+    const texts = {
+        1: "공지사항",
+        2: "FAQ",
+        3: "Q&A"
+    };
+    document.getElementById("changeText").innerHTML = texts[categoryId];
+
     const params = new URLSearchParams(window.location.search);
     const pageNum = parseInt(params.get("pageNum")) || 1;
     const itemsPerPage = 15; // 페이지 글 개수 15개
@@ -249,6 +257,50 @@ document.querySelector('#submit-update').addEventListener('click', async functio
     const $updatePassword = document.querySelector('#update-password');
     const $updateCategory = document.querySelector('#update-category');
 
+    const {data} = await supabase
+        .from('board')
+        .select('password')
+        .eq('id', $updateId.innerHTML)
+        .single();
+
+    const {value: inputPassword} = await Swal.fire({
+        title: "비밀번호 확인",
+        input: "password",
+        inputPlaceholder: "비밀번호를 입력하세요",
+        inputAttributes: {
+            maxlength: 10,
+            autocapitalize: "off",
+            autocorrect: "off"
+        },
+        showCancelButton: true,
+        confirmButtonText: "확인",
+        cancelButtonText: "취소",
+        customClass: {
+            input: 'swal-custom-input'
+        },
+        preConfirm: (password) => {
+            if (!password) {
+                Swal.showValidationMessage("비밀번호를 입력하세요.");
+            }
+            return password;
+        }
+    });
+
+    if (!inputPassword) {
+        return;
+    }
+
+    console.log(inputPassword);
+    console.log(data.password);
+    if (inputPassword !== data.password) {
+        Swal.fire({
+            title: "비밀번호 오류",
+            text: "비밀번호가 올바르지 않습니다.",
+            icon: "error",
+        });
+        return;
+    }
+
     const res = await supabase
         .from('board')
         .update({
@@ -381,10 +433,3 @@ function noticemodalClose() {
     $noticeModal.classList.add('hidden');
     document.body.classList.remove('scroll-lock');
 }
-
-// 카테고리별로 이름 가져오기 - 이거 해야함!!!
-// const subcategoryId = document.getElementById("category");
-// const changeText = document.getElementById("changeText");
-// subcategoryId.addEventListener('change', function (event) {
-//     changeText.innerHTML = subcategoryId.value;
-// });

@@ -160,7 +160,7 @@ table {
 }
 
 th, td {
-    padding: 12px;
+    padding: 10px;
     text-align: center;
 }
 
@@ -382,4 +382,9 @@ textarea {
     display: flex;
     justify-content: center;
     gap: 1.5rem;
+}
+
+.swal-custom-input{
+    width: 84% !important;
+    border-radius: 10px !important;
 }
