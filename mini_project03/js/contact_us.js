@@ -9,6 +9,11 @@ document.querySelector('#submit-post').addEventListener('click', async function 
     const password = document.querySelector('#post-password').value;
     const image_url = document.querySelector('#post-image-url').files[0];
 
+    const passwordInput = document.querySelector('#post-password'); // 사용자가 입력한 password값 가져옴
+    passwordInput.addEventListener('input', function(){
+        const passwordValue = passwordInput.value;
+        console.log(passwordValue);
+    })
     if (!title) {
         Swal.fire({icon: "error", title: "등록실패", text: "제목을 입력해주세요."})
             .then(() => {
@@ -62,10 +67,25 @@ document.querySelector('#submit-post').addEventListener('click', async function 
                 document.querySelector('#post-content').value = '';
                 document.querySelector('#post-password').value = '';
                 document.querySelector('#post-image-url').value = '';
-
-                noticeSelect(categoryId);
             });
+
         cancelModalClose();
+
+        switch (categoryId) {
+            case 1:
+                noticeSelect(1);
+                break;
+            case 2:
+                noticeSelect(2);
+                break;
+            case 3:
+                noticeSelect(3);
+                break;
+            default:
+                noticeSelect(1);
+                break;
+        }
+
 
     } else {
         Swal.fire({title: '저장실패', icon: 'error', confirmButtonText: '확인'});
