@@ -190,7 +190,7 @@ async function noticeSelect(categoryId) {
         .eq('category_id', categoryId)
         .order('updated_at', {ascending: true})
         .range(from, to)
-        ;
+    ;
     let rows = '';
     for (let i = 0; i < res.data.length; i++) {
         rows = rows + `
@@ -308,14 +308,14 @@ async function postRowClick(trTag) {
 }
 
 document.querySelector('#submit-update').addEventListener('click', async function () {
-    const $updateId = document.querySelector('#update-id');
+    let $updateId = document.querySelector('#update-id');
     const $updateTitle = document.querySelector('#update-title');
     const $updateContent = document.querySelector('#update-content');
     const $updateName = document.querySelector('#update-name');
-    const $updatePassword = document.querySelector('#update-password');
+    let $updatePassword = document.querySelector('#update-password');
     const $updateCategory = document.querySelector('#update-category');
 
-    const {data} = await supabase
+    let {data} = await supabase
         .from('board')
         .select('password')
         .eq('id', $updateId.innerHTML)
@@ -403,6 +403,45 @@ async function postDeleteClick(ev, id) {
     ev.stopPropagation();
     urlParams = new URLSearchParams(window.location.search);
     categoryId = Number(urlParams.get('category_id'));
+    const res_delete = await supabase.from('board').select('password').eq('id', id);
+
+    const {value: inputPassword} = await Swal.fire({
+        title: "비밀번호 확인",
+        input: "password",
+        inputPlaceholder: "비밀번호를 입력하세요",
+        inputAttributes: {
+            maxlength: 10,
+            autocapitalize: "off",
+            autocorrect: "off"
+        },
+        showCancelButton: true,
+        confirmButtonText: "확인",
+        cancelButtonText: "취소",
+        customClass: {
+            input: 'swal-custom-input'
+        },
+        preConfirm: (password) => {
+            if (!password) {
+                Swal.showValidationMessage("비밀번호를 입력하세요.");
+            }
+            return password;
+        }
+    });
+
+    if (!inputPassword) {
+        return;
+    }
+    console.log(inputPassword);
+    console.log(Number(res_delete.data[0]));
+    if (inputPassword !== res_delete.data.password) {
+        Swal.fire({
+            title: "비밀번호 오류",
+            text: "비밀번호가 올바르지 않습니다.",
+            icon: "error",
+        });
+        return;
+    }
+
     const result = await Swal.fire({
         title: "삭제하시겠습니까?",
         text: "You won't be able to revert this!",
@@ -413,6 +452,7 @@ async function postDeleteClick(ev, id) {
         confirmButtonText: "확인",
         cancelButtonText: "취소"
     });
+
     if (result.isConfirmed) {
         await supabase.from('board').delete().eq('id', id);
 
@@ -421,7 +461,7 @@ async function postDeleteClick(ev, id) {
             text: "Your file has been deleted.",
             icon: "success"
         });
-if(!categoryId)categoryId=1;
+        if (!categoryId) categoryId = 1;
         noticeSelect(categoryId);
     } else {
         Swal.fire({
