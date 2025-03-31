@@ -127,6 +127,7 @@ async function noticeSelect(categoryId) {
         pageLink.href = `?category_id=${categoryId}&pageNum=${i}`;
         pageLink.textContent = i;
         pageLink.style.fontFamily = 'pageNum3'
+        pageLink.style.color = 'black';
 
         if (i === pageNum) {
             pageLink.style.fontWeight = "bold";
@@ -196,7 +197,7 @@ async function noticeSelect(categoryId) {
         rows = rows + `
             <tr onclick='postRowClick(this);' style='cursor:pointer;'>
                 <td>${res.data[i].id}</td>
-                <td>${res.data[i].title}</td>
+                <td style="text-align: left;">${res.data[i].title}</td>
                 <td>${res.data[i].content}</td>
                 <td>${res.data[i].author}</td>
                 <td>${res.data[i].password}</td>
@@ -378,22 +379,9 @@ document.querySelector('#submit-update').addEventListener('click', async functio
             icon: "success",
             draggable: true
         });
-        console.log(`categoryId ${categoryId}`);
-        switch (categoryId) {
-            case 1:
-                noticeSelect(1);
-                break;
-            case 2:
-                noticeSelect(2);
-                break;
-            case 3:
-                noticeSelect(3);
-                break;
-            default:
-                noticeSelect(1);
-                break;
-        }
 
+        if (!categoryId) categoryId = 1;
+        noticeSelect(categoryId);
     }
 
 })
@@ -432,8 +420,8 @@ async function postDeleteClick(ev, id) {
         return;
     }
     console.log(inputPassword);
-    console.log(Number(res_delete.data[0]));
-    if (inputPassword !== res_delete.data.password) {
+    console.log(res_delete.data[0].password);
+    if (inputPassword !== res_delete.data[0].password) {
         Swal.fire({
             title: "비밀번호 오류",
             text: "비밀번호가 올바르지 않습니다.",
