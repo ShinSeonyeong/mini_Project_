@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ICECARE 예약조회</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="./css/reservationInquiry.css">
+    <link rel="stylesheet" href="css/reservationInmedia.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = 'https://wqetnltlnsvjidubewia.supabase.co';
+        const supabasePassword = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxZXRubHRsbnN2amlkdWJld2lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NzI5NDksImV4cCI6MjA1ODM0ODk0OX0.-Jw0jqyq93rA7t194Kq4_umPoTci8Eqx9j-oCwoZc6k';
+
+        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="reservation.html" class="logo">
+            <img src="image/logo.png" alt="로고 이미지">
+        </a>
+        <ul class="nav-links">
+            <!--링크연결하기-->
+            <li><a class="hoho" href="reservation.html" style="line-height: 40px">예약하기</a></li>
+            <li><a class="hoho" href="reservationInquiry.html" style="line-height: 40px">예약조회</a></li>
+            <li class="gomain"><a style="color: white; line-height: 40px; font-weight: 500;" href="index.html">MAIN PAGE</a></li>
+        </ul>
+        <div class="hamburger" onclick="slideMenu()">
+            <i class="fas fa-bars"></i> <!-- 햄버거 아이콘 -->
+        </div>
+    </nav>
+    <div class="m-nav-links">
+        <div class="close-btn" onclick="slideMenu()">
+            <i class="fas fa-times"></i> <!-- 닫기 아이콘 -->
+        </div>
+        <ul>
+            <!--링크연결하기-->
+            <li><a href="reservation.html">예약하기</a></li>
+            <li><a href="reservationInquiry.html">예약조회</a></li>
+            <li><a href="#">홈페이지</a></li>
+        </ul>
+    </div><!--m-nav-links-->
+
+    <div class="overlay"></div>
+
+    <div id="container">
+        <h1 class="Q-txt">예약 정보를 입력하세요</h1>
+        <div class="step01">
+            <div>
+                <label for="name">이름</label>
+                <input type="text" name="name" id="name">
+            </div>
+            <div>
+                <label for="phone">연락처</label>
+                <input type="tel" name="phone" id="phone">
+            </div>
+            <div>
+                <label for="email">이메일</label>
+                <input type="email" name="email" id="email">
+            </div>
+            <div class="privacy-check">
+                <input type="checkbox" name="privacy" id="privacy" class="cursor-pointer">
+                <label class="agree" for="privacy">개인정보 제공에 동의합니다 </label>
+                <button class="privacy-detail-btn">[보기]</button>
+            </div>
+            <div class="privacy-details hidden2" id="privacy-details">
+                <p><strong>1. 개인정보 수집 및 이용 목적</strong><br>
+                    ICECARE는 제빙기 청소 및 수리 서비스 예약, 제공, 고객 문의 응대, 품질 향상을 위해 개인정보를 수집·이용합니다.</p>
+                <p><strong>2. 수집하는 개인정보 항목</strong><br>
+                    - 필수: 성명, 연락처, 이메일, 서비스 주소, 예약 일시, 제빙기 모델명, 서비스 요청 세부 사항 등</p>
+                <p><strong>3. 보유 및 이용 기간</strong><br>
+                    서비스 제공 완료 후 1년 (법령에 따른 보존 기간 예외)</p>
+                <p><strong>4. 개인정보 제공</strong><br>
+                    - 제공받는 자: ICECARE 협력업체, 제빙기 제조사<br>
+                    - 목적: 예약 조율, 현장 서비스, 부품 수급<br>
+                    - 항목: 성명, 연락처, 주소, 모델명 등</p>
+                <p><strong>5. 동의 철회</strong><br>
+                    언제든지 동의를 철회하거나 열람·정정을 요청할 수 있습니다 <br/>(고객센터: 1234-5678)</p>
+            </div>
+            <button class="gobtn">예약 확인</button>
+        </div><!--step01-->
+        <div class="step02">
+
+
+        </div><!-- step02-->
+    </div><!--container-->
+</body>
+</html>
+<script>
+    function slideMenu() {
+        const navLinks = document.querySelector('.m-nav-links');
+        const overlay = document.querySelector('.overlay');
+
+        navLinks.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+</script>
+<script src="./js/reservationInquiry.js"></script>

@@ -1,0 +1,129 @@
+@media (max-width: 768px) {
+    .Q-txt{
+        text-align: center;
+        font-size: 1rem;
+    }
+    .logo img {
+        margin-top: 5px;
+        width: 120px;
+        height: 20px;
+    }
+    /* 네비게이션 링크 숨기기 */
+    .nav-links {
+        display: none;
+    }
+    /* 햄버거 메뉴 표시 */
+    .hamburger {
+        display: block;
+        color: #006B99;
+        cursor: pointer;
+        font-size: 30px;
+    }
+    /* 슬라이더 메뉴 */
+    .m-nav-links {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: -300px; /* 메뉴를 오른쪽으로 숨김 */
+        width: 300px;
+        height: 100%;
+        background-color: white;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+        transition: right 1s ease;
+        z-index: 1500;
+    }
+    .m-nav-links.active {
+        right: 0;
+    }
+    .m-nav-links ul {
+        list-style: none;
+        padding: 20px;
+        position: absolute;
+        top: 40px;
+        right: 180px;
+    }
+    .m-nav-links li {
+        margin: 20px 0;
+    }
+    .m-nav-links a {
+        color: black;
+        text-decoration: none;
+        font-size: 16px;
+        display: block;
+    }
+    .m-nav-links a:hover {
+        color: #006B99;
+        transform: translateX(3px);
+    }
+    .close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 30px;
+        color: #006B99;
+        cursor: pointer;
+    }
+    /* 배경 어둡게 */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 */
+        display: none;
+        z-index: 1000;
+    }
+    .overlay.active {
+        display: block;
+    }
+    .r-date{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+    .r-time, .r-info, .r-addr, .r-model,
+    .r-selectServ, .r-selectCyc, .r-selectAdd,
+    .r-Special, .r-capacity{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+    .info-group{
+        display: flex;
+        flex-direction: column;
+    }
+    .r-addr{
+        margin-top: 10rem;
+    }
+    .addr-input div{
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        height: 15rem;
+        padding: 1rem;
+    }
+    .time-select, .info-select, .addr-input, .model-input, .selectCyc-input,
+    .selectServ-input, .selectAdd-input, .special-input, .capacity-input
+
+    {
+        width: 90%;
+    }
+
+    .r-date label, .r-time h1, .r-info h1, .r-addr h1,
+    .r-model h1,.r-model h1, .r-selectServ h1, .r-selectCyc h1,
+    .r-selectAdd h1, .r-Special h1{
+        width: 100%;
+    }
+    .check-input{
+        width: 90%;
+    }
+    .privacy-details{
+        width: 90%;
+    }
+
+}
+.hidden2{
+    display: none;
+}

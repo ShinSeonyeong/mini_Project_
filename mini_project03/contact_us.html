@@ -21,7 +21,7 @@
 <body class="scroll-lock">
 <div id="container">
     <header class="navbar">
-        <img src="./image/logo.png" alt="아이스케어 로고">
+        <a href="./index.html" ><img src="./image/logo.png" alt="아이스케어 로고"></a>
 
         <div class="category">
             <div class="sub-category">
@@ -34,7 +34,7 @@
                 <button onclick="noticeSelect(3);">Q&A</button>
             </div>
             <nav>
-                <button>MAIN PAGE</button>
+                <button onclick="location.href='./index.html'" >MAIN PAGE</button>
             </nav>
         </div>
     </header>
@@ -91,7 +91,7 @@
     <div id="notice-modal" class="update-notice hidden">
         <div class="modal-div post-modal-content post-detail">
             <div>
-                <h1>글수정</h1>
+                <p>글수정</p>
             </div>
             <div>
                 <div>
@@ -107,7 +107,7 @@
 
                 작성자<input type="text" id="update-name"/>
 
-                비밀번호 <input type="password" id="update-password"/>
+                비밀번호 <input type="password" id="update-password" readonly/>
 
                 카테고리
                 <select id="update-category">

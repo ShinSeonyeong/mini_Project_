@@ -10,7 +10,7 @@ document.querySelector('#submit-post').addEventListener('click', async function 
     const image_url = document.querySelector('#post-image-url').files[0];
 
     const passwordInput = document.querySelector('#post-password'); // 사용자가 입력한 password값 가져옴
-    passwordInput.addEventListener('input', function(){
+    passwordInput.addEventListener('input', function () {
         const passwordValue = passwordInput.value;
         console.log(passwordValue);
     })
@@ -110,37 +110,75 @@ async function noticeSelect(categoryId) {
     };
     document.getElementById("changeText").innerHTML = texts[categoryId];
 
-    const params = new URLSearchParams(window.location.search);
-    const pageNum = parseInt(params.get("pageNum")) || 1;
-    const itemsPerPage = 15; // 페이지 글 개수 15개
-    const totalItems = 150;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const params = new URLSearchParams(location.search);
+    let pageNum = parseInt(params.get('pageNum')) || 1;
+    const itemPerPage = 15;
+    let [from, to] = [(pageNum - 1) * itemPerPage, pageNum * itemPerPage - 1];
+    const {count} = await supabase
+        .from('board')
+        .select('*', {count: "exact", head: true})
+        .eq('category_id', categoryId);
+    const maxPage = Math.ceil(count / itemPerPage);
 
-    const from = (pageNum - 1) * itemsPerPage;
-    const to = from + itemsPerPage - 1;
-
-    const pagingContainer = document.getElementById("paging-container");
+    const pagingContainer = document.querySelector('#paging-container');
     pagingContainer.innerHTML = "";
-    let pageFrom = parseInt((pageNum - 1) / 10);
-    let result = await supabase.from('board').select('id').range(pageFrom * totalItems, pageFrom * totalItems + totalItems);
-    if (result.data?.length >= 151) {
-        // 다음페이지로 이동 넣는다면 여기서 생성!
-        result.data.length = 150;
-    }
-    for (let i = 1; i <= Math.ceil(result.data?.length / itemsPerPage); i++) {
-        const pageLink = document.createElement("a"); // a태그 생성
-        pageLink.href = `?pageNum=${i}`;
+    for (let i = 1; i <= maxPage; i++) {
+        const pageLink = document.createElement("a");
+        pageLink.href = `?category_id=${categoryId}&pageNum=${i}`;
         pageLink.textContent = i;
+        pageLink.style.fontFamily = 'pageNum3'
 
-        pageLink.style.fontFamily = 'pageNum3';
-        // 현재 페이지라면 스타일 변경
         if (i === pageNum) {
             pageLink.style.fontWeight = "bold";
             pageLink.style.color = "#B8001F";
         }
-
         pagingContainer.appendChild(pageLink);
     }
+    // debugger
+    if (params.get('category_id') !== categoryId.toString()) {
+        pageNum = 1;
+        [from, to] = [(pageNum - 1) * itemPerPage, pageNum * itemPerPage - 1];
+        params.set('pageNum', '1');
+        params.set('category_id', categoryId);
+        const stateobject = {
+            category_id: categoryId,
+            pageNum: pageNum,
+        }
+
+        history.pushState(stateobject, '', `?${params.toString()}`);
+    }
+
+    // const params = new URLSearchParams(window.location.search);
+    // const pageNum = parseInt(params.get("pageNum")) || 1;
+    // const itemsPerPage = 15; // 페이지 글 개수 15개
+    // const totalItems = 150;
+    // const totalPages = Math.ceil(totalItems / itemsPerPage);
+    //
+    // const from = (pageNum - 1) * itemsPerPage;
+    // const to = from + itemsPerPage - 1;
+    //
+    // const pagingContainer = document.getElementById("paging-container");
+    // pagingContainer.innerHTML = "";
+    // let pageFrom = parseInt((pageNum - 1) / 10);
+    // let result = await supabase.from('board').select('id').range(pageFrom * totalItems, pageFrom * totalItems + totalItems);
+    // if (result.data?.length >= 151) {
+    //     // 다음페이지로 이동 넣는다면 여기서 생성!
+    //     result.data.length = 150;
+    // }
+    // for (let i = 1; i <= Math.ceil(result.data?.length / itemsPerPage); i++) {
+    //     const pageLink = document.createElement("a"); // a태그 생성
+    //     pageLink.href = `?pageNum=${i}`;
+    //     pageLink.textContent = i;
+    //
+    //     pageLink.style.fontFamily = 'pageNum3';
+    //     // 현재 페이지라면 스타일 변경
+    //     if (i === pageNum) {
+    //         pageLink.style.fontWeight = "bold";
+    //         pageLink.style.color = "#B8001F";
+    //     }
+    //
+    //     pagingContainer.appendChild(pageLink);
+    // }
 
     // 날짜 형식 변경 0000-00-00
     const fomatDate = (dateString) => {
@@ -151,8 +189,8 @@ async function noticeSelect(categoryId) {
         .select()
         .eq('category_id', categoryId)
         .order('updated_at', {ascending: true})
-        .range(from, to);
-
+        .range(from, to)
+        ;
     let rows = '';
     for (let i = 0; i < res.data.length; i++) {
         rows = rows + `
@@ -363,7 +401,8 @@ document.querySelector('#submit-update').addEventListener('click', async functio
 async function postDeleteClick(ev, id) {
     // stopPropagation 다른 이벤트 실행 막는 것, userRowClick 이벤트 실행X
     ev.stopPropagation();
-
+    urlParams = new URLSearchParams(window.location.search);
+    categoryId = Number(urlParams.get('category_id'));
     const result = await Swal.fire({
         title: "삭제하시겠습니까?",
         text: "You won't be able to revert this!",
@@ -382,7 +421,7 @@ async function postDeleteClick(ev, id) {
             text: "Your file has been deleted.",
             icon: "success"
         });
-
+if(!categoryId)categoryId=1;
         noticeSelect(categoryId);
     } else {
         Swal.fire({
@@ -395,8 +434,8 @@ async function postDeleteClick(ev, id) {
 }
 
 // 카테고리 선택하면 categoryId 값 가져옴
-const urlParams = new URLSearchParams(window.location.search);
-const categoryId = Number(urlParams.get('categoryId'));
+let urlParams = new URLSearchParams(window.location.search);
+let categoryId = Number(urlParams.get('category_id'));
 document.addEventListener('DOMContentLoaded', function () {
     switch (categoryId) {
         case 1:

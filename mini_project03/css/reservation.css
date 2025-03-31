@@ -1,0 +1,551 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: iceFont, sans-serif;
+
+}
+@font-face {
+    font-family: 'iceFont';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+body{
+    margin: 0;
+    padding: 60px 0 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 20px;
+    position: fixed;
+    background-color: white;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+}
+.gomain{
+    width: 140px;
+    height: 40px;
+    background-color: #00499a;
+    border-radius: 50px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.logo img {
+    margin-top: 5px;
+    width: 143px;
+    height: 25px;
+}
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+.nav-links li {
+    margin: 0 20px;
+}
+.nav-links a {
+    color: black;
+    text-decoration: none;
+    font-size: 16px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+.nav-links .hoho:hover {
+    color: #006B99;
+}
+.nav-links .hoho::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: #006B99;
+    bottom: -5px;
+    left: 50%;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+.nav-links .hoho:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+
+
+
+
+
+.hamburger, .m-nav-links{
+    display: none;
+}
+
+.Q-txt{
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+#r-container {
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 24px 30px 64px;
+    overflow-y: auto;
+    height: auto;
+}
+
+.r-date{
+    display: flex;
+    margin-top: 4rem;
+    animation: fadein 2s
+}
+.r-date label{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.r-date input{
+    display: none;
+    flex: 0 0 auto;
+    width: 50%;
+}
+.r-time{
+    margin-top: 7rem;
+    display: flex;
+    justify-content: center;
+    animation: fadein 2s
+}
+.r-time h1{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.time-select{
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    width: 50%;
+}
+.time-select label{
+    cursor: pointer;
+    padding: 0.5rem;
+}
+.time-select div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+input[type = "radio"]{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.r-info{
+    display: flex;
+    justify-content: center;
+    margin-top: 7rem;
+    animation: fadein 2s
+}
+.r-info h1{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.info-select{
+    flex: 0 0 auto;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    gap: 1rem;
+}
+.info-group{
+    display: flex;
+    flex-direction: row;
+}
+.info-group label{
+    margin-right: 1rem;
+    font-weight: bold;
+    line-height: 30px;
+    cursor: pointer;
+}
+.info-group input{
+    height: 30px;
+    padding: 1px;
+    cursor: pointer;
+}
+
+.search-btn {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.r-addr{
+    margin-top: 7rem;
+    display: flex;
+    justify-content: center;
+    animation: fadein 2s
+}
+.r-addr h1{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.addr-input{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.addr-input div{
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    height: 11rem;
+    padding: 1rem;
+}
+.addr-input-top{
+    cursor: pointer;
+    margin : 0 auto 5px;
+    padding: 0.5rem;
+}
+.addr-input-top2{
+    cursor: pointer;
+    margin : 0 auto 5px;
+    padding: 0.5rem;
+    background-color: #006B99;
+    border-radius: 5px;
+    color: white;
+}
+.addr-input-bot{
+    cursor: pointer;
+    margin : 5px auto;
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+.r-model{
+    margin-top: 7rem;
+    display: flex;
+    justify-content: center;
+    animation: fadein 2s
+}
+.r-model h1{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.model-input{
+    flex: 0 0 auto;
+    width: 50%;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+.model-input input{
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+}
+.r-selectServ{
+    display: flex;
+    justify-content: center;
+    margin-top: 7rem;
+    animation: fadein 2s
+}
+.r-selectServ h1{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.selectServ-input {
+    flex: 0 0 auto;
+    width: 50%;
+}
+.selectServ-input div{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.selectServ-input div label, .selectCyc-input div label, .selectAdd-input div label{
+    cursor: pointer;
+}
+
+.r-capacity{
+    display: flex;
+    justify-content: center;
+    margin-top: 7rem;
+    animation: fadein 2s
+}
+.r-capacity h1{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.capacity-input{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.capacity-input div{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.capacity-input div label{
+    cursor: pointer;
+}
+.r-selectCyc {
+    margin-top: 7rem;
+    display: flex;
+    justify-content: center;
+    animation: fadein 2s
+}
+.r-selectCyc h1{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.selectCyc-input{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.selectCyc-input div{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.r-selectAdd{
+    margin-top: 7rem;
+    display: flex;
+    justify-content: center;
+    animation: fadein 2s
+}
+.r-selectAdd h1{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.selectAdd-input{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.selectAdd-input div{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.r-Special{
+    display: flex;
+    justify-content: center;
+    margin-top: 7rem;
+    animation: fadein 2s
+}
+.r-Special h1{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.special-input{
+    flex: 0 0 auto;
+    width: 50%;
+}
+.special-input textarea{
+    width: 100%;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    height: 11rem;
+    text-align: center;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.table-body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 5rem auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    color: #333;
+}
+.table-tit {
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+.table-body table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+.table-body th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-size: 0.8rem;
+}
+.table-body th {
+    background-color: #3498db;
+    color: white;
+}
+.table-body tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.table-body tr:hover {
+    background-color: #eef2f7;
+    cursor: pointer;
+}
+.total-cost, .notes {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+.notes-toggle {
+    cursor: pointer;
+    color: #2980b9;
+    font-weight: bold;
+    text-align: right;
+}
+.notes-content {
+    display: none;
+    margin-top: 10px;
+}
+
+.reserBtn{
+    display: flex;
+    align-items: center;
+    margin-top: 7rem;
+    flex-direction: column;
+    gap: 2rem;
+}
+.resercheck-input{
+    cursor: pointer;
+}
+.resercheck-label{
+    cursor: pointer;
+}
+.resercheck-label:hover{
+    text-decoration: underline;
+    color: firebrick;
+}
+
+#confirm-reserve{
+    background: #427D9D;
+    width: 10rem;
+    height: 4rem;
+    font-size: 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    color: whitesmoke;
+    animation: bounce 1.2s infinite;
+    font-weight: bold;
+
+}
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-25px);
+    }
+}
+.reserBtn button:hover{
+    transform: scale(1.05);
+}
+#confirm-reserve:hover {
+    background: #164863;
+    color: white;
+}
+.r-check{
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.r-check h1{
+    text-align: center;
+}
+.check-input{
+    background-color: #EBF4F6;
+    border-radius: 1rem;
+    width: 30rem;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+.check-input div{
+    display: flex;
+}
+.check-input div label,div{
+    margin: 4px 8px;
+}
+.check-input div label{
+    font-weight: bold;
+    text-align: left;
+    width: 125px;
+}
+
+
+.modal{
+    position: absolute;
+    top: 5rem;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    animation: fadein 2s;
+}
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.agree:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.privacy-detail-btn:hover{
+    color: darkred;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.privacy-no,.privacy-ok{
+    width: 3.5rem;
+    border: gray solid 1px;
+    border-radius: 0.5rem;
+    margin: 1rem 1rem 5rem;
+    cursor: pointer;
+}
+
+.privacy-no:hover,.privacy-ok:hover{
+    background-color: #006B99;
+    border: none;
+    color: white;
+    width: 4rem;
+    transform: scale(1.05);
+}
+.privacy-details{
+    border: 1px solid lightgray;
+    padding: 2rem;
+    margin: 2rem auto;
+    width: 60rem;
+    display: none;
+}
+
+.hidden2{
+    display: none;
+}
+
+.flatpickr-current-month .numInputWrapper {
+    width:115px;
+}
+.flatpickr-months .flatpickr-prev-month, .flatpickr-months .flatpickr-next-month{
+    top:5%;
+}
+.flatpickr-calendar.inline{
+    width: auto;
+}

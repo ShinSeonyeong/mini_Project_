@@ -40,10 +40,6 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.navbar img {
-    height: 40px;
-}
-
 nav button {
     font-weight: bold;
     margin-right: 40px;
@@ -334,6 +330,7 @@ textarea {
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
 }
+
 #notice-modal div span {
     display: inline-block;
     margin-right: 15px;
@@ -344,6 +341,7 @@ textarea {
     margin: 0 10px 0 5px;
     font-weight: normal;
 }
+
 .post-modal-content h1 {
     font-size: 24px;
     margin-bottom: 20px;
@@ -358,7 +356,7 @@ textarea {
 
 .modal-div {
     padding: 20px;
-    margin: 25vh auto;
+    margin: 13vh auto;
     background-color: white;
     overflow-y: auto;
     width: 800px;
@@ -378,13 +376,13 @@ textarea {
     color: #666;
 }
 
-#paging-container{
+#paging-container {
     display: flex;
     justify-content: center;
     gap: 1.5rem;
 }
 
-.swal-custom-input{
+.swal-custom-input {
     width: 84% !important;
     border-radius: 10px !important;
 }
