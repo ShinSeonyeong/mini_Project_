@@ -128,6 +128,7 @@ async function noticeSelect(categoryId) {
         pageLink.textContent = i;
         pageLink.style.fontFamily = 'pageNum3'
         pageLink.style.color = 'black';
+        pageLink.style.textDecoration = 'none';
 
         if (i === pageNum) {
             pageLink.style.fontWeight = "bold";
@@ -135,7 +136,7 @@ async function noticeSelect(categoryId) {
         }
         pagingContainer.appendChild(pageLink);
     }
-    // debugger
+
     if (params.get('category_id') !== categoryId.toString()) {
         pageNum = 1;
         [from, to] = [(pageNum - 1) * itemPerPage, pageNum * itemPerPage - 1];
@@ -149,42 +150,16 @@ async function noticeSelect(categoryId) {
         history.pushState(stateobject, '', `?${params.toString()}`);
     }
 
-    // const params = new URLSearchParams(window.location.search);
-    // const pageNum = parseInt(params.get("pageNum")) || 1;
-    // const itemsPerPage = 15; // 페이지 글 개수 15개
-    // const totalItems = 150;
-    // const totalPages = Math.ceil(totalItems / itemsPerPage);
-    //
-    // const from = (pageNum - 1) * itemsPerPage;
-    // const to = from + itemsPerPage - 1;
-    //
-    // const pagingContainer = document.getElementById("paging-container");
-    // pagingContainer.innerHTML = "";
-    // let pageFrom = parseInt((pageNum - 1) / 10);
-    // let result = await supabase.from('board').select('id').range(pageFrom * totalItems, pageFrom * totalItems + totalItems);
-    // if (result.data?.length >= 151) {
-    //     // 다음페이지로 이동 넣는다면 여기서 생성!
-    //     result.data.length = 150;
-    // }
-    // for (let i = 1; i <= Math.ceil(result.data?.length / itemsPerPage); i++) {
-    //     const pageLink = document.createElement("a"); // a태그 생성
-    //     pageLink.href = `?pageNum=${i}`;
-    //     pageLink.textContent = i;
-    //
-    //     pageLink.style.fontFamily = 'pageNum3';
-    //     // 현재 페이지라면 스타일 변경
-    //     if (i === pageNum) {
-    //         pageLink.style.fontWeight = "bold";
-    //         pageLink.style.color = "#B8001F";
-    //     }
-    //
-    //     pagingContainer.appendChild(pageLink);
-    // }
-
     // 날짜 형식 변경 0000-00-00
     const fomatDate = (dateString) => {
-        return new Date(dateString).toISOString().split('T')[0];
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).replace(/. /g, '-').replace('.', '');
     };
+
     var res = await supabase
         .from('board')
         .select()
@@ -201,8 +176,8 @@ async function noticeSelect(categoryId) {
                 <td>${res.data[i].content}</td>
                 <td>${res.data[i].author}</td>
                 <td>${res.data[i].password}</td>
-                <td>${fomatDate(res.data[i].created_at)}</td>
-                <td>${fomatDate(res.data[i].updated_at)}</td>
+                <td>${fomatDate(res.data[i].created_at).toLocaleString('ko-kr')}</td>
+                <td>${fomatDate(res.data[i].updated_at).toLocaleString('ko-kr')}</td>
                 <td id="views-${res.data[i].id}">${res.data[i].views}</td>
                 <td>${res.data[i].category_id}</td>
                 <td><button class="delete-btn" onclick='postDeleteClick(event, "${res.data[i].id}")'>삭제</button></td>
@@ -306,6 +281,12 @@ async function postRowClick(trTag) {
     // 모달창 안 보여주게 하기
     const $noticeModal = document.querySelector('#notice-modal');
     $noticeModal.classList.remove('hidden');
+
+    $noticeModal.addEventListener('click', function (event) {
+        if (event.target === $noticeModal) {
+            $noticeModal.classList.add('hidden');
+        }
+    });
 }
 
 document.querySelector('#submit-update').addEventListener('click', async function () {
@@ -506,6 +487,12 @@ document.getElementById('post-image-url').addEventListener('change', function (e
 function postClick() {
     const $openModal = document.querySelector('#post-modal');
     $openModal.classList.remove('hidden');
+    $openModal.addEventListener('click', function (event) {
+        if (event.target === $openModal) {
+            $openModal.classList.add('hidden');
+        }
+    });
+
 }
 
 // 글쓰기 취소
@@ -515,6 +502,7 @@ function cancelModalClose() {
     document.body.classList.add('scroll-lock');
 }
 
+// 글 수정
 function noticemodalClose() {
     const $noticeModal = document.querySelector('#notice-modal');
     $noticeModal.classList.add('hidden');

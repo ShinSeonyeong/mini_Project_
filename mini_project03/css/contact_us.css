@@ -213,8 +213,8 @@ tr:hover {
 
 .post-modal-content {
     background: white;
-    width: 800px;
-    height: 700px;
+    width: 500px;
+    height: 600px;
     padding: 20px;
     border-radius: 10px;
     overflow-y: auto;
@@ -245,16 +245,18 @@ tr:hover {
 }
 
 .post-detail p {
-    font-size: 22px;
+    font-size: 2rem;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 15px;
+    margin: 15px;
 }
 
 .post-detail label {
     display: block;
     margin-top: 10px;
     font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 30px;
 }
 
 input[type="text"],
