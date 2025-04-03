@@ -192,9 +192,6 @@ async function noticeSelect(categoryId) {
             <tr>
                 <td>${res.data[i].id}</td>
                 <td>${content}</td>
-                <td>${res.data[i].author}</td>
-                <td>${new Date(res.data[i].created_at).toLocaleDateString('ko-KR')}</td>
-                <td>${new Date(res.data[i].updated_at).toLocaleDateString('ko-KR')}</td>
             </tr>
         `;
     }
@@ -205,9 +202,6 @@ async function noticeSelect(categoryId) {
                 <tr>
                     <th>No.</th>
                     <th>제목</th>
-                    <th>작성자</th>
-                    <th>작성시간</th>
-                    <th>수정시간</th>
                 </tr>
                 ${rows}
             </table>
@@ -216,50 +210,12 @@ async function noticeSelect(categoryId) {
     $boardDiv.classList.add('show');
 }
 
-// 📌 FAQ 토글 기능
 function toggleFAQ(id) {
     const contentDiv = document.getElementById(`faq-content-${id}`);
+    const questionDiv = contentDiv.previousElementSibling; // 질문 div
     contentDiv.classList.toggle("show");
+    questionDiv.classList.toggle("active"); // 아이콘 변경 효과 추가
 }
-//     let rows = '';
-//     for (let i = 0; i < res.data.length; i++) {
-//         rows = rows + `
-//             <tr onclick='postRowClick(this);' style='cursor:pointer;'>
-//                 <td>${res.data[i].id}</td>
-//                 <td style="text-align: left;">${res.data[i].title}</td>
-//                 <td>${res.data[i].content}</td>
-//                 <td>${res.data[i].author}</td>
-//                 <td>${res.data[i].password}</td>
-//                 <td>${fomatDate(res.data[i].created_at).toLocaleString('ko-kr')}</td>
-//                 <td>${fomatDate(res.data[i].updated_at).toLocaleString('ko-kr')}</td>
-//                 <td id="views-${res.data[i].id}">${res.data[i].views}</td>
-//                 <td>${res.data[i].category_id}</td>
-//                 <td><button class="delete-btn" onclick='postDeleteClick(event, "${res.data[i].id}")'>삭제</button></td>
-//             </tr>`;
-//     }
-//
-//     let boardTable = `
-//         <div>
-//             <table>
-//                 <tr>
-//                     <th>No.</th>
-//                     <th>제목</th>
-//                     <th>내용</th>
-//                     <th>작성자</th>
-//                     <th>비밀번호</th>
-//                     <th>작성시간</th>
-//                     <th>수정시간</th>
-//                     <th>조회수</th>
-//                     <th>category_id</th>
-//                     <th>선택</th>
-//                 </tr>
-//                 ${rows}
-//             </table>
-//         </div>`;
-//     $boardDiv.innerHTML = boardTable;
-//     $boardDiv.classList.add('show');
-// }
-
 
 // 항목 눌렀을 때 작성한 내용 보기
 async function postRowClick(trTag) {
