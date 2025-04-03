@@ -7,3 +7,66 @@
     box-sizing: border-box;
     word-break: keep-all;
 }
+header{
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    nav{
+        a{
+            padding: 1.5rem;
+            margin-right: 4rem;
+            font-weight: bold;
+            position:relative;
+            &::after{
+                content: "";
+                position: absolute;
+                width: 0px;
+                height: 2px;
+                background-color: #006B99;
+                bottom: 20%;
+                left: 50%;
+                transition: width 0.3s ease, left 0.3s ease;
+            }
+            &:hover{
+                color:#006B99;
+                &::after{
+                    width:100%;
+                    left:0;
+
+                }
+            }
+        }
+    }
+}
+#side_btn_group{
+    background-color:rgba(217,217,217,0.7);
+    span{
+        &:hover {
+            &:first-child {
+                border: 1px solid #19499E;
+
+                p {
+                    color: #19499E;
+                }
+            }
+            &:nth-child(2) {
+                background-image:url("../image/seablueBalloon.png");
+                p{
+                    color:white;
+                }
+            }
+            &:nth-child(3) {
+                background-image:url("../image/yellowBalloon.png");
+                p{
+                    color:black;
+                }
+            }
+        }
+
+        &:nth-child(n+2){
+            p{
+                font-family:"pageNum5",sans-serif;
+                font-weight:500;
+            }
+        }
+
+    }
+}

@@ -1,3 +1,4 @@
+<!-- 모달창 띄워서 글작성하고, 글수정하는 html 코드 방식-->
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,9 +9,8 @@
     <title>Contact Us</title>
     <link rel="stylesheet" href="./css/common.css">
     <link rel="stylesheet" href="./css/index.css">
-    <link rel="stylesheet" href="css/contact_us.css">
+    <link rel="stylesheet" href="css/contact_us_bk.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const supabaseUrl = "https://rnzhzcfovaqfsjfxorfq.supabase.co";
@@ -20,69 +20,25 @@
     </script>
 </head>
 <body class="scroll-lock">
-
-<!--    <header class="navbar">-->
-<header class="sticky top-0 z-40 w-full bg-white p-5">
-    <nav class="flex items-center justify-start gap-[200px] flex-wrap">
-        <img src="./image/logo.png" class="cursor-pointer ml-[100px]" onclick="location.href='./index.html'" alt="">
-        <ul>
-            <li>
-                <a href="./contact_us.html">공지사항</a>
-                <a href="./contact_us.html?pageNum=1&category_id=2">FAQ</a>
-                <a href="./reservation.html">예약하기</a>
-                <a href="./reservationInquiry.html">예약확인</a>
-
-            </li>
-        </ul>
-        <!--<button class="flex gap-2 align-middle p-3 rounded-[10px] text-white bg-[#194A9C] cursor-pointer"
-                onclick="window.open('./reservation.html', '_blank', 'width=1000,height=730')" >
-            <div class="w-[27px] h-[26px]" style="background:url('image/reserve.png') no-repeat"></div>
-            <div class="pt-[3px]">예약하기</div>
-        </button>-->
-    </nav>
-    <!--  <div id="side_btn_group" class="h-full absolute right-[5%] top-60 z-50 flex flex-col justify-between items-center">
-      <div id="notice_btn" class="rounded-[25px] w-[50px] h-[50px] mb-10 z-50 flex justify-center items-center" onclick="location.href='./contact_us.html'">
-          <span class="flex justify-center items-center"><h5 class="h-[38px]">&lt;</h5></span>
-          <p>공지사항</p>
-      </div>
-      <div id="kakaoBot_btn" class="rounded-[25px] w-[50px] h-[50px] z-50 flex justify-center items-center" onclick="location.href='#'">
-          <p>카카오챗봇</p>
-      </div>
-      </div>
-  -->
-    <div id="side_btn_group"
-         class="w-[45px] h-[100px] rounded-[20px] z-50 absolute top-[70vh] right-10  flex flex-col justify-evenly items-center">
-        <span class="w-[35px] h-[35px] rounded-[50%] border border-white flex justify-start items-center cursor-pointer"
-              onclick="window.scrollTo({top:0,behavior:'smooth'})">
-            <p class="text-white text-xl rotate-90 pb-[17px]">&lt;</p>
-        </span>
-        <!--   <span class="w-[35px] h-[35px] rounded-[50%] flex justify-center items-center bg-[url('./image/whiteBalloon.png')] bg-no-repeat cursor-pointer"
-                 onclick="location.href='./contact_us.html'">
-               <p class="text-black text-xs font-bold tracking-[-1.2px] pb-[1.5px]">Q&A</p>
-           </span>-->
-        <span class="w-[35px] h-[35px] rounded-[50%] flex justify-center items-center bg-[url('./image/darkBalloon.png')] bg-no-repeat cursor-pointer"
-              onclick="window.open('http://pf.kakao.com/_Kxgsxfn','_blank','width=500,height=630')">
-            <p class="text-white text-xs font-bold tracking-[-0.5px] pl-[3px] pb-[2px]">Ch+</p>
-        </span>
-
-    </div>
-
-</header>
 <div id="container">
-    <!--        <div class="category">-->
-    <!--            <div class="sub-category">-->
-    <!--                <button onclick="noticeSelect(1);">공지사항</button>-->
-    <!--            </div>-->
-    <!--            <div class="sub-category">-->
-    <!--                <button onclick="noticeSelect(2);">FAQ</button>-->
-    <!--            </div>-->
-    <!--            <div class="sub-category">-->
-    <!--                <button onclick="noticeSelect(3);">Q&A</button>-->
-    <!--            </div>-->
-    <!--            <nav>-->
-    <!--                <button onclick="location.href='./reservation.html'" >예약하기</button>-->
-    <!--            </nav>-->
-    <!--        </div>-->
+    <header class="navbar">
+        <a href="./index.html"><img src="./image/logo.png" alt="아이스케어 로고"></a>
+
+        <div class="category">
+            <div class="sub-category">
+                <button onclick="noticeSelect(1);">공지사항</button>
+            </div>
+            <div class="sub-category">
+                <button onclick="noticeSelect(2);">FAQ</button>
+            </div>
+            <div class="sub-category">
+                <button onclick="noticeSelect(3);">Q&A</button>
+            </div>
+            <nav>
+                <button onclick="location.href='./reservation.html'">예약하기</button>
+            </nav>
+        </div>
+    </header>
 
     <div class="main_text">
         <p id="changeText">공지사항</p>
@@ -93,7 +49,7 @@
         <button onclick="postClick()" class="post-writing">글쓰기</button>
     </div>
 
-    <div id="post-modal" class="post-modal-c hidden">
+    <div id="post-modal" class="post-modal-c "> <!--post-modal-->
         <div class="post-modal-content">
             <div class="post-detail">
                 <p>글작성</p>
@@ -132,6 +88,7 @@
         </div>
     </div>
 
+    <!-- 글 수정 -->
     <div id="notice-modal" class="update-notice hidden">
         <div class="modal-div post-modal-content post-detail">
             <div>
@@ -178,4 +135,4 @@
 </div>
 </body>
 </html>
-<script src="js/contact_us.js"></script>
+<script src="js/contact_us_bk.js"></script>
