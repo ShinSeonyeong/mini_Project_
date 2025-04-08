@@ -1,4 +1,6 @@
-const $boardDiv = document.querySelector('#board-div');
+// const $boardDiv = document.querySelector('#board-div')
+const $boardDiv = document.getElementById("board-div");
+
 
 // 게시글 작성 및 등록
 document.querySelector('#submit-post').addEventListener('click', async function () {
@@ -168,55 +170,119 @@ async function noticeSelect(categoryId) {
         .range(from, to)
     ;
     let rows = '';
-    for (let i = 0; i < res.data.length; i++) {
-        let content = '';
 
+    // for (let i = 0; i < res.data.length; i++) {
+    //     let content = '';
+    for (let i = 0; i < res.data.length; i++) {
+        const row = document.createElement("tr");
         if (categoryId === 1) {
             content = `
-        <a href="notice_detail.html?id=${res.data[i].id}" style="text-decoration:none; color:inherit;">
-            <td>${res.data[i].title}</td>
-        </a>
+        <div class="notice-item post-item" data-id="${res.data[i].id}">
+            <a class="notice-link" href="contact_us.html?pageNum=${pageNum}&category_id=${categoryId}&id=${res.data[i].id}">
+                <h3 class="notice-title">${res.data[i].title}</h3>
+                <p class="notice-content">${res.data[i].content}</p>
+            </a>
+        </div>
     `;
-        } else if (categoryId === 2) {
+        }
+        else if (categoryId === 2) {
             content = `
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(${res.data[i].id})">
-                        <span class="faq-icon">Q</span>  ${res.data[i].title}
-                    </div>
-                    <div id="faq-content-${res.data[i].id}" class="faq-answer">
-                        <span class="faq-icon">A</span> ${res.data[i].content}
-                    </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(${res.data[i].id})">
+                    <span class="faq-icon">Q</span>  ${res.data[i].title}
                 </div>
-            `;
+                <div id="faq-content-${res.data[i].id}" class="faq-answer">
+                    <span class="faq-icon">A</span> ${res.data[i].content}
+                </div>
+            </div>
+        `;
         } else {
-            // 공지사항 및 Q&A는 기존 방식 유지
             content = `<td>${res.data[i].content}</td>`;
         }
 
         rows += `
-            <tr>
-                <td>${content}</td>
-            </tr>
-        `;
+        <tr>
+            ${categoryId === 1 ? content : `<td>${content}</td>`}
+        </tr>
+    `;
+    }
+
+    if (!res.data) {
+        $boardDiv.innerHTML = "<p>데이터를 불러오는 중 오류가 발생했습니다.</p>";
+        return;
     }
 
     $boardDiv.innerHTML = rows;
     $boardDiv.classList.add('show');
 }
 
-function showPostDetail(post) {
-    // post는 객체 형태로 전달 (id, title, author, date, content 등)
-    document.getElementById('board-div').style.display = 'none';
-    document.getElementById('paging-container').style.display = 'none';
-    document.querySelector('.post-writing').style.display = 'none';
+window.addEventListener('DOMContentLoaded', async () => {
+    const params = new URLSearchParams(location.search);
+    const postId = parseInt(params.get('id'));
 
-    document.getElementById('post-detail-view').classList.remove('hidden');
+    // 게시글 ID가 없으면 목록만 보여줍니다.
+    if (!postId) {
+        document.getElementById('notice-detail-container').style.display = 'none';
+        document.querySelector('.post_list').style.display = 'block';
+        return;
+    }
 
-    document.getElementById('detail-title').innerText = post.title;
-    document.getElementById('detail-author').innerText = post.author;
-    document.getElementById('detail-date').innerText = post.created_at || '날짜 정보 없음';
-    document.getElementById('detail-content').innerText = post.content;
+    // 게시글 데이터 불러오기
+    const { data, error } = await supabase
+        .from('board')
+        .select('*')
+        .eq('id', postId)
+        .single();
+
+    if (error || !data) {
+        document.getElementById('notice-title').textContent = "해당 게시물을 찾을 수 없습니다.";
+        document.getElementById('notice-date').textContent = "";
+        document.getElementById('notice-content').textContent = "";
+        return;
+    }
+
+    // 데이터 표시
+    document.getElementById('notice-title').textContent = data.title;
+    document.getElementById('notice-date').textContent = new Date(data.updated_at).toLocaleDateString('ko-KR');
+    document.getElementById('notice-content').innerHTML = data.content;
+
+    // 상세 화면 표시 / 목록 숨기기
+    document.querySelector('.post_list').style.display = 'none';
+    document.getElementById('notice-detail-container').style.display = 'block';
+});
+
+document.getElementById("board-div").addEventListener("click", async (e) => {
+    const target = e.target.closest(".post-item");
+    if (target) {
+        e.preventDefault();  // 링크 이동 막기
+        const postId = target.dataset.id;
+        history.pushState(null, "", `?pageNum=1&category_id=1&id=${postId}`); // 주소는 바뀌지만 새로고침 없음
+        showPostDetail(postId); // 내부 함수로 상세 게시글 로드
+    }
+});
+
+async function showPostDetail(postId) {
+    const { data, error } = await supabase
+        .from('board')
+        .select('*')
+        .eq('id', postId)
+        .single();
+
+    if (error || !data) {
+        document.getElementById('notice-detail-container').innerHTML = "해당 게시물을 찾을 수 없습니다.";
+        return;
+    }
+
+    document.getElementById('notice-title').textContent = data.title;
+    document.getElementById('notice-date').textContent = new Date(data.updated_at).toLocaleDateString('ko-KR');
+    document.getElementById('notice-content').innerHTML = data.content;
+
+    // 리스트 숨기고 상세보기만 보여줌
+    document.querySelector('.post_list').style.display = 'none';
+    document.getElementById('notice-detail-container').style.display = 'block';
 }
+
+
 
 function goBackToList() {
     document.getElementById('post-detail-view').classList.add('hidden');

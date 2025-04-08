@@ -78,7 +78,14 @@
         <div id="board-div" class="content"></div>
         <button onclick="postClick()" class="post-writing">글쓰기</button>
     </div>
-
+<!--    <table id="boardTable">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>제목</th>-->
+<!--            <th>내용</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--    </table>-->
     <div id="post-modal" class="post-modal-c hidden">
         <div class="post-modal-content">
             <div class="post-detail">
@@ -158,19 +165,33 @@
             </div>
         </div>
     </div>
-
-    <div id="post-detail-view" class="hidden">
-        <button onclick="goBackToList()">← 목록으로</button>
-        <h2 id="detail-title"></h2>
-        <p><strong>작성자:</strong> <span id="detail-author"></span></p>
-        <p><strong>날짜:</strong> <span id="detail-date"></span></p>
-        <p><strong>내용:</strong></p>
-        <div id="detail-content"></div>
+    <div id="notice-detail-container" style="margin-top: 30px; display: none;">
+        <h2 id="notice-title">제목</h2>
+        <p id="notice-date">2025.03.05</p>
+        <hr>
+        <div id="notice-content">본문 내용</div>
+        <button onclick="goBackToList()">목록으로</button>
     </div>
-
     <div id="paging-container" class="post-paging"></div>
+<!--    <div id="post-detail-view" class="hidden">-->
+<!--        <button onclick="goBackToList()">← 목록으로</button>-->
+<!--        <h2 id="detail-title"></h2>-->
+<!--        <p><strong>작성자:</strong> <span id="detail-author"></span></p>-->
+<!--        <p><strong>날짜:</strong> <span id="detail-date"></span></p>-->
+<!--        <p><strong>내용:</strong></p>-->
+<!--        <div id="detail-content"></div>-->
+<!--    </div>-->
+    <div id="postDetail"></div>
+    <div id="notice-detail" style="display:none; padding: 20px;"></div>
+<!--    <div id="paging-container" class="post-paging"></div>-->
 
 </div>
 </body>
 </html>
 <script src="js/contact_us.js"></script>
+<script>
+    function goBackToList() {
+        document.getElementById('notice-detail-container').style.display = 'none';
+        document.querySelector('.post_list').style.display = 'block';
+    }
+</script>

@@ -147,57 +147,108 @@ nav button:hover {
 .show {
     height: auto;
 }
-
 .faq-item {
-    border-radius: 8px;
-    margin-bottom: 10px;
-    padding: 15px;
-    cursor: pointer;
-    border: 1px solid black;
+    padding: 16px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
 }
 
-.faq-item {
-    border-radius: 8px;
-    margin-bottom: 10px;
-    padding: 15px;
-    cursor: pointer;
-    border: 1px solid black;
+.faq-item:hover {
+    background-color: #f9f9f9;
 }
 
 .faq-question {
-    text-align: start;
+    font-size: 1.05rem;
+    font-weight: 600;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-    padding: 10px;
-}
-
-.faq-question::after {
-    content: "+";
-    font-size: 1.5rem;
-    transition: transform 0.3s ease;
-}
-
-.faq-question.active::after {
-    content: "-";
-    transform: rotate(180deg);
+    gap: 8px;
+    cursor: pointer;
 }
 
 .faq-answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease, padding 0.2s ease;
-    padding: 0 10px;
-    border-radius: 8px;
-    font-size: 1rem;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #444;
+    display: none; /* 기본은 감춤 */
 }
 
 .faq-answer.show {
-    max-height: 1000px;
-    padding: 10px;
+    display: block;
 }
+
+.faq-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.8rem;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+}
+
+
+
+/*************************************************************************************/
+#notice-detail-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+#notice-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#notice-date {
+    font-size: 14px;
+    color: gray;
+}
+
+#notice-content {
+    margin-top: 30px;
+    line-height: 1.6;
+}
+
+button {
+    margin-top: 40px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border: 1px solid black;
+}
+
+
+.notice-item {
+    padding: 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+.notice-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.notice-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0 0 8px 0;
+}
+
+.notice-content {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+}
+/*************************************************************************************/
 
 .post-modal-c {
     position: fixed;
