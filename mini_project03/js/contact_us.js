@@ -171,12 +171,17 @@ async function noticeSelect(categoryId) {
     for (let i = 0; i < res.data.length; i++) {
         let content = '';
 
-        // FAQ 카테고리일 때 접었다 펴는 스타일 적용
-        if (categoryId === 2) {
+        if (categoryId === 1) {
+            content = `
+        <a href="notice_detail.html?id=${res.data[i].id}" style="text-decoration:none; color:inherit;">
+            <td>${res.data[i].title}</td>
+        </a>
+    `;
+        } else if (categoryId === 2) {
             content = `
                 <div class="faq-item">
                     <div class="faq-question" onclick="toggleFAQ(${res.data[i].id})">
-                        <span class="faq-icon">Q</span> ${res.data[i].title}
+                        <span class="faq-icon">Q</span>  ${res.data[i].title}
                     </div>
                     <div id="faq-content-${res.data[i].id}" class="faq-answer">
                         <span class="faq-icon">A</span> ${res.data[i].content}
@@ -190,32 +195,60 @@ async function noticeSelect(categoryId) {
 
         rows += `
             <tr>
-                <td>${res.data[i].id}</td>
                 <td>${content}</td>
             </tr>
         `;
     }
 
-    let boardTable = `
-        <div>
-            <table>
-                <tr>
-                    <th>No.</th>
-                    <th>제목</th>
-                </tr>
-                ${rows}
-            </table>
-        </div>`;
-    $boardDiv.innerHTML = boardTable;
+    $boardDiv.innerHTML = rows;
     $boardDiv.classList.add('show');
 }
 
-function toggleFAQ(id) {
-    const contentDiv = document.getElementById(`faq-content-${id}`);
-    const questionDiv = contentDiv.previousElementSibling; // 질문 div
-    contentDiv.classList.toggle("show");
-    questionDiv.classList.toggle("active"); // 아이콘 변경 효과 추가
+function showPostDetail(post) {
+    // post는 객체 형태로 전달 (id, title, author, date, content 등)
+    document.getElementById('board-div').style.display = 'none';
+    document.getElementById('paging-container').style.display = 'none';
+    document.querySelector('.post-writing').style.display = 'none';
+
+    document.getElementById('post-detail-view').classList.remove('hidden');
+
+    document.getElementById('detail-title').innerText = post.title;
+    document.getElementById('detail-author').innerText = post.author;
+    document.getElementById('detail-date').innerText = post.created_at || '날짜 정보 없음';
+    document.getElementById('detail-content').innerText = post.content;
 }
+
+function goBackToList() {
+    document.getElementById('post-detail-view').classList.add('hidden');
+    document.getElementById('board-div').style.display = 'block';
+    document.getElementById('paging-container').style.display = 'flex';
+    document.querySelector('.post-writing').style.display = 'inline-block';
+}
+
+
+function toggleFAQ(id) {
+    const currentContent = document.getElementById(`faq-content-${id}`);
+    const currentQuestion = currentContent.previousElementSibling;
+
+    const allContents = document.querySelectorAll('.faq-answer');
+    const allQuestions = document.querySelectorAll('.faq-question');
+
+    allContents.forEach(content => {
+        if (content !== currentContent) {
+            content.classList.remove('show');
+        }
+    });
+
+    allQuestions.forEach(question => {
+        if (question !== currentQuestion) {
+            question.classList.remove('active');
+        }
+    });
+
+    currentContent.classList.toggle("show");
+    currentQuestion.classList.toggle("active");
+}
+
 
 // 항목 눌렀을 때 작성한 내용 보기
 async function postRowClick(trTag) {
@@ -282,8 +315,11 @@ async function postRowClick(trTag) {
     if (res.data.image_url && res.data.image_url.trim() !== '') {
         $updateImage.alt = `Uploaded Image: ${res.data.title}`;
         $updateImage.src = res.data.image_url;
+        $updateImage.style.display = 'block';
+
         console.log($updateImage.src);
     } else {
+        $updateImage.style.display = 'none';
         $updateImage.alt = '이미지가 없습니다.';
         $updateImage.src = '';
     }

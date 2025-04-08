@@ -148,99 +148,55 @@ nav button:hover {
     height: auto;
 }
 
-/*table {*/
-/*    width: 100%;*/
-/*    border-collapse: collapse;*/
-/*}*/
-
-/*th, td {*/
-/*    padding: 10px;*/
-/*    !*text-align: center;*!*/
-/*}*/
-
-/*th {*/
-/*    border-top: 1px solid black;*/
-/*    border-bottom: 1px solid black;*/
-/*}*/
-
-/*td {*/
-/*    border-bottom: 1px solid #d3d3da;*/
-/*    white-space: nowrap;*/
-/*    overflow: hidden;*/
-/*    text-overflow: ellipsis;*/
-/*    max-width: 150px;*/
-/*}*/
-
-tr:hover {
-    background-color: rgb(220, 220, 220);
-    cursor: pointer;
-}
-
-
 .faq-item {
-    background-color: #222; /* 어두운 배경 */
     border-radius: 8px;
     margin-bottom: 10px;
     padding: 15px;
-    color: white;
     cursor: pointer;
+    border: 1px solid black;
+}
+
+.faq-item {
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 15px;
+    cursor: pointer;
+    border: 1px solid black;
 }
 
 .faq-question {
+    text-align: start;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 1.2rem;
     font-weight: bold;
-    color: #00bfff;
     padding: 10px;
 }
 
 .faq-question::after {
-    content: "+"; /* 기본 상태에서는 + */
+    content: "+";
     font-size: 1.5rem;
-    color: #00bfff;
     transition: transform 0.3s ease;
 }
 
 .faq-question.active::after {
-    content: "-"; /* 클릭하면 - 로 변경 */
+    content: "-";
     transform: rotate(180deg);
 }
 
 .faq-answer {
-    display: none;
-    padding: 10px;
-    background-color: #333;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease, padding 0.2s ease;
+    padding: 0 10px;
     border-radius: 8px;
     font-size: 1rem;
-    color: white;
 }
 
 .faq-answer.show {
-    display: block; /* 펼쳐지도록 변경 */
-}
-
-
-
-.delete-btn {
-    background-color: #d33;
-    color: white;
-    border: none;
-    padding: 3px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.delete-btn:hover {
-    background-color: #b02a2a;
-    transform: scale(1.05);
-}
-
-.delete-btn:active {
-    background-color: #8a1f1f;
-    transform: scale(0.95);
+    max-height: 1000px;
+    padding: 10px;
 }
 
 .post-modal-c {
