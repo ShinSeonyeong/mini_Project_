@@ -30,7 +30,7 @@ nav {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
 }
 .gomain{
-    width: 140px;
+    width: 100px;
     height: 40px;
     background-color: #00499a;
     border-radius: 50px;

@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let $reTitle = document.querySelector("#re_title");
     let $reDate = document.querySelector("#re_date");
     let $reservNo = document.querySelector("#reserv_no");
-    let $symptoms = document.querySelector("#symptoms");
+    //let $symptoms = document.querySelector("#symptoms");
     const quill = new Quill('#editor', {
         theme: 'snow'
     });
@@ -72,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(res);*/
             //let res = await re_upload(filesArr, res.data[0].re_no);
             let res = await re_upload(filesArr,quill);
-            console.log(res);
             if (!res.error) {
                 document.querySelector("#re_file_list").innerHTML = '';
                 $reTitle.value = '';
@@ -90,11 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
         btn2.disabled=false;
        // }
     })
-    for(let item of $symptoms.children) {
+   /* for(let item of $symptoms.children) {
         item.addEventListener("click", () => {
             location.href = './reservation.html';
         })
-    }
+    }*/
 
 })
 /*
@@ -132,7 +131,7 @@ async function re_upload(arr, quill) {
 
 /* 첨부파일 추가 */
 function addFile(obj) {
-    var maxFileCnt = 10;   // 첨부파일 최대 개수
+    var maxFileCnt = 8;   // 첨부파일 최대 개수
     var attFileCnt = document.querySelectorAll('.filebox').length;    // 기존 추가된 첨부파일 개수
     var remainFileCnt = maxFileCnt - attFileCnt;    // 추가로 첨부가능한 개수
     var curFileCnt = obj.files.length;  // 현재 선택된 첨부파일 개수
@@ -209,7 +208,6 @@ async function fetchGallery_search(page,keyword,key){
     }
     let res = await supabase.rpc("fetch_gallery_search", {page,keyword,key});
     if (!res.error) {
-        console.log(res);
         let htmlData = '';
         res.data.forEach(item => {
             htmlData += `  <div class="rounded-2xl flex flex-col justify-baseline w-full h-[370px] gap-4 gallery_fetch">
@@ -237,7 +235,6 @@ async function fetchGallery(page,keyword=''){
     }
         let res = await supabase.rpc("fetch_gallery", {page});
         if (!res.error) {
-            console.log(res);
             let htmlData = '';
             res.data.forEach(item => {
                 htmlData += `  <div class="rounded-2xl flex flex-col justify-baseline w-full h-[370px] gap-4 gallery_fetch">
@@ -261,7 +258,6 @@ async function openGallery(re_no){
     let $gallery_popup = document.querySelector("#select_gallery");
     document.querySelector('body').classList.add("scroll_lock");
     let res = await supabase.rpc("select_gallery",{gallery_no:re_no});
-    console.log(res);
         $gallery_popup.classList.remove("hidden");
     if(!res.error){
         document.querySelector("#gallery_date").innerHTML = res.data[0].cpdt.slice(0,10);
@@ -498,48 +494,49 @@ window.addEventListener("scroll", ()=>{
     let $advantage = document.querySelector("#advantage")
     let $state = document.querySelector("#state");
     let $gallery = document.querySelector("#gallery");
-    let $symptom = document.querySelector("#symptom");
+    //let $symptom = document.querySelector("#symptom");
     let $process = document.querySelector("#process");
-    let $membership = document.querySelector("#membership");
+    //let $membership = document.querySelector("#membership");
 
     if(document.documentElement.scrollTop>=$advantage.offsetTop-500){
         $advantage.classList.add("fade-in-animation");
-    }else{
+    }/*else{
         $advantage.classList.remove("fade-in-animation");
-    }
+    }*/
 
     if(document.documentElement.scrollTop>=$state.offsetTop-500){
         $state.classList.add("fade-in-animation");
-    }else{
+    }/*else{
         $state.classList.remove("fade-in-animation");
-    }
+    }*/
 
     if(document.documentElement.scrollTop>=$gallery.offsetTop-500){
         $gallery.classList.add("fade-in-animation");
-    }else{
+    }/*else{
         $gallery.classList.remove("fade-in-animation");
-    }
+    }*/
 
-    if(document.documentElement.scrollTop>=$symptom.offsetTop-500){
+  /*  if(document.documentElement.scrollTop>=$symptom.offsetTop-500){
         $symptom.classList.add("fade-in-animation");
     }else{
         $symptom.classList.remove("fade-in-animation");
-    }
+    }*/
 
     if(document.documentElement.scrollTop>=$process.offsetTop-500){
         $process.classList.add("fade-in-animation");
-    }else{
+    }/*else{
         $process.classList.remove("fade-in-animation");
-    }
+    }*/
 
-    if(document.documentElement.scrollTop>=$membership.offsetTop-500){
+  /*  if(document.documentElement.scrollTop>=$membership.offsetTop-500){
         $membership.classList.add("fade-in-animation");
     }else{
         $membership.classList.remove("fade-in-animation");
-    }
+    }*/
 
 });
 
+/*
 function counseling(){
     const form = document.getElementById('fwrite');
 
@@ -562,4 +559,4 @@ function counseling(){
             Swal.fire({icon: 'error', title: `${counseling} 미입력`, text: `미입력하신 내용을 입력해주세요.`});
         }
     }
-}
+}*/

@@ -7,10 +7,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="./css/reservation.css">
-  <link rel="stylesheet" href="css/reservationmedia.css">
+  <link rel="stylesheet" href="./css/reservationmedia.css">
   <link rel="stylesheet" href="./css/common.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -26,14 +26,13 @@
 </head>
 <body>
 <nav>
-  <a href="reservation.html" class="logo">
+  <a href="./index.html" class="logo">
     <img src="image/logo.png" alt="로고 이미지">
   </a>
   <ul class="nav-links">
-    <!--링크연결하기-->
-    <li><a class="hoho" style="line-height: 40px" href="reservation.html">예약하기</a></li>
-    <li><a class="hoho" style="line-height: 40px" href="reservationInquiry.html">예약조회</a></li>
-    <li class="gomain"><a style="color: white; line-height: 40px; font-weight: 500;" href="index.html">MAIN PAGE</a></li>
+    <li><a class="hoho" style="line-height: 40px" href="./reservation.html">예약하기</a></li>
+    <li><a class="hoho" style="line-height: 40px" href="./reservationInquiry.html">예약조회</a></li>
+    <li style="cursor:pointer;" class="gomain"><a style="color: white; line-height: 43px; font-weight: 500;" onclick="window.open('./contact_us.html','_blank', 'width=1350,height= 800')">공지사항</a></li>
   </ul>
   <div class="hamburger" onclick="slideMenu()">
     <i class="fas fa-bars"></i> <!-- 햄버거 아이콘 -->
@@ -44,10 +43,9 @@
     <i class="fas fa-times"></i> <!-- 닫기 아이콘 -->
   </div>
   <ul>
-    <!--링크연결하기-->
-    <li><a href="reservation.html">예약하기</a></li>
-    <li><a href="reservationInquiry.html">예약조회</a></li>
-    <li><a href="#">홈페이지</a></li>
+    <li><a href="./reservation.html">예약하기</a></li>
+    <li><a href="./reservationInquiry.html">예약조회</a></li>
+    <li><a href="./contact_us.html">공지사항</a></li>
   </ul>
 </div><!--m-nav-links-->
 
@@ -89,7 +87,7 @@
       </div>
       <div class="info-group">
         <label for="phone">연락처 : </label>
-        <input class="reserInfo" type="tel" id="phone" name="phone" placeholder="010-1234-5678">
+        <input class="reserInfo" type="tel" id="phone" name="phone" placeholder="010-1234-5678" maxlength="13" oninput="formatPhone(this)">
       </div>
       <div class="info-group">
         <label for="email">이메일 : </label>
@@ -307,7 +305,7 @@
       </div>
       <div>
         <label>주소</label>
-        <div style="display: flex; flex-direction: column;">
+        <div style="display: flex; flex-direction: column; margin:0">
           <div class="check-addr-addr"></div>
           <div class="check-addr-deta"></div>
         </div>
@@ -360,13 +358,14 @@
         - 항목: 성명, 연락처, 주소, 모델명</p>
       <p><strong>5. 동의 철회</strong><br>
         언제든지 동의를 철회하거나 열람·정정을 요청할 수 있습니다 (고객센터: 1234-5678)</p>
-    </div>
+    </div><!--    privacy-details-->
     <div>
       <button class="privacy-no">취소</button>
       <button class="privacy-ok">확인</button>
     </div>
 
-  </div>
+  </div><!--  r-check-->
+</div><!--modal-->
 
 
   <script>
@@ -423,6 +422,21 @@
         content.style.display = 'block';
       }
     });
+
+    //연락처 입력
+      function formatPhone(input) {
+      // 숫자만 남기고 나머지 제거
+      let value = input.value.replace(/\D/g, '');
+
+      // 010-1234-5678 형식으로 변환
+      if (value.length > 3 && value.length <= 7) {
+      value = `${value.slice(0, 3)}-${value.slice(3)}`;
+    } else if (value.length > 7) {
+      value = `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7, 11)}`;
+    }
+
+      input.value = value;
+    }
 
 
   </script>

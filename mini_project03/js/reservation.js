@@ -329,7 +329,7 @@ PrivacyNo.addEventListener('click', () => {
         confirmButtonText: "예약취소"
     }).then((result) => {
         if (result.isConfirmed) {
-            location.href = '../reservation.html'
+            location.href = './reservation.html'
         }
     });
 
@@ -351,8 +351,8 @@ PrivacyOk.addEventListener('click', async function () {
         tel: document.querySelector('.check-info-phone').innerHTML,
         email: document.querySelector('.check-info-email').innerHTML,
         addr: `${document.querySelector('.check-addr-post').innerHTML},
-                ${document.querySelector('.check-addr-addr').innerHTML},
-                ${document.querySelector('.check-addr-deta').innerHTML}`,
+                ${document.querySelector('.check-addr-addr').innerHTML.replaceAll(',','')},
+                ${document.querySelector('.check-addr-deta').innerHTML.replaceAll(',','')}`,
         date: document.querySelector('.check-date').innerHTML,
         time: document.querySelector('.check-time').innerHTML,
         model: document.querySelector('.check-model').innerHTML,
@@ -375,7 +375,7 @@ PrivacyOk.addEventListener('click', async function () {
             icon: 'success',
             draggable: true,
         }).then(() => {
-            location.href = '../reservation.html';
+            location.href = './reservation.html';
         });
     } else {
         Swal.fire({

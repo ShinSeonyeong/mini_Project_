@@ -33,6 +33,33 @@ $Gobtn.addEventListener('click', async function () {
         return;
     }
 
+    const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const phone = $phone.value;
+    const email = $email.value;
+
+    // 전화번호 유효성 검사
+    if (!phoneRegex.test(phone)) {
+        Swal.fire({
+            icon: 'error',
+            html: `유효한 전화번호 형식이 아닙니다.<br> ex) 010-1234-5678`
+        });
+        return;
+    }
+
+    // 이메일 유효성 검사
+    if (!emailRegex.test(email)) {
+        Swal.fire({
+            icon: 'error',
+            html: '유효한 이메일 형식이 아닙니다.<br> ex) example@domain.com'
+        });
+        return;
+    }
+
+
+
+
     $Step01.style.display = 'none';
     $Step02.classList.remove('hidden2');
     const $Qtxt = document.querySelector('.Q-txt');
@@ -78,7 +105,7 @@ $Gobtn.addEventListener('click', async function () {
       </div>
       <div class="button-container">
         <button class="update-btn" onclick="Resupdate(${data[0].res_no})">수정</button>
-        <button class="done-btn" onclick="location.href='../reservationInquiry.html'">확인</button>
+        <button class="done-btn" onclick="location.href='./reservationInquiry.html'">확인</button>
       </div>
     `;
     } else {
@@ -124,7 +151,7 @@ async function Resupdate(reservationId) {
     const formatDate = (date) => date.toISOString().split('T')[0];
 
     // 기존 주소에서 우편번호와 상세 주소 분리
-    const addrParts = data.addr.split(' ');
+    const addrParts = data.addr.split(',');
     const postcode = addrParts[0].match(/[0-9]{5}$/) ? addrParts[0] : '';
     const basicAddr = postcode ? addrParts.slice(1, -1).join(' ') : addrParts.slice(0, -1).join(' ');
     const detailAddr = addrParts[addrParts.length - 1];
@@ -191,7 +218,7 @@ async function Resupdate(reservationId) {
     </div>
     <div class="button-container">
       <button class="update-btn" onclick="saveUpdate(${data.res_no})">저장</button>
-      <button class="done-btn" onclick="location.href='../reservationInquiry.html'">취소</button>
+      <button class="done-btn" onclick="location.href='./reservationInquiry.html'">취소</button>
     </div>
   `;
 
@@ -235,7 +262,9 @@ async function saveUpdate(reservationId) {
         name: document.getElementById('updateName').value,
         tel: document.getElementById('updateTel').value,
         email: document.getElementById('updateEmail').value,
-        addr: `${document.getElementById('updatePostcode').value} ${document.getElementById('updateAddr').value} ${document.getElementById('updateDetailAddr').value}`,
+        addr: `${document.getElementById('updatePostcode').value},
+        ${document.getElementById('updateAddr').value.trim().replaceAll(',','')},
+        ${document.getElementById('updateDetailAddr').value.trim().replaceAll(',','')}`,
         date: document.getElementById('updateDate').value,
         time: document.getElementById('updateTime').value,
         model: document.getElementById('updateModel').value,
@@ -276,7 +305,7 @@ async function saveUpdate(reservationId) {
             icon: 'success',
             text: '예약이 성공적으로 수정되었습니다.',
         }).then(() => {
-            location.href = '../reservationInquiry.html';
+            location.href = './reservationInquiry.html';
         });
     }
 }
