@@ -145,6 +145,24 @@ const BoardManage = () => {
                 </div>
             ),
             async onOk() {
+                // 사용자가 입력한 패스워드 출력
+                console.log('사용자가 입력한 패스워드 (post.passwordInput):', post.passwordInput);
+
+                // 기존에 저장된 패스워드 조회
+                const { data: postData, error: fetchError } = await supabase
+                    .from('board')
+                    .select('password')
+                    .eq('id', post.id)
+                    .single();
+
+                if (fetchError) {
+                    message.error('패스워드 조회에 실패했습니다.');
+                    return;
+                }
+
+                // 기존에 저장된 패스워드 출력
+                console.log('기존에 저장된 패스워드:', postData.password);
+
                 if (post.image_url) {
                     const fileName = post.image_url.split('/').pop();
                     await supabase.storage.from('board-images').remove([`board-images/${fileName}`]);
@@ -156,7 +174,7 @@ const BoardManage = () => {
                     .eq('id', post.id)
                     .eq('password', post.passwordInput);
 
-                if (error) {
+                if (postData.password !== post.passwordInput) {
                     message.error('비밀번호가 틀렸거나 삭제에 실패했습니다.');
                     return;
                 }
@@ -361,13 +379,13 @@ const BoardManage = () => {
                     </Card>
                 ))}
             </div>
-            <div style={{margin: '0 auto'}}>
+            <div style={{width: 'fit-content', margin: '0 auto'}}>
                 <Pagination
                     current={currentPage}
                     pageSize={pageSize}
                     total={totalPosts}
                     onChange={(page) => setCurrentPage(page)}
-                    style={{marginTop: '16px', textAlign: 'center'}}
+                    style={{marginTop: '16px'}}
                 />
             </div>
         </div>
