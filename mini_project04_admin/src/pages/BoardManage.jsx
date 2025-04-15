@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Table, Button, Input, Select, Modal, Form, message, Space, Tag, Upload, Image, Card, Pagination} from 'antd';
-import {supabase} from '../supabaseClient';
+import {supabase} from '../js/supabaseClient.js';
 import {EditOutlined, DeleteOutlined, PlusOutlined, UploadOutlined} from '@ant-design/icons';
 import {format} from 'date-fns';
 import '../css/BoardManage.css';
@@ -361,7 +361,7 @@ const BoardManage = () => {
                     </Card>
                 ))}
             </div>
-            <div style={{margin:0 auto}}>
+            <div style={{margin: '0 auto'}}>
                 <Pagination
                     current={currentPage}
                     pageSize={pageSize}
