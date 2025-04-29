@@ -3,14 +3,13 @@ const $boardDiv = document.getElementById("board-div");
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(location.search);
     const categoryId = parseInt(params.get('category_id')) || 1; // 기본값 1
-
     noticeSelect(categoryId);
 });
 
 // 게시글 작성 및 등록
 document.querySelector('#submit-post').addEventListener('click', async function () {
     const title = document.querySelector('#post-title').value;
-    let category_id = document.querySelector('#post-category').value;
+    const category_id = document.querySelector('#post-category').value;
     const author = document.querySelector('#post-name').value;
     const content = document.querySelector('#post-content').value;
     const password = document.querySelector('#post-password').value;
@@ -47,6 +46,7 @@ document.querySelector('#submit-post').addEventListener('click', async function 
         return;
     }
 
+    let fileUrl = null;
     // 슈파베이스 스토리지에 저장
     if (!image_url) {
         // const id = JSON.parse(id).id;
@@ -235,6 +235,7 @@ async function noticeSelect(categoryId) {
 
     $boardDiv.classList.add('show');
 }
+
 // 항목 눌렀을 때 작성한 내용 보기
 async function postRowClick(trTag) {
     const id = trTag.children[0].innerText; // 게시글 ID (번호)

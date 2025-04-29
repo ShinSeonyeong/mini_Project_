@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,10 +13,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        const supabaseUrl = "https://rnzhzcfovaqfsjfxorfq.supabase.co";
-        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuemh6Y2ZvdmFxZnNqZnhvcmZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0MjQ4MzAsImV4cCI6MjA1NTAwMDgzMH0.lC3jUF1yLH5RA0rMZ-ApWOuoTmWHQT7b1ihZXR50xhM";
-
-        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
+        const supabaseUrl = 'https://wqetnltlnsvjidubewia.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxZXRubHRsbnN2amlkdWJld2lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NzI5NDksImV4cCI6MjA1ODM0ODk0OX0.-Jw0jqyq93rA7t194Kq4_umPoTci8Eqx9j-oCwoZc6k';
+        var supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
     </script>
 </head>
 <body class="scroll-lock">
@@ -30,42 +29,21 @@
                 <a href="./contact_us.html?pageNum=1&category_id=2">FAQ</a>
                 <a href="./reservation.html">예약하기</a>
                 <a href="./reservationInquiry.html">예약확인</a>
-
             </li>
         </ul>
-        <!--<button class="flex gap-2 align-middle p-3 rounded-[10px] text-white bg-[#194A9C] cursor-pointer"
-                onclick="window.open('./reservation.html', '_blank', 'width=1000,height=730')" >
-            <div class="w-[27px] h-[26px]" style="background:url('image/reserve.png') no-repeat"></div>
-            <div class="pt-[3px]">예약하기</div>
-        </button>-->
+
     </nav>
-    <!--  <div id="side_btn_group" class="h-full absolute right-[5%] top-60 z-50 flex flex-col justify-between items-center">
-      <div id="notice_btn" class="rounded-[25px] w-[50px] h-[50px] mb-10 z-50 flex justify-center items-center" onclick="location.href='./contact_us.html'">
-          <span class="flex justify-center items-center"><h5 class="h-[38px]">&lt;</h5></span>
-          <p>공지사항</p>
-      </div>
-      <div id="kakaoBot_btn" class="rounded-[25px] w-[50px] h-[50px] z-50 flex justify-center items-center" onclick="location.href='#'">
-          <p>카카오챗봇</p>
-      </div>
-      </div>
-  -->
     <div id="side_btn_group"
          class="w-[45px] h-[100px] rounded-[20px] z-50 absolute top-[70vh] right-10  flex flex-col justify-evenly items-center">
         <span class="w-[35px] h-[35px] rounded-[50%] border border-white flex justify-start items-center cursor-pointer"
               onclick="window.scrollTo({top:0,behavior:'smooth'})">
             <p class="text-white text-xl rotate-90 pb-[17px]">&lt;</p>
         </span>
-        <!--   <span class="w-[35px] h-[35px] rounded-[50%] flex justify-center items-center bg-[url('./image/whiteBalloon.png')] bg-no-repeat cursor-pointer"
-                 onclick="location.href='./contact_us.html'">
-               <p class="text-black text-xs font-bold tracking-[-1.2px] pb-[1.5px]">Q&A</p>
-           </span>-->
         <span class="w-[35px] h-[35px] rounded-[50%] flex justify-center items-center bg-[url('./image/darkBalloon.png')] bg-no-repeat cursor-pointer"
               onclick="window.open('http://pf.kakao.com/_Kxgsxfn','_blank','width=500,height=630')">
             <p class="text-white text-xs font-bold tracking-[-0.5px] pl-[3px] pb-[2px]">Ch+</p>
         </span>
-
     </div>
-
 </header>
 <div id="container">
 
@@ -74,102 +52,7 @@
     </div>
 
     <div class="post_list">
-        <div id="board-div" class="content">
-<!--            <table class="notice-table">-->
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                    <th>번호</th>-->
-<!--                    <th>카테고리</th>-->
-<!--                    <th>제목</th>-->
-<!--                    <th class="notice-views">조회수</th>-->
-<!--                    <th class="date">날짜</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody id="board">-->
-
-<!--                </tbody>-->
-<!--            </table>-->
-        </div>
-<!--        <button onclick="postClick()" class="post-writing">글쓰기</button>-->
-    </div>
-
-    <div id="post-modal" class="post-modal-c hidden">
-        <div class="post-modal-content">
-            <div class="post-detail">
-                <p>글작성</p>
-
-                <label for="post-title">제목</label>
-                <input type="text" id="post-title" placeholder="Please enter a title."/>
-
-                <label for="post-category">카테고리</label>
-                <select id="post-category">
-                    <option value="1">공지</option>
-                    <option value="2">FAQ</option>
-                </select>
-
-                <label for="post-name">작성자</label>
-                <input type="text" id="post-name" placeholder="Please enter the author name."/>
-
-                <label for="post-content">내용</label>
-                <textarea id="post-content" placeholder="Please enter the contents."></textarea>
-
-                <label for="post-image-url" class="file-upload-label"> 📁 파일 선택</label>
-                <input type="file" id="post-image-url" name="file" accept="image/*"/>
-                <span id="file-name">선택된 파일 없음</span>
-                <img id="image-preview" style="max-width: 100%; margin-top: 10px; display: none;" alt="미리보기 이미지"/>
-
-                <label for="post-password">비밀번호</label>
-                <input type="password" id="post-password" value=""/>
-
-                <div>
-                    <div class="button-container">
-                        <button id="submit-post">등록</button>
-                        <button onclick="cancelModalClose()" id="cancel-post">취소</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="notice-modal" class="update-notice hidden">
-        <div class="modal-div post-modal-content post-detail">
-            <div>
-                <p>글수정</p>
-            </div>
-            <div>
-                <div>
-                    <span>No.<h3 id="update-id"></h3></span>
-
-                    <span>날짜<h3 id="update-date"></h3></span>
-
-                    <span>조회수<h3 id="update-views"></h3></span>
-                </div>
-                제목 <input id="update-title" type="text" class="update-input">
-
-                내용<textarea id="update-content"></textarea>
-
-                작성자<input type="text" id="update-name"/>
-
-                비밀번호 <input type="password" id="update-password" readonly/>
-
-                카테고리
-                <select id="update-category">
-                    <option value="1">공지</option>
-                    <option value="2">FAQ</option>
-                    <option value="3">Q&A</option>
-                </select>
-
-                <p>업로드된 파일</p>
-                <label for="post-image-url" class="file-upload-label"> 📁 파일 선택</label>
-                <!--                <img id="update-image" src="" alt="Uploaded Image"/>-->
-                <p id="update-file"></p>
-
-            </div>
-            <div class="button-container">
-                <button id="submit-update">수정</button>
-                <button onclick="noticemodalClose();" id="cancel-update">취소</button>
-            </div>
-        </div>
+        <div id="board-div" class="content"></div>
     </div>
 
     <div id="notice-detail-container" style="margin-top: 30px; display: none;">
@@ -186,6 +69,6 @@
     <div id="paging-container" class="post-paging"></div>
 
 </div>
+<script src="./js/contact_us.js"></script>
 </body>
 </html>
-<script src="./js/contact_us.js"></script>

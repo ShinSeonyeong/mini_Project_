@@ -526,3 +526,28 @@ textarea {
     width: 84% !important;
     border-radius: 10px !important;
 }
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .post_list {
+        min-width: 100%; /* 변경: 모바일에서 전체 너비 */
+        width: 100%;
+        padding: 10px;
+    }
+
+    .post-modal-content, .modal-div {
+        width: 90%; /* 변경: 모바일에서 모달 크기 조정 */
+        height: auto;
+        max-height: 80vh;
+    }
+
+    .notice-table th, .notice-table td {
+        padding: 10px; /* 변경: 테이블 패딩 축소 */
+        font-size: 13px;
+    }
+
+    .button-container button {
+        padding: 6px 10px; /* 변경: 모바일에서 버튼 크기 더 축소 */
+        font-size: 12px;
+    }
+}
