@@ -55,9 +55,9 @@ function BusRoute(props) {
       .then((response) => {
         const { header, body } = response.data;
 
-        // console.log("📦 API 응답 전체:", response.data);
-        // console.log("📍 응답 header:", header);
-        // console.log("🧭 경로 body:", body);
+        // console.log("API 응답 전체:", response.data);
+        // console.log("응답 header:", header);
+        // console.log("경로 body:", body);
 
         if (header?.success && Array.isArray(body) && body.length > 0) {
           setRouteList(body);
