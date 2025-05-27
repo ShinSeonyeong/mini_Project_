@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Input, List, message, Space, Tag } from "antd";
 import axios from "axios";
 import proj4 from "proj4";
@@ -15,6 +15,7 @@ function BusRoute(props) {
   const [selectedDestination, setSelectedDestination] = useState(null);
   const [routeList, setRouteList] = useState([]);
   const [isRouteSearched, setIsRouteSearched] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [searchHistory, setSearchHistory] = useState(() => {
     const saved = localStorage.getItem("searchHistory");
     return saved ? JSON.parse(saved) : [];
@@ -132,10 +133,12 @@ function BusRoute(props) {
   };
 
   const handleDeleteHistory = (index) => {
+    setIsDeleting(true);
     const updated = [...searchHistory];
     updated.splice(index, 1);
     setSearchHistory(updated);
     localStorage.setItem("searchHistory", JSON.stringify(updated));
+    setIsDeleting(false);
   };
 
   const fetchArrivalInfo = (bsId) => {
@@ -169,48 +172,102 @@ function BusRoute(props) {
     const [longitude, latitude] = proj4("EPSG:5182", "EPSG:4326", [x, y]);
     let lat = latitude;
     let lng = longitude;
+    console.log("lat" + lat + " lng" + lng);
     return { lat, lng };
   };
 
-  const searchBusRoute = (value, setValue, target = null, callback = null) => {
-    if (!value || value.trim() === "") return;
+  const searchBusRoute = (value, target) => {
+    if (!value || value.trim() === "") return Promise.resolve(null);
 
-    axios
+    return axios
       .get(
         `https://businfo.daegu.go.kr:8095/dbms_web_api/bs/search?searchText=${value}&wincId=`
       )
       .then((response) => {
-        if (response.data.header.success) {
-          setValue(value);
+        if (response.data.header.success && response.data.body.length > 0) {
+          const firstStop = response.data.body[0];
           setSearchResults(response.data.body);
           setArrivalInfo(null);
           setIsRouteSearched(false);
-          if (response.data.body.length > 0) {
-            const firstStop = response.data.body[0];
-            setSelectedStop(firstStop);
-            setMapCenter(
-              convertNGISToKakao(firstStop.ngisXPos, firstStop.ngisYPos)
-            );
-            fetchArrivalInfo(firstStop.bsId);
-
-            if (target === "origin") {
-              setOrigin(firstStop.bsNm);
-              setSelectedOrigin(firstStop);
-            } else if (target === "destination") {
-              setDestination(firstStop.bsNm);
-              setSelectedDestination(firstStop);
-            }
-
-            if (callback) {
-              callback(firstStop);
-            }
+          setSelectedStop(firstStop);
+          setMapCenter(
+            convertNGISToKakao(firstStop.ngisXPos, firstStop.ngisYPos)
+          );
+          fetchArrivalInfo(firstStop.bsId);
+          if (target === "origin") {
+            setOrigin(firstStop.bsNm);
+            setSelectedOrigin(firstStop);
+          } else if (target === "destination") {
+            setDestination(firstStop.bsNm);
+            setSelectedDestination(firstStop);
           }
+          return firstStop;
         }
+        return null;
+        // if (response.data.header.success && response.data.body.length > 0) {
+        //   setValue(value);
+        //   setSearchResults(response.data.body);
+        //   setArrivalInfo(null);
+        //   setIsRouteSearched(false);
+        //   if (response.data.body.length > 0) {
+        //     const firstStop = response.data.body[0];
+        //     setSelectedStop(firstStop);
+        //     setMapCenter(
+        //       convertNGISToKakao(firstStop.ngisXPos, firstStop.ngisYPos)
+        //     );
+        //     fetchArrivalInfo(firstStop.bsId);
+
+        //     if (target === "origin") {
+        //       setOrigin(firstStop.bsNm);
+        //       setSelectedOrigin(firstStop);
+        //     } else if (target === "destination") {
+        //       setDestination(firstStop.bsNm);
+        //       setSelectedDestination(firstStop);
+        //     }
+
+        //     if (callback) {
+        //       callback(firstStop);
+        //     }
+        //   }
+        // }
       })
       .catch((error) => {
         console.log("정류장 검색에 실패했습니다:", error);
       });
   };
+
+  const handleHistoryClick = async (item) => {
+    console.log("handleHistoryClick 시작:", item);
+    setSearchTarget("origin");
+    const originStop = await searchBusRoute(item.origin, "origin");
+    if (originStop) {
+      setSearchTarget("destination");
+      const destinationStop = await searchBusRoute(
+        item.destination,
+        "destination"
+      );
+      console.log("destinationStop:", destinationStop);
+      if (destinationStop) {
+        message.loading({
+          content: `경로 재선택: ${item.origin} → ${item.destination}`,
+          key,
+          duration: 2,
+        });
+        setTimeout(()=>handleSearch(), 0);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (
+      selectedOrigin &&
+      selectedDestination &&
+      searchTarget === "destination" &&
+      !isDeleting
+    ) {
+      handleSearch();
+    }
+  }, [selectedOrigin, selectedDestination, searchTarget]);
 
   // 지하철 포함된 경로 안 나오도록
   const filteredRouteList = routeList.filter(
@@ -272,57 +329,24 @@ function BusRoute(props) {
             renderItem={(item, index) => (
               <List.Item
                 key={index}
-                actions={[
-                  <Button
-                    type=""
-                    danger
-                    onClick={() => {
-                      e.stopPropagation();
-                      handleDeleteHistory(index);
-                      console.log("최근기록 클릭됨:", item);
-                    }}
-                  >
-                    삭제
-                  </Button>,
-                ]}
-                onClick={() => {
-                  // setOrigin(item.origin);
-                  // setDestination(item.destination);
-                  setSearchTarget("origin");
-                  searchBusRoute(
-                    item.origin,
-                    ()=>{},
-                    // setOrigin,
-                    "origin",
-                    (originStop) => {
-                      setOrigin(originStop.bsNm); // add
-                      setSelectedOrigin(originStop);
-
-                      searchBusRoute(
-                        item.destination,
-                        ()=>{},
-                        // setDestination,
-                        "destination",
-                        (destinationStop) => {
-                          setDestination(destinationStop.bsNm); // add
-                          setSelectedDestination(destinationStop);
-
-                          handleSearch();
-                          message.loading({
-                            content: `경로 재선택: ${item.origin} → ${item.destination}`,
-                            key,
-                            duration: 2,
-                          });
-                        }
-                      );
-                    }
-                  );
-                }}
                 style={{ cursor: "pointer" }}
+                onClick={() => handleHistoryClick(item)} // 수정된 handleHistoryClick 사용
               >
                 <span>
                   📍 {item.origin} → {item.destination}
                 </span>
+                <div
+                  onClick={(e) => e.stopPropagation()} // 별도 div로 이벤트 차단
+                  style={{ marginLeft: "10px" }}
+                >
+                  <Button
+                    type="text"
+                    danger
+                    onClick={() => handleDeleteHistory(index)} // 삭제만 처리
+                  >
+                    삭제
+                  </Button>
+                </div>
               </List.Item>
             )}
           ></List>
