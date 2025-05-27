@@ -279,36 +279,42 @@ function BusRoute(props) {
                     onClick={() => {
                       e.stopPropagation();
                       handleDeleteHistory(index);
-                      console.log("최근기록 클릭됨:", item);}
-                      }
+                      console.log("최근기록 클릭됨:", item);
+                    }}
                   >
                     삭제
                   </Button>,
                 ]}
                 onClick={() => {
-                  setOrigin(item.origin);
-                  setDestination(item.destination);
+                  // setOrigin(item.origin);
+                  // setDestination(item.destination);
                   setSearchTarget("origin");
                   searchBusRoute(
                     item.origin,
-                    setOrigin,
+                    ()=>{},
+                    // setOrigin,
                     "origin",
                     (originStop) => {
+                      setOrigin(originStop.bsNm); // add
                       setSelectedOrigin(originStop);
 
                       searchBusRoute(
                         item.destination,
-                        setDestination,
+                        ()=>{},
+                        // setDestination,
                         "destination",
                         (destinationStop) => {
+                          setDestination(destinationStop.bsNm); // add
                           setSelectedDestination(destinationStop);
+
+                          handleSearch();
+                          message.loading({
+                            content: `경로 재선택: ${item.origin} → ${item.destination}`,
+                            key,
+                            duration: 2,
+                          });
                         }
                       );
-                      message.info({
-                        content: `경로 재선택: ${item.origin} → ${item.destination}`,
-                        key,
-                        duration: 2,
-                      });
                     }
                   );
                 }}
