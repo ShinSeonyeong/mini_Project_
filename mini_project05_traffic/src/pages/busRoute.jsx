@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Input, List, message, Space, Tag } from "antd";
 import axios from "axios";
 import proj4 from "proj4";
-import { Map, MapMarker, Polyline, useKakaoLoader } from "react-kakao-maps-sdk";
-import KaokaoMain from "./KaokaoMain";
 
 function BusRoute(props) {
   const [origin, setOrigin] = useState("");
@@ -21,39 +19,10 @@ function BusRoute(props) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [routeResults, setRouteResults] = useState([]);
   const [selectedRoute, setSeletedRoute] = useState(null);
-  const [mapExpanded, setMapExpanded] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [searchHistory, setSearchHistory] = useState(() => {
     const saved = localStorage.getItem("searchHistory");
     return saved ? JSON.parse(saved) : [];
   }); // localStorage로 관리
-
-    // 화면 크기 변경 감지
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // 카카오맵 SDK 로드 (모바일에서만 로드)
-  const { loading, error } = useKakaoLoader({
-    appkey: import.meta.env.VITE_KAKAO_API_KEY,
-    libraries: ["services"],
-    skip: !isMobile, // 모바일이 아닌 경우 로드 스킵
-  });
-
-  // 로딩 및 에러 처리
-  useEffect(() => {
-    if (error && isMobile) {
-      message.error({
-        content: "카카오맵을 로드하지 못했습니다. 네트워크를 확인하세요.",
-        key: "map_error",
-        duration: 3,
-      });
-    }
-  }, [error, isMobile]);
 
   // antd 메시지 알림 한번만 나오도록 key 설정
   const key = "unique_noti_key";
@@ -281,7 +250,7 @@ function BusRoute(props) {
 
   return (
     <div>
-      <div className="search-section" style={{ padding: "20px" }}>
+      <div style={{ padding: "20px" }}>
         <Space direction="vertical" style={{ width: "100%" }}>
           <Input.Search
             id="originInput"
@@ -317,7 +286,7 @@ function BusRoute(props) {
         </Space>
       </div>
 
-      <div className="button-section" style={{ padding: "20px" }}>
+      <div style={{ padding: "20px" }}>
         <Space>
           <Button onClick={handleSwap}>🔄 출발지 ↔ 도착지</Button>
           <Button type="primary" onClick={handleSearch}>
@@ -329,7 +298,7 @@ function BusRoute(props) {
         </Space>
       </div>
 
-      <div className="history-section" style={{ padding: "20px" }}>
+      <div style={{ padding: "20px" }}>
         <Card title="최근 검색 경로" size="small">
           <List
             dataSource={searchHistory}
@@ -359,67 +328,6 @@ function BusRoute(props) {
           ></List>
         </Card>
       </div>
-
-      {isMobile && (
-        <div className="map-section" style={{ padding: "20px" }}>
-          {loading ? (
-            <div style={{ padding: "20px", textAlign: "center" }}>
-              지도를 로드 중입니다...
-            </div>
-          ) : (
-            <Card
-              title="지도"
-              style={{
-                height: mapExpanded ? "80vh" : "40vh",
-                overflow: "hidden",
-              }}
-              className={mapExpanded ? "expanded" : ""}
-            >
-              <Map
-                center={mapCenter}
-                style={{ width: "100%", height: "100%" }}
-                level={3}
-              >
-                {selectedOrigin && (
-                  <MapMarker
-                    position={convertNGISToKakao(
-                      selectedOrigin.ngisXPos,
-                      selectedOrigin.ngisYPos
-                    )}
-                    title="출발지"
-                  />
-                )}
-                {selectedDestination && (
-                  <MapMarker
-                    position={convertNGISToKakao(
-                      selectedDestination.ngisXPos,
-                      selectedDestination.ngisYPos
-                    )}
-                    title="도착지"
-                  />
-                )}
-                {isMobile && !loading && routeList.length > 0 && (
-                  <Polyline
-                    path={routeList[0].list.map((step) =>
-                      convertNGISToKakao(step.ngisXPos, step.ngisYPos)
-                    )}
-                    strokeWeight={5}
-                    strokeColor="#1890ff"
-                    strokeOpacity={0.7}
-                    strokeStyle="solid"
-                  />
-                )}
-              </Map>
-              <Button
-                onClick={() => setMapExpanded(!mapExpanded)}
-                style={{ position: "absolute", top: "10px", right: "10px" }}
-              >
-                {mapExpanded ? "지도 축소" : "지도 확대"}
-              </Button>
-            </Card>
-          )}
-        </div>
-      )}
 
       <Card
         style={{ marginBottom: 16, borderRadius: 12, background: "#fafafa" }}
@@ -523,7 +431,6 @@ function BusRoute(props) {
                     renderItem={(step, sIdx) => (
                       <List.Item
                         key={sIdx}
-                        className="route-item"
                         style={{
                           paddingLeft: 12,
                           borderLeft: "2px solid #1890ff",
@@ -536,7 +443,6 @@ function BusRoute(props) {
                         }}
                       >
                         <div
-                          className="step-title"
                           style={{
                             fontWeight: "bold",
                             fontSize: 16,
@@ -545,16 +451,10 @@ function BusRoute(props) {
                         >
                           🚌 {step.routeNo} ({step.routeType})
                         </div>
-                        <div
-                          className="step-desc"
-                          style={{ fontSize: 14, color: "#444" }}
-                        >
+                        <div style={{ fontSize: 14, color: "#444" }}>
                           출발: {step.stBsNm} → 도착: {step.edBsNm}
                         </div>
-                        <div
-                          className="step-desc"
-                          style={{ fontSize: 13, color: "#666" }}
-                        >
+                        <div style={{ fontSize: 13, color: "#666" }}>
                           소요 시간: {step.time} / 거리: {step.dist} / 정류장
                           수: {step.gap}
                         </div>
@@ -570,101 +470,7 @@ function BusRoute(props) {
         </div>
       )}
 
-      <style>
-        {`
-          @media (max-width: 768px) {
-            .container {
-              display: flex;
-              flex-direction: column;
-              padding: 8px;
-            }
-            .search-section,
-            .button-section,
-            .map-section,
-            .history-section {
-              padding: 8px !important;
-            }
-            .button-section .ant-space {
-              flex-direction: column;
-              gap: 12px;
-              align-items: stretch;
-            }
-            .button-section .ant-btn {
-              width: 100%;
-              font-size: 14px;
-              padding: 8px;
-            }
-            .map-section .ant-card {
-              height: 40vh;
-              transition: height 0.3s ease;
-            }
-            .map-section .ant-card.expanded {
-              height: 80vh;
-            }
-            .route-item {
-              padding-left: 8px !important;
-              border-left: 2px solid #1890ff;
-              margin-bottom: 8px !important;
-              border-radius: 4px;
-            }
-            .route-item .step-title {
-              font-size: 14px !important;
-              margin-bottom: 4px;
-            }
-            .route-item .step-desc {
-              font-size: 12px !important;
-              line-height: 1.4;
-            }
-            .ant-list-item {
-              padding: 8px 12px !important;
-            }
-            .ant-card {
-              padding: 12px !important;
-            }
-          }
-
-          @media (max-width: 480px) {
-            .search-section .ant-input-search {
-              font-size: 14px !important;
-            }
-            .button-section .ant-btn {
-              font-size: 13px;
-              padding: 6px;
-            }
-            .map-section .ant-card {
-              height: 30vh;
-            }
-            .map-section .ant-card.expanded {
-              height: 70vh;
-            }
-            .route-item .step-title {
-              font-size: 13px !important;
-            }
-            .route-item .step-desc {
-              font-size: 11px !important;
-            }
-            .ant-card-title {
-              font-size: 16px !important;
-            }
-          }
-
-          @media (min-width: 769px) {
-            .container {
-              display: flex;
-              flex-direction: column; /* 데스크톱에서도 세로 정렬 */
-              padding: 20px;
-            }
-            .search-section,
-            .button-section,
-            .history-section {
-              padding: 20px !important;
-            }
-            .map-section {
-              display: none !important; /* 데스크톱에서 지도 숨김 */
-            }
-          }
-        `}
-      </style>
+      
     </div>
   );
 }
