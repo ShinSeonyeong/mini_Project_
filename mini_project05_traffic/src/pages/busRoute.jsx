@@ -249,9 +249,9 @@ function BusRoute(props) {
   );
 
   return (
-    <div>
-      <div style={{ padding: "20px" }}>
-        <Space direction="vertical" style={{ width: "100%" }}>
+    <div className="bus-route-container">
+      <div className="search-section">
+        <Space direction="vertical" className="search-inputs">
           <Input.Search
             id="originInput"
             placeholder="출발지를 선택해 주세요."
@@ -266,6 +266,7 @@ function BusRoute(props) {
               searchBusRoute(value, setOrigin);
             }}
             allowClear
+            className="search-input"
           />
 
           <Input.Search
@@ -282,38 +283,45 @@ function BusRoute(props) {
               searchBusRoute(value, setDestination);
             }}
             allowClear
+            className="search-input"
           />
         </Space>
       </div>
 
-      <div style={{ padding: "20px" }}>
+      <div className="button-section">
         <Space>
-          <Button onClick={handleSwap}>🔄 출발지 ↔ 도착지</Button>
-          <Button type="primary" onClick={handleSearch}>
+          <Button onClick={handleSwap} className="swap-button">
+            🔄 출발지 ↔ 도착지
+          </Button>
+          <Button
+            type="primary"
+            onClick={handleSearch}
+            className="search-button"
+          >
             경로찾기
           </Button>
-          <Button danger onClick={handleReset}>
+          <Button danger onClick={handleReset} className="reset-button">
             초기화
           </Button>
         </Space>
       </div>
 
-      <div style={{ padding: "20px" }}>
-        <Card title="최근 검색 경로" size="small">
+      <div className="history-section">
+        <Card title="최근 검색 경로" size="small" className="history-card">
           <List
             dataSource={searchHistory}
             renderItem={(item, index) => (
               <List.Item
                 key={index}
-                style={{ cursor: "pointer" }}
+                className="history-item"
                 onClick={() => handleHistoryClick(item)} // 수정된 handleHistoryClick 사용
               >
                 <span>
                   📍 {item.origin} → {item.destination}
                 </span>
                 <div
+                  className="history-delete"
                   onClick={(e) => e.stopPropagation()} // 별도 div로 이벤트 차단
-                  style={{ marginLeft: "10px" }}
                 >
                   <Button
                     type="text"
@@ -329,24 +337,22 @@ function BusRoute(props) {
         </Card>
       </div>
 
-      <Card
-        style={{ marginBottom: 16, borderRadius: 12, background: "#fafafa" }}
-      >
+      <Card className="info-card">
         <p>
           <strong>출발지:</strong>{" "}
-          {selectedOrigin?.bsNm || <span style={{ color: "red" }}>없음</span>}
+          {selectedOrigin?.bsNm || <span className="no-selection">없음</span>}
         </p>
         <p>
           <strong>도착지:</strong>{" "}
           {selectedDestination?.bsNm || (
-            <span style={{ color: "red" }}>없음</span>
+            <span className="no-selection">없음</span>
           )}
         </p>
       </Card>
 
       {/* 출발/도착지 각각 검색 후 경로 검색하면 관련 검색어 닫기 */}
       {!isRouteSearched && searchResults.length > 0 && (
-        <div style={{ padding: "20px" }}>
+        <div className="search-results-section">
           <List
             variant="borderless"
             dataSource={searchResults}
@@ -368,30 +374,12 @@ function BusRoute(props) {
                     setSelectedDestination(item);
                   }
                 }}
-                style={{ cursor: "pointer" }}
+                className="search-result-item"
               >
-                <div style={{ width: "100%" }}>
-                  <div
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "1.1em",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    {item.bsNm}
-                  </div>
-                  <div
-                    style={{
-                      color: "#666",
-                      fontSize: "0.9em",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    정류장ID: {item.bsId}
-                  </div>
-                  <div style={{ color: "#1890ff", fontSize: "0.9em" }}>
-                    경유노선: {item.routeList}
-                  </div>
+                <div className="search-result-content">
+                  <div className="stop-name">{item.bsNm}</div>
+                  <div className="stop-id">정류장ID: {item.bsId}</div>
+                  <div className="route-list">경유노선: {item.routeList}</div>
                 </div>
               </List.Item>
             )}
@@ -400,29 +388,19 @@ function BusRoute(props) {
       )}
 
       {Array.isArray(routeList) && routeList.length > 0 && (
-        <div style={{ padding: "20px" }}>
-          <Card title="추천 경로" variant="outlined">
+        <div className="route-section">
+          <Card title="추천 경로" variant="outlined" className="route-card">
             <List
               dataSource={filteredRouteList}
               renderItem={(route, idx) => (
-                <List.Item
-                  key={idx}
-                  style={{ flexDirection: "column", alignItems: "flex-start" }}
-                >
-                  <div
-                    style={{
-                      width: "100%",
-                      marginBottom: 8,
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
+                <List.Item key={idx} className="route-item">
+                  <div className="route-header">
                     <strong>{idx + 1}번 경로</strong>
                     <Tag color={route.transCd === "T" ? "blue" : "green"}>
                       {route.trans}
                     </Tag>
                   </div>
-                  <div style={{ marginBottom: 8, fontSize: 14, color: "#555" }}>
+                  <div className="route-info">
                     총 소요 시간: <strong>{route.totalTime}</strong> / 총 거리:{" "}
                     <strong>{route.totalDist}</strong>
                   </div>
@@ -431,32 +409,21 @@ function BusRoute(props) {
                     renderItem={(step, sIdx) => (
                       <List.Item
                         key={sIdx}
-                        style={{
-                          paddingLeft: 12,
-                          borderLeft: "2px solid #1890ff",
-                          marginBottom: 8,
-                          flexDirection: "column",
-                          alignItems: "flex-start",
-                          backgroundColor: sIdx % 2 === 0 ? "#f0f5ff" : "white",
-                          borderRadius: 4,
-                          width: "100%",
-                        }}
+                        className={`route-step ${
+                          sIdx % 2 === 0 ? "even" : "odd"
+                        }`}
                       >
-                        <div
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: 16,
-                            marginBottom: 4,
-                          }}
-                        >
-                          🚌 {step.routeNo} ({step.routeType})
-                        </div>
-                        <div style={{ fontSize: 14, color: "#444" }}>
-                          출발: {step.stBsNm} → 도착: {step.edBsNm}
-                        </div>
-                        <div style={{ fontSize: 13, color: "#666" }}>
-                          소요 시간: {step.time} / 거리: {step.dist} / 정류장
-                          수: {step.gap}
+                        <div className="step-details">
+                          <div className="step-title">
+                            🚌 {step.routeNo} ({step.routeType})
+                          </div>
+                          <div className="step-route">
+                            출발: {step.stBsNm} → 도착: {step.edBsNm}
+                          </div>
+                          <div className="step-info">
+                            소요 시간: {step.time} / 거리: {step.dist} / 정류장
+                            수: {step.gap}
+                          </div>
                         </div>
                       </List.Item>
                     )}
@@ -470,7 +437,240 @@ function BusRoute(props) {
         </div>
       )}
 
-      
+<style>{`
+        /* 전체 컨테이너 */
+        .bus-route-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 1rem;
+          box-sizing: border-box;
+          font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* 검색 입력 영역 */
+        .search-section {
+          padding: 1rem;
+        }
+
+        .search-inputs {
+          width: 100%;
+          gap: 1rem;
+        }
+
+        .search-input {
+          width: 100% !important;
+          border-radius: 8px;
+        }
+
+        /* 버튼 영역 */
+        .button-section {
+          padding: 1rem;
+          display: flex;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        .swap-button, .search-button, .reset-button {
+          border-radius: 8px;
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+        }
+
+        /* 최근 검색 경로 */
+        .history-section {
+          padding: 1rem;
+        }
+
+        .history-card {
+          border-radius: 12px;
+          background: #ffffff;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-item {
+          cursor: pointer;
+          padding: 0.5rem 1rem;
+          border-bottom: 1px solid #f0f0f0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .history-item:hover {
+          background-color: #f5f5f5;
+        }
+
+        .history-delete {
+          margin-left: 0.5rem;
+        }
+
+        /* 출발지/도착지 정보 */
+        .info-card {
+          margin: 1rem;
+          border-radius: 12px;
+          background: #fafafa;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-selection {
+          color: red;
+        }
+
+        /* 검색 결과 */
+        .search-results-section {
+          padding: 1rem;
+        }
+
+        .search-result-item {
+          cursor: pointer;
+          padding: 0.75rem;
+          border-bottom: 1px solid #f0f0f0;
+        }
+
+        .search-result-item:hover {
+          background-color: #f5f5f5;
+        }
+
+        .search-result-content {
+          width: 100%;
+        }
+
+        .stop-name {
+          font-weight: bold;
+          font-size: 1.1rem;
+          margin-bottom: 0.25rem;
+        }
+
+        .stop-id {
+          color: #666;
+          font-size: 0.9rem;
+          margin-bottom: 0.25rem;
+        }
+
+        .route-list {
+          color: #1890ff;
+          font-size: 0.9rem;
+        }
+
+        /* 추천 경로 */
+        .route-section {
+          padding: 1rem;
+        }
+
+        .route-card {
+          border-radius: 12px;
+          background: #ffffff;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .route-item {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 1rem;
+          border-bottom: 1px solid #f0f0f0;
+        }
+
+        .route-header {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.5rem;
+        }
+
+        .route-info {
+          font-size: 0.9rem;
+          color: #555;
+          margin-bottom: 0.5rem;
+        }
+
+        .route-step {
+          padding-left: 1rem;
+          border-left: 2px solid #1890ff;
+          margin-bottom: 0.5rem;
+          border-radius: 4px;
+          width: 100%;
+        }
+
+        .route-step.even {
+          background-color: #f0f5ff;
+        }
+
+        .route-step.odd {
+          background-color: #ffffff;
+        }
+
+        .step-details {
+          width: 100%;
+        }
+
+        .step-title {
+          font-weight: bold;
+          font-size: 1rem;
+          margin-bottom: 0.25rem;
+        }
+
+        .step-route {
+          font-size: 0.9rem;
+          color: #444;
+        }
+
+        .step-info {
+          font-size: 0.85rem;
+          color: #666;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+          .bus-route-container {
+            padding: 0.5rem;
+          }
+
+          .search-section, .button-section, .history-section, .search-results-section, .route-section {
+            padding: 0.5rem;
+          }
+
+          .search-input {
+            font-size: 0.9rem;
+          }
+
+          .swap-button, .search-button, .reset-button {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+          }
+
+          .history-card, .info-card, .route-card {
+            margin: 0.5rem;
+          }
+
+          .stop-name, .step-title {
+            font-size: 1rem;
+          }
+
+          .stop-id, .route-list, .step-route, .step-info {
+            font-size: 0.8rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .search-inputs {
+            gap: 0.5rem;
+          }
+
+          .button-section {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .swap-button, .search-button, .reset-button {
+            width: 100%;
+            margin-bottom: 0.5rem;
+          }
+
+          .history-item, .search-result-item, .route-item {
+            padding: 0.5rem;
+          }
+        }
+      `}</style>
     </div>
   );
 }
