@@ -9,13 +9,13 @@ function Side(props) {
         setNavTab(e.target.value);
     }
     return (
-        <nav ref={props.sideRef} className={styles.side_nav}>
+        <nav className={styles.side_nav}>
             <article id={styles.nav_header}>
                 <img src="/bus.svg" alt="bus" />
                 <h4>버스정보조회</h4>
             </article>
             <Radio.Group onChange={handleTabClick} value={navTab} style={{ width: '100%',display:'grid',gridTemplateColumns:'1fr 1fr' }} >
-                <Radio.Button value="search" style={{borderRadius:0,height:"auto"}} className={"navSideTotalSearchBtn navSideRouteBtn"}>
+                <Radio.Button value="search" style={{borderRadius:0,height:"auto"}} className={"navSideTotalSearchBtn"}>
                     <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
                         <img src={"/search_i.svg"} width={30} alt={"search_i"}/>
                         <h2 >통합검색</h2>
@@ -28,7 +28,7 @@ function Side(props) {
                     </div>
                 </Radio.Button>
             </Radio.Group>
-            {navTab === 'search' ? <SearchTotal {...props} />:<BusRoute {...props} />}
+            {navTab === 'search' ? <SearchTotal />:<BusRoute />}
         </nav>
     );
 }
