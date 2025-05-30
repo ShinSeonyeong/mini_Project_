@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Card, Input, List, message, Space} from "antd";
+import {Card, Input, List, message, Space, Spin} from "antd";
 import kakaoMap from "../js/kakaoMap.js";
 import proj4 from 'proj4';
 import styles from "../css/search_total.module.css";
@@ -12,8 +12,8 @@ proj4.defs("EPSG:4326", "+proj=longlat +datum=WGS84 +no_defs");
 ///[^ㄱ-ㅎ가-힣a-zA-Z0-9]/g
 function SearchTotal(props) {
     useEffect(() => {
-        document.querySelector(".jh_sideSelectedStop")?.scrollIntoView({behavior:"smooth",block:"center",inline:"nearest"});
-    }, [props.selectedRouteList]);
+        document.querySelector(".jh_sideSelectedStop")?.scrollIntoView({behavior:"smooth",block:"center",inline:"center"});
+    }, [props.selectedStop]);
     const fetchArrivalInfo = (bsId) => {
         kakaoMap.getArrivalInfo(bsId)
             .then(res => {
@@ -41,6 +41,8 @@ function SearchTotal(props) {
                 props.setSearchResults(res);
                 props.setArrivalInfo(null);
                 props.setSelectedStop(null);
+                props.setMarkerClicked(false);
+                props.setOpenedRoute(false);
             }
         }
 
@@ -132,8 +134,16 @@ function SearchTotal(props) {
                                         }}>
                                             버스 번호: {item.vhcNo2}
                                         </div>
+                                        {props?.selectedRoute?.routeId === item.routeId && props.selectedRouteList && (
+                                            <div style={{display:"flex",width:"100%",justifyContent:"end"}}>
+                                            <img className={props.openedRoute?styles.jh_side_open:styles.jh_side_close} width={15} src={"/reverse_triangle.svg"} alt={"경로 닫기"}
+                                                 onClick={()=>props.setOpenedRoute(!props.openedRoute)} style={{cursor:"pointer"}} />
+                                            </div>
+                                        )}
                                     {props.openedRoute && props?.selectedRoute?.routeId === item.routeId && props.selectedRouteList && (
+
                                         <List
+                                            className={styles.jh_sideSelectedStopList}
                                             dataSource={props.selectedRouteList}
                                             renderItem={(item) => {
 
@@ -166,7 +176,9 @@ function SearchTotal(props) {
                                                     </List.Item>
                                                 </Card>
                                             )}}
-                                        />
+                                        >
+                                            <img width={30} src={"/dir.png"} alt={"위로가기버튼"} className={styles.sticky_side_btn} onClick={()=>{document.querySelector(`.${styles.jh_sideSelectedStopList}`).scrollIntoView({behavior:"smooth",block:"start",inline:"nearest"});}}/>
+                                        </List>
                                     )}
                                     </div>
                                 </List.Item>
