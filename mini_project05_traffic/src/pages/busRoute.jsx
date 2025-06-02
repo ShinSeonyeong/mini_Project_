@@ -17,7 +17,9 @@ function BusRoute(props) {
   const [isRouteSearched, setIsRouteSearched] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [routeResults, setRouteResults] = useState([]);
-  const [selectedRoute, setSeletedRoute] = useState(null);
+  const [selectedRoute, setSelectedRoute] = useState(null);
+  // 상태 추가: 선택된 경로 인덱스 관리
+  const [selectedRouteIndex, setSelectedRouteIndex] = useState(null);
   const [searchHistory, setSearchHistory] = useState(() => {
     const saved = localStorage.getItem("searchHistory");
     return saved ? JSON.parse(saved) : [];
@@ -116,6 +118,10 @@ function BusRoute(props) {
 
       const { header, body } = response.data;
 
+      console.log("Selected Route:", body);
+      console.log("Origin:", selectedOrigin);
+      console.log("Destination:", selectedDestination);
+
       if (header?.success && Array.isArray(body) && body.length > 0) {
         setRouteList(body);
       } else {
@@ -166,12 +172,17 @@ function BusRoute(props) {
   };
 
   const handleReset = () => {
-    setOrigin("");
-    setDestination("");
-    setSelectedOrigin(null);
-    setSelectedDestination(null);
-    setRouteList([]);
-    handleStartNewSearch();
+    setOrigin(""); // 출발지 입력값 초기화
+    setDestination(""); // 도착지 입력값 초기화
+    setSelectedOrigin(null); // 선택된 출발지 객체 초기화
+    setSelectedDestination(null); // 선택된 도착지 객체 초기화
+    setRouteList([]); // 추천 경로 목록 초기화
+    setSelectedRouteIndex(null); // 선택된 경로 초기화
+    handleStartNewSearch(); // 검색결과 초기화
+    // 부모 컴포넌트에 마커 제거, props 업데이트
+    props.setOpenFind(false);
+    props.setOriginRoute(null);
+    props.setDestyRoute(null);
   };
 
   const convertNGISToKakao = (x, y) => {
@@ -224,6 +235,7 @@ function BusRoute(props) {
       });
   };
 
+  // 검색 기록 클릭 시 해당 경로 재검색
   const handleHistoryClick = async (item) => {
     if (item.origin === item.destination) {
       message.error({
@@ -234,14 +246,20 @@ function BusRoute(props) {
       return;
     }
 
+    // 출발지 검색
     const originStop = await searchBusRoute(item.origin, "origin");
     if (originStop) {
       setSearchTarget("destination");
+      // 도착지 검색
       const destinationStop = await searchBusRoute(
         item.destination,
         "destination"
       );
       if (destinationStop) {
+        // 출발지와 도착지가 모두 설정된 경우 부모 컴포넌트에 경로 정보 전달
+        props.setOpenFind(true);
+        props.setOriginRoute(originStop);
+        props.setDestyRoute(destinationStop);
         message.info({
           content: `${item.origin} → ${item.destination} 선택이 완료되었어요! [경로찾기]를 눌러 이동 경로를 확인해보세요.`,
           key,
@@ -250,6 +268,58 @@ function BusRoute(props) {
         setSearchResults([]);
       }
     }
+  };
+
+  // const handleRouteSegmentClick = async (step) => {
+  //   console.log("경로 구간 클릭:", step.stBsNm, "->", step.edBsNm);
+
+  //   try {
+  //     const [originStop, destinationStop] = await Promise.all([
+  //       searchBusRoute(step.stBsNm, "origin"),
+  //       searchBusRoute(step.edBsNm, "destination"),
+  //     ]);
+
+  //     if (originStop) {
+  //       setOrigin(originStop.bsNm);
+  //       setSelectedOrigin(originStop);
+  //       props.setOriginRoute(originStop);
+  //     }
+
+  //     if (destinationStop) {
+  //       setDestination(destinationStop.bsNm);
+  //       setSelectedDestination(destinationStop);
+  //       props.setDestyRoute(destinationStop);
+  //     }
+  //   } catch (error) {
+  //     console.error("정류장 검색 실패:", error);
+  //   }
+  // };
+
+  const handleRouteSegmentClick = (step) => {
+    console.log(event);
+    if(props.linkData?.target!==event.target)
+    props.setLinkData(event.target);
+    console.log("경로 구간 클릭:", step.stBsNm, "->", step.edBsNm);
+    console.log("step : ",step);
+    // 출발 정류장 정보 설정
+    searchBusRoute(step.stBsNm, "origin").then((originStop) => {
+      if (originStop) {
+        props.setOpenFind(true);
+        setOrigin(originStop.bsNm);
+        setSelectedOrigin(originStop);
+        props.setOriginRoute(originStop); // 부모 컴포넌트로 출발지 정보 전달
+      }
+    });
+
+    // 도착 정류장 정보 설정
+    searchBusRoute(step.edBsNm, "destination").then((destinationStop) => {
+      if (destinationStop) {
+        props.setOpenFind(true);
+        setDestination(destinationStop.bsNm);
+        setSelectedDestination(destinationStop);
+        props.setDestyRoute(destinationStop); // 부모 컴포넌트로 도착지 정보 전달
+      }
+    });
   };
 
   // 지하철 포함된 경로 안 나오도록 필터링
@@ -360,24 +430,28 @@ function BusRoute(props) {
               <List.Item
                 onClick={() => {
                   /* const latlng = convertNGISToKakao(
-                    item.ngisXPos,
-                    item.ngisYPos
-                  ); */
+                                      item.ngisXPos,
+                                      item.ngisYPos
+                                    ); */
                   /* fetchArrivalInfo(item.bsId);
-                  setSelectedStop(item); */
+                                    setSelectedStop(item); */
                   if (searchTarget === "origin") {
                     setOrigin(item.bsNm); // 출발지 이름 설정
                     setSelectedOrigin(item); // 출발지 전체 객체 저장
 
-                    console.log("선택된 시작 아이템 : ",item);
-                    console.log("선택된 시작 아이템 위치: ",item.lat,item.lng);
+                    console.log("선택된 시작 아이템 : ", item);
+                    console.log(
+                      "선택된 시작 아이템 위치: ",
+                      item.lat,
+                      item.lng
+                    );
                     props.setOpenFind(true);
                     props.setOriginRoute(item);
                   } else if (searchTarget === "destination") {
                     setDestination(item.bsNm);
                     setSelectedDestination(item);
 
-                    console.log("선택된 도착 아이템 : ",item);
+                    console.log("선택된 도착 아이템 : ", item);
                     props.setOpenFind(true);
                     props.setDestyRoute(item);
                   }
@@ -421,7 +495,21 @@ function BusRoute(props) {
               renderItem={(route, idx) => (
                 <List.Item
                   key={idx}
-                  style={{ flexDirection: "column", alignItems: "flex-start" }}
+                  style={{
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    cursor: "pointer",
+                    backgroundColor:
+                      selectedRouteIndex === idx ? "#e6f7ff" : "transparent", // 선택된 경로 하이라이트
+                    border:
+                      selectedRouteIndex === idx ? "2px solid #1890ff" : "none",
+                    borderRadius: 4,
+                    padding: selectedRouteIndex === idx ? "8px" : "0",
+                  }}
+                  onClick={() => {
+                    setSelectedRouteIndex(idx);
+                    props.handleRouteClick(route); // 지도에 경로와 마커를 렌더링
+                  }}
                 >
                   <div
                     style={{
@@ -455,6 +543,10 @@ function BusRoute(props) {
                           borderRadius: 4,
                           width: "100%",
                         }}
+                        onClick={() => {
+                          handleRouteSegmentClick(step);
+                          console.log('step', step);
+                        }}
                       >
                         <div
                           style={{
@@ -465,7 +557,13 @@ function BusRoute(props) {
                         >
                           🚌 {step.routeNo} ({step.routeType})
                         </div>
-                        <div style={{ fontSize: 14, color: "#444" }}>
+                        {/* 특정 노선(step.routeNo)과 해당 노선의 출발 정류장(step.stBsNm) 및 도착 정류장(step.edBsNm) 정보 */}
+                        <div
+                          style={{
+                            width: "100%",
+                            padding: "5px 0",
+                          }} // 클릭 영역 확보 및 시각적 피드백
+                        >
                           출발: {step.stBsNm} → 도착: {step.edBsNm}
                         </div>
                         <div style={{ fontSize: 13, color: "#666" }}>
