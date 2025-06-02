@@ -2,6 +2,164 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Input, List, message, Space, Tag } from "antd";
 import axios from "axios";
 import proj4 from "proj4";
+import { SwapOutlined } from "@ant-design/icons";
+
+const styles = `
+  .bus-route-container {
+    padding: 16px;
+    max-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .input-space {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+.button-space {
+  display: flex;
+  justify-content: center; /* 버튼 중앙 정렬 */
+  align-items: center;
+  flex-wrap: nowrap; /* 줄바꿈 방지 */
+}
+
+/* 모든 화면 크기에서 동일한 스타일 유지 */
+.button-space .ant-btn {
+  padding: 6px 12px; /* 기본 패딩 */
+  min-width: 5px; /* 최소 너비로 일관성 유지 */
+  border-radius: 8px; /* 둥근 모서리 */
+}
+
+/* 반응형 조정 (크기만 조정, 배치는 고정) */
+@media (max-width: 425px) {
+  .button-space .ant-btn {
+    font-size: 12px; /* 모바일에서 폰트 크기 축소 */
+    padding: 4px 8px; /* 패딩 축소 */
+    min-width: 80px; /* 최소 너비 조정 */
+  }
+}
+
+  .search-history-card,
+  .route-card {
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .search-result-list {
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 8px;
+    background: #fff;
+    border-radius: 8px;
+  }
+
+  .route-list-item {
+    transition: background-color 0.3s ease, border 0.3s ease;
+    padding: 10px;
+    border-radius: 4px;
+  }
+
+  /* 425px 이하 (모바일) */
+  @media (max-width: 425px) {
+    .bus-route-container {
+      padding: 10px; /* 작은 화면에서 패딩 축소 */
+    }
+
+    .input-space .ant-input-search {
+      font-size: 14px; /* 입력 필드 폰트 크기 조정 */
+      padding: 6px;
+    }
+
+@media (max-width: 425px) {
+  .button-space .ant-btn {
+    font-size: 12px; /* 모바일에서 폰트 크기 축소 */
+    padding: 4px 8px; /* 패딩 축소 */
+    min-width: 80px; /* 최소 너비 조정 */
+  }
+
+    .search-history-card,
+    .route-card {
+      padding: 10px; /* 카드 내부 패딩 축소 */
+    }
+
+    .search-result-list {
+      max-height: 200px; /* 검색 결과 목록 높이 축소 */
+    }
+
+    .route-list-item {
+      padding: 8px; /* 리스트 아이템 패딩 조정 */
+    }
+  }
+
+  /* 426px ~ 768px (태블릿) */
+  @media (min-width: 426px) and (max-width: 768px) {
+    .bus-route-container {
+      padding: 14px;
+      max-width: 720px; /* 태블릿에 적합한 최대 너비 */
+    }
+
+    .input-space .ant-input-search {
+      font-size: 15px;
+      padding: 8px;
+    }
+
+    .button-space .ant-btn {
+      font-size: 13px;
+      padding: 5px 10px;
+      min-width: 90px;
+    }
+
+    .search-history-card,
+    .route-card {
+      padding: 12px;
+    }
+
+    .search-result-list {
+      max-height: 300px;
+    }
+
+    .route-list-item {
+      padding: 10px;
+    }
+  }
+
+  /* 769px 이상 (데스크톱) */
+  @media (min-width: 769px) {
+    .bus-route-container {
+      padding: 20px;
+      max-width: 960px; /* 데스크톱에 적합한 최대 너비 */
+    }
+
+    .input-space .ant-input-search {
+      font-size: 16px;
+      padding: 10px;
+    }
+
+    .button-space .ant-btn {
+      font-size: 16px;
+      padding: 8px 16px;
+      min-width: 120px;
+    }
+
+    .search-history-card,
+    .route-card {
+      padding: 16px;
+    }
+
+    .search-result-list {
+      max-height: 350px;
+    }
+
+    .route-list-item {
+      padding: 12px;
+    }
+  }
+`;
 
 function BusRoute(props) {
   const [origin, setOrigin] = useState("");
@@ -192,7 +350,7 @@ function BusRoute(props) {
     return { lat, lng };
   };
 
-  const searchBusRoute = (value, target, dir) => {
+  const searchBusRoute = (value, target, dir, isSegmentClick = false) => {
     if (!value || value.trim() === "") return Promise.resolve(null);
 
     return axios
@@ -211,14 +369,18 @@ function BusRoute(props) {
             el.dir = dir;
             return el;
           });
-          setSearchResults(data);
-          setArrivalInfo(null);
-          setIsRouteSearched(false);
-          setSelectedStop(firstStop);
-          setMapCenter(
-            convertNGISToKakao(firstStop.ngisXPos, firstStop.ngisYPos)
-          );
-          fetchArrivalInfo(firstStop.bsId);
+          // 세부 구간 클릭이 아닌 경우에만 searchResults 업데이트
+          if (!isSegmentClick) {
+            setSearchResults(data);
+            setArrivalInfo(null);
+            setIsRouteSearched(false);
+            setSelectedStop(firstStop);
+            setMapCenter(
+              convertNGISToKakao(firstStop.ngisXPos, firstStop.ngisYPos)
+            );
+            fetchArrivalInfo(firstStop.bsId);
+          }
+
           if (target === "origin") {
             setOrigin(firstStop.bsNm);
             setSelectedOrigin(firstStop);
@@ -295,72 +457,6 @@ function BusRoute(props) {
     }
   };
 
-  // const handleRouteSegmentClick = (step) => {
-  //   if (props.linkData?.target !== event.target)
-  //     props.setLinkData(event.target);
-  //   console.log("경로 구간 클릭:", step.stBsNm, "->", step.edBsNm);
-  //   console.log("step : ", step);
-  //   // 출발 정류장 정보 설정
-  //   searchBusRoute(step.stBsNm, "origin").then((originStop) => {
-  //     if (originStop) {
-  //       props.setOpenFind(true);
-  //       setOrigin(originStop.bsNm);
-  //       setSelectedOrigin(originStop);
-  //       props.setOriginRoute(originStop); // 부모 컴포넌트로 출발지 정보 전달
-  //     }
-  //   });
-
-  //   // 도착 정류장 정보 설정
-  //   searchBusRoute(step.edBsNm, "destination").then((destinationStop) => {
-  //     if (destinationStop) {
-  //       props.setOpenFind(true);
-  //       setDestination(destinationStop.bsNm);
-  //       setSelectedDestination(destinationStop);
-  //       props.setDestyRoute(destinationStop); // 부모 컴포넌트로 도착지 정보 전달
-  //     }
-  //   });
-  // };
-
-  // const handleRouteSegmentClick = async (step) => {
-  //   console.log("경로 구간 클릭:", step.stBsNm, "->", step.edBsNm);
-  //   console.log("step : ", step);
-
-  //   try {
-  //     // 출발지와 도착지를 순차적으로 검색
-  //     const originStop = await searchBusRoute(step.stBsNm, "origin");
-  //     const destinationStop = await searchBusRoute(step.edBsNm, "destination");
-
-  //     if (originStop) {
-  //       setOrigin(originStop.bsNm);
-  //       setSelectedOrigin(originStop);
-  //       props.setOriginRoute(originStop);
-  //     }
-  //     if (destinationStop) {
-  //       setDestination(destinationStop.bsNm);
-  //       setSelectedDestination(destinationStop);
-  //       props.setDestyRoute(destinationStop);
-  //     }
-  //     if (originStop && destinationStop) {
-  //       props.setOpenFind(true);
-  //       // 모든 데이터가 준비된 후 handleRouteClick 호출
-  //       props.handleRouteClick({ list: [step] });
-  //     } else {
-  //       message.error({
-  //         content: "출발지 또는 도착지 정보를 가져오지 못했습니다.",
-  //         key: `search_error_${Date.now()}`,
-  //         duration: 2,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("정류장 검색 실패:", error);
-  //     message.error({
-  //       content: "정류장 정보를 검색하는 중 오류가 발생했습니다.",
-  //       key: `search_error_${Date.now()}`,
-  //       duration: 2,
-  //     });
-  //   }
-  // };
-
   // 지하철 포함된 경로 안 나오도록 필터링
   const filteredRouteList = routeList.filter(
     (route) =>
@@ -369,261 +465,293 @@ function BusRoute(props) {
   );
 
   return (
-    <div>
-      <div style={{ padding: "20px" }}>
-        <Space direction="vertical" style={{ width: "100%" }}>
-          <Input.Search
-            id="originInput"
-            placeholder="출발지를 선택해 주세요."
-            value={origin}
-            onChange={(e) => {
-              setOrigin(e.target.value);
-              setSearchTarget("origin");
-            }}
-            onSearch={(value) => {
-              setSearchTarget("origin");
-              searchBusRoute(value, setOrigin, 0);
-            }}
-            allowClear
-          />
-
-          <Input.Search
-            id="destinationInput"
-            placeholder="도착지를 선택해 주세요."
-            value={destination}
-            onChange={(e) => {
-              setDestination(e.target.value);
-              setSearchTarget("destination");
-            }}
-            onSearch={(value) => {
-              setSearchTarget("destination");
-              searchBusRoute(value, setDestination, 1);
-            }}
-            allowClear
-          />
-        </Space>
-      </div>
-
-      <div style={{ padding: "20px" }}>
-        <Space>
-          <Button onClick={handleSwap}>🔄 출발지 ↔ 도착지</Button>
-          <Button type="primary" onClick={handleSearch}>
-            경로찾기
-          </Button>
-          <Button danger onClick={handleReset}>
-            초기화
-          </Button>
-        </Space>
-      </div>
-
-      <div style={{ padding: "20px" }}>
-        <Card title="최근 검색 경로" size="small">
-          <List
-            dataSource={searchHistory}
-            renderItem={(item, index) => (
-              <List.Item
-                key={index}
-                style={{ cursor: "pointer" }}
-                onClick={() => handleHistoryClick(item)} // 수정된 handleHistoryClick 사용
-              >
-                <span>
-                  📍 {item.origin} → {item.destination}
-                </span>
-                <div
-                  onClick={(e) => e.stopPropagation()} // 별도 div로 이벤트 차단
-                  style={{ marginLeft: "10px" }}
-                >
-                  <Button
-                    type="text"
-                    danger
-                    onClick={() => handleDeleteHistory(index)} // 삭제만 처리
-                  >
-                    삭제
-                  </Button>
-                </div>
-              </List.Item>
-            )}
-          ></List>
-        </Card>
-      </div>
-
-      <Card
-        style={{ marginBottom: 16, borderRadius: 12, background: "#fafafa" }}
-      >
-        <p>
-          <strong>출발지:</strong>{" "}
-          {selectedOrigin?.bsNm || <span style={{ color: "red" }}>없음</span>}
-        </p>
-        <p>
-          <strong>도착지:</strong>{" "}
-          {selectedDestination?.bsNm || (
-            <span style={{ color: "red" }}>없음</span>
-          )}
-        </p>
-      </Card>
-
-      {!isRouteSearched && searchResults.length > 0 && (
+    <>
+      <style>{styles}</style>
+      <div className="bus-route-container">
         <div style={{ padding: "20px" }}>
-          <List
-            variant="borderless"
-            dataSource={searchResults}
-            renderItem={(item) => (
-              <List.Item
-                onClick={() => {
-                  /* const latlng = convertNGISToKakao(
+          <Space direction="vertical" className="input-space">
+            <Input.Search
+              id="originInput"
+              placeholder="출발지를 선택해 주세요."
+              value={origin}
+              onChange={(e) => {
+                setOrigin(e.target.value);
+                setSearchTarget("origin");
+              }}
+              onSearch={(value) => {
+                setSearchTarget("origin");
+                searchBusRoute(value, setOrigin, 0);
+              }}
+              allowClear
+            />
+
+            <Input.Search
+              id="destinationInput"
+              placeholder="도착지를 선택해 주세요."
+              value={destination}
+              onChange={(e) => {
+                setDestination(e.target.value);
+                setSearchTarget("destination");
+              }}
+              onSearch={(value) => {
+                setSearchTarget("destination");
+                searchBusRoute(value, setDestination, 1);
+              }}
+              allowClear
+            />
+          </Space>
+        </div>
+
+        <div style={{ padding: "5px" }}>
+          <Space className="button-space">
+            <Button
+              onClick={handleSwap}
+              icon={<SwapOutlined />}
+              style={{
+                borderRadius: "8px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              출발지 ↔ 도착지
+            </Button>
+            <Button
+              type="primary"
+              onClick={handleSearch}
+              style={{ borderRadius: "8px", fontWeight: "bold" }}
+            >
+              경로찾기
+            </Button>
+            <Button
+              danger
+              onClick={handleReset}
+              style={{ borderRadius: "8px" }}
+            >
+              초기화
+            </Button>
+          </Space>
+        </div>
+
+        <div style={{ padding: "5px" }}>
+          <Card
+            title="최근 검색 경로"
+            size="small"
+            className="search-history-card"
+          >
+            <List
+              dataSource={searchHistory}
+              renderItem={(item, index) => (
+                <List.Item
+                  key={index}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleHistoryClick(item)} // 수정된 handleHistoryClick 사용
+                >
+                  <span>
+                    📍 {item.origin} → {item.destination}
+                  </span>
+                  <div
+                    onClick={(e) => e.stopPropagation()} // 별도 div로 이벤트 차단
+                    style={{ marginLeft: "10px" }}
+                  >
+                    <Button
+                      type="text"
+                      danger
+                      onClick={() => handleDeleteHistory(index)} // 삭제만 처리
+                    >
+                      삭제
+                    </Button>
+                  </div>
+                </List.Item>
+              )}
+            ></List>
+          </Card>
+        </div>
+
+        <Card
+          style={{ marginBottom: 16, borderRadius: 12, background: "#fafafa" }}
+        >
+          <p>
+            <strong>출발지:</strong>{" "}
+            {selectedOrigin?.bsNm || <span style={{ color: "red" }}>없음</span>}
+          </p>
+          <p>
+            <strong>도착지:</strong>{" "}
+            {selectedDestination?.bsNm || (
+              <span style={{ color: "red" }}>없음</span>
+            )}
+          </p>
+        </Card>
+
+        {!isRouteSearched && searchResults.length > 0 && (
+          <div style={{ padding: "20px" }}>
+            <List
+              variant="borderless"
+              dataSource={searchResults}
+              className="search-result-list"
+              renderItem={(item) => (
+                <List.Item
+                  onClick={() => {
+                    /* const latlng = convertNGISToKakao(
                                       item.ngisXPos,
                                       item.ngisYPos
                                     ); */
-                  /* fetchArrivalInfo(item.bsId);
+                    /* fetchArrivalInfo(item.bsId);
                                     setSelectedStop(item); */
-                  if (searchTarget === "origin") {
-                    setOrigin(item.bsNm); // 출발지 이름 설정
-                    setSelectedOrigin(item); // 출발지 전체 객체 저장
+                    if (searchTarget === "origin") {
+                      setOrigin(item.bsNm); // 출발지 이름 설정
+                      setSelectedOrigin(item); // 출발지 전체 객체 저장
 
-                    console.log("선택된 시작 아이템 : ", item);
-                    console.log(
-                      "선택된 시작 아이템 위치: ",
-                      item.lat,
-                      item.lng
-                    );
-                    props.setOpenFind(true);
-                    props.setOriginRoute(item);
-                  } else if (searchTarget === "destination") {
-                    setDestination(item.bsNm);
-                    setSelectedDestination(item);
+                      console.log("선택된 시작 아이템 : ", item);
+                      console.log(
+                        "선택된 시작 아이템 위치: ",
+                        item.lat,
+                        item.lng
+                      );
+                      props.setOpenFind(true);
+                      props.setOriginRoute(item);
+                    } else if (searchTarget === "destination") {
+                      setDestination(item.bsNm);
+                      setSelectedDestination(item);
 
-                    console.log("선택된 도착 아이템 : ", item);
-                    props.setOpenFind(true);
-                    props.setDestyRoute(item);
-                  }
-                }}
-                style={{ cursor: "pointer" }}
-              >
-                <div style={{ width: "100%" }}>
-                  <div
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "1.1em",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    {item.bsNm}
-                  </div>
-                  <div
-                    style={{
-                      color: "#666",
-                      fontSize: "0.9em",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    정류장ID: {item.bsId}
-                  </div>
-                  <div style={{ color: "#1890ff", fontSize: "0.9em" }}>
-                    경유노선: {item.routeList}
-                  </div>
-                </div>
-              </List.Item>
-            )}
-          />
-        </div>
-      )}
-
-      {Array.isArray(routeList) && routeList.length > 0 && (
-        <div style={{ padding: "20px" }}>
-          <Card title="추천 경로" variant="outlined">
-            <List
-              dataSource={filteredRouteList}
-              renderItem={(route, idx) => (
-                <List.Item
-                  key={idx}
-                  style={{
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    cursor: "pointer",
-                    backgroundColor:
-                      selectedRouteIndex === idx ? "#e6f7ff" : "transparent", // 선택된 경로 하이라이트
-                    border:
-                      selectedRouteIndex === idx ? "2px solid #1890ff" : "none",
-                    borderRadius: 4,
-                    padding: selectedRouteIndex === idx ? "8px" : "0",
+                      console.log("선택된 도착 아이템 : ", item);
+                      props.setOpenFind(true);
+                      props.setDestyRoute(item);
+                    }
                   }}
-                  onClick={() => {
-                    console.log(route);
-                    setSelectedRouteIndex(idx);
-                    props.handleRouteClick(route); // 지도에 경로와 마커를 렌더링
-                  }}
+                  style={{ cursor: "pointer" }}
                 >
-                  <div
-                    style={{
-                      width: "100%",
-                      marginBottom: 8,
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <strong>{idx + 1}번 경로</strong>
-                    {/* <Tag color={route.transCd === "T" ? "blue" : "green"}>
-                      {route.trans}
-                    </Tag> */}
+                  <div style={{ width: "100%" }}>
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "1.1em",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      {item.bsNm}
+                    </div>
+                    <div
+                      style={{
+                        color: "#666",
+                        fontSize: "0.9em",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      정류장ID: {item.bsId}
+                    </div>
+                    <div style={{ color: "#1890ff", fontSize: "0.9em" }}>
+                      경유노선: {item.routeList}
+                    </div>
                   </div>
-                  <div style={{ marginBottom: 8, fontSize: 14, color: "#555" }}>
-                    총 소요 시간: <strong>{route.totalTime}</strong> / 총 거리:{" "}
-                    <strong>{route.totalDist}</strong>
-                  </div>
-                  <List
-                    dataSource={route.list}
-                    renderItem={(step, sIdx) => (
-                      <List.Item
-                        key={sIdx}
-                        style={{
-                          paddingLeft: 12,
-                          borderLeft: "2px solid #1890ff",
-                          marginBottom: 8,
-                          flexDirection: "column",
-                          alignItems: "flex-start",
-                          backgroundColor: sIdx % 2 === 0 ? "#f0f5ff" : "white",
-                          borderRadius: 4,
-                          width: "100%",
-                        }}
-                        onClick={() => {
-                          handleRouteSegmentClick(step);
-                          console.log("step", step);
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: 16,
-                            marginBottom: 4,
-                          }}
-                        >
-                          🚌 {step.routeNo} ({step.routeType})
-                        </div>
-                        {/* 특정 노선(step.routeNo)과 해당 노선의 출발 정류장(step.stBsNm) 및 도착 정류장(step.edBsNm) 정보 */}
-                        <div
-                          style={{
-                            width: "100%",
-                            padding: "5px 0",
-                          }} // 클릭 영역 확보 및 시각적 피드백
-                        >
-                          출발: {step.stBsNm} → 도착: {step.edBsNm}
-                        </div>
-                        <div style={{ fontSize: 13, color: "#666" }}>
-                          소요 시간: {step.time} / 거리: {step.dist} / 정류장
-                          수: {step.gap}
-                        </div>
-                      </List.Item>
-                    )}
-                    pagination={false}
-                  />
                 </List.Item>
               )}
-              pagination={false}
             />
-          </Card>
-        </div>
-      )}
-    </div>
+          </div>
+        )}
+
+        {Array.isArray(routeList) && routeList.length > 0 && (
+          <div style={{ padding: "5px" }}>
+            <Card title="추천 경로" variant="outlined" className="route-card">
+              <List
+                dataSource={filteredRouteList}
+                renderItem={(route, idx) => (
+                  <List.Item
+                    key={idx}
+                    className="route-list-item"
+                    style={{
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      cursor: "pointer",
+                      backgroundColor:
+                        selectedRouteIndex === idx ? "#e6f7ff" : "transparent", // 선택된 경로 하이라이트
+                      border:
+                        selectedRouteIndex === idx
+                          ? "2px solid #1890ff"
+                          : "none",
+                      borderRadius: 4,
+                      padding: selectedRouteIndex === idx ? "8px" : "0",
+                    }}
+                    onClick={() => {
+                      console.log(route);
+                      setSelectedRouteIndex(idx);
+                      props.handleRouteClick(route); // 지도에 경로와 마커를 렌더링
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        marginBottom: 8,
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <strong>{idx + 1}번 경로</strong>
+                      {/* <Tag color={route.transCd === "T" ? "blue" : "green"}>
+                      {route.trans}
+                    </Tag> */}
+                    </div>
+                    <div
+                      style={{ marginBottom: 8, fontSize: 14, color: "#555" }}
+                    >
+                      총 소요 시간: <strong>{route.totalTime}</strong> / 총
+                      거리: <strong>{route.totalDist}</strong>
+                    </div>
+                    <List
+                      dataSource={route.list}
+                      renderItem={(step, sIdx) => (
+                        <List.Item
+                          key={sIdx}
+                          style={{
+                            paddingLeft: 12,
+                            borderLeft: "2px solid #1890ff",
+                            marginBottom: 8,
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                            backgroundColor:
+                              sIdx % 2 === 0 ? "#f0f5ff" : "white",
+                            borderRadius: 4,
+                            width: "100%",
+                          }}
+                          onClick={() => {
+                            handleRouteSegmentClick(step);
+                            console.log("step", step);
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: 16,
+                              marginBottom: 4,
+                            }}
+                          >
+                            🚌 {step.routeNo} ({step.routeType})
+                          </div>
+                          {/* 특정 노선(step.routeNo)과 해당 노선의 출발 정류장(step.stBsNm) 및 도착 정류장(step.edBsNm) 정보 */}
+                          <div
+                            style={{
+                              width: "100%",
+                              padding: "5px 0",
+                            }} // 클릭 영역 확보 및 시각적 피드백
+                          >
+                            출발: {step.stBsNm} → 도착: {step.edBsNm}
+                          </div>
+                          <div style={{ fontSize: 13, color: "#666" }}>
+                            소요 시간: {step.time} / 거리: {step.dist} / 정류장
+                            수: {step.gap}
+                          </div>
+                        </List.Item>
+                      )}
+                      pagination={false}
+                    />
+                  </List.Item>
+                )}
+                pagination={false}
+              />
+            </Card>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 
