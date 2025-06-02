@@ -79,10 +79,9 @@ function KaokaoMain(props) {
       { enableHighAccuracy: true, maximumAge: 0 }
     );
   }, []);
-  useEffect(()=>{
-    if(linkData)
-    linkData.click();
-  },[linkData]);
+  // useEffect(() => {
+  //   if (linkData) linkData.click();
+  // }, [linkData]);
   const handleRouteClick = async (route) => {
     if (
       !linkGeoJson ||
@@ -101,7 +100,7 @@ function KaokaoMain(props) {
       setCustomPathLink(null);
       return;
     }
-  
+
     try {
       console.log("추천 경로 입력:", {
         routeNo: route.list[0].routeNo,
@@ -109,24 +108,29 @@ function KaokaoMain(props) {
         origin: originRoute,
         desty: destyRoute,
       });
-      
+
       // 1. API 호출로 링크 데이터 가져오기
       const step = route.list[0];
       const res = await kakaoMap.getRouteLink(step.routeId).catch((error) => {
         console.error(`Route ${step.routeNo} API 호출 실패:`, error);
         return { data: { body: { items: [] } } };
       });
-      console.log("노선번호 경로 찾기 값 : ",res);
+      console.log("노선번호 경로 찾기 값 : ", res);
       if (!res.data?.body?.items) {
-        console.warn(`Route ${step.routeNo} API 응답이 유효하지 않습니다:`, res);
+        console.warn(
+          `Route ${step.routeNo} API 응답이 유효하지 않습니다:`,
+          res
+        );
       }
       const links = res.data?.body?.items || [];
       // console.log(`Route ${step.routeNo} API 응답 (links):`, links);
-  
+
       // 2. linkGeoJson에서 링크 필터링
       let validLinks = linkGeoJson.features
         .filter((link) =>
-          links.some((item) => String(item.linkId) === String(link.properties.link_id))
+          links.some(
+            (item) => String(item.linkId) === String(link.properties.link_id)
+          )
         )
         .map((link) => {
           const matchedItem = links.find(
@@ -147,41 +151,47 @@ function KaokaoMain(props) {
           moveDir: item.moveDir,
         }))
       );
-  
+
       // 3. 출발지와 도착지 사이의 경로 구성 (수정됨)
       const threshold = 0.02; // 0.02도 (약 2km 이내)
       let bestPath = null;
-  
+
       if (links && links.length > 0) {
         // links 순서를 기준으로 링크 연결
-        const orderedLinks = links.map((linkItem) => {
-          const link = linkGeoJson.features.find(
-            (feature) => String(feature.properties.link_id) === String(linkItem.linkId)
-          );
-          return link
-            ? {
-                link,
-                routeNo: step.routeNo,
-                linkId: link.properties.link_id,
-                moveDir: linkItem.moveDir,
-              }
-            : null;
-        }).filter(Boolean); // null 제거
-  
+        const orderedLinks = links
+          .map((linkItem) => {
+            const link = linkGeoJson.features.find(
+              (feature) =>
+                String(feature.properties.link_id) === String(linkItem.linkId)
+            );
+            return link
+              ? {
+                  link,
+                  routeNo: step.routeNo,
+                  linkId: link.properties.link_id,
+                  moveDir: linkItem.moveDir,
+                }
+              : null;
+          })
+          .filter(Boolean); // null 제거
+
         if (orderedLinks.length > 0) {
           // 출발지와 도착지에 가까운 링크 찾기
           let startLink = null;
           let endLink = null;
           let minStartDist = Infinity;
           let minEndDist = Infinity;
-  
+
           orderedLinks.forEach((linkObj, linkIdx) => {
             const coords = linkObj.link.geometry.coordinates;
             coords.forEach(([x, y], idx) => {
               const [lng, lat] = proj4("EPSG:5182", "EPSG:4326", [x, y]);
-              const startDist = Math.abs(lat - originRoute.lat) + Math.abs(lng - originRoute.lng);
-              const endDist = Math.abs(lat - destyRoute.lat) + Math.abs(lng - destyRoute.lng);
-  
+              const startDist =
+                Math.abs(lat - originRoute.lat) +
+                Math.abs(lng - originRoute.lng);
+              const endDist =
+                Math.abs(lat - destyRoute.lat) + Math.abs(lng - destyRoute.lng);
+
               if (startDist < minStartDist) {
                 minStartDist = startDist;
                 startLink = { linkObj, idx, linkIdx };
@@ -192,13 +202,13 @@ function KaokaoMain(props) {
               }
             });
           });
-  
+
           if (startLink && endLink) {
             // 출발지에서 도착지까지 링크를 순서대로 연결
             const allPaths = [];
             let startLinkIdx = startLink.linkIdx;
             let endLinkIdx = endLink.linkIdx;
-  
+
             // 시작 링크에서 자르기
             let path = startLink.linkObj.link.geometry.coordinates
               .slice(startLink.idx)
@@ -213,7 +223,7 @@ function KaokaoMain(props) {
                 };
               });
             allPaths.push(path);
-              
+
             // 중간 링크 연결
             for (let i = startLinkIdx + 1; i < endLinkIdx; i++) {
               const linkObj = orderedLinks[i];
@@ -229,7 +239,7 @@ function KaokaoMain(props) {
               });
               allPaths.push(path);
             }
-  
+
             // 도착지 링크에서 자르기
             path = endLink.linkObj.link.geometry.coordinates
               .slice(0, endLink.idx + 1)
@@ -244,43 +254,81 @@ function KaokaoMain(props) {
                 };
               });
             allPaths.push(path);
-  
+
             // 경로에 출발지와 도착지 추가
             bestPath = [
-              { lat: originRoute.lat, lng: originRoute.lng, dir: 0, routeNo: step.routeNo, linkId: startLink.linkObj.linkId },
+              {
+                lat: originRoute.lat,
+                lng: originRoute.lng,
+                dir: 0,
+                routeNo: step.routeNo,
+                linkId: startLink.linkObj.linkId,
+              },
               ...allPaths.flat(),
-              { lat: destyRoute.lat, lng: destyRoute.lng, dir: 0, routeNo: step.routeNo, linkId: endLink.linkObj.linkId },
-            ].filter((point, index, self) =>
-              index === 0 || index === self.length - 1 || !self.slice(0, index).some(p => p.lat === point.lat && p.lng === point.lng)
+              {
+                lat: destyRoute.lat,
+                lng: destyRoute.lng,
+                dir: 0,
+                routeNo: step.routeNo,
+                linkId: endLink.linkObj.linkId,
+              },
+            ].filter(
+              (point, index, self) =>
+                index === 0 ||
+                index === self.length - 1 ||
+                !self
+                  .slice(0, index)
+                  .some((p) => p.lat === point.lat && p.lng === point.lng)
             ); // 중복 제거
           }
         }
       }
-  
+
       // 4. 대체 경로 탐색 (수정됨)
       if (!bestPath) {
-        console.warn("출발지-도착지 간 유효한 경로를 찾지 못했습니다. 대체 경로 탐색 시도.");
+        console.warn(
+          "출발지-도착지 간 유효한 경로를 찾지 못했습니다. 대체 경로 탐색 시도."
+        );
         const candidates = linkGeoJson.features
           .filter((link) => {
             // API 링크와 일치하는 링크만 고려
-            return links.some((item) => String(item.linkId) === String(link.properties.link_id));
+            return links.some(
+              (item) => String(item.linkId) === String(link.properties.link_id)
+            );
           })
           .map((link) => {
             const coords = link.geometry.coordinates;
-            let startIdx = 0, endIdx = coords.length - 1;
-            let minStartDist = Infinity, minEndDist = Infinity;
+            let startIdx = 0,
+              endIdx = coords.length - 1;
+            let minStartDist = Infinity,
+              minEndDist = Infinity;
             coords.forEach(([x, y], idx) => {
               const [lng, lat] = proj4("EPSG:5182", "EPSG:4326", [x, y]);
-              const startDist = Math.abs(lat - originRoute.lat) + Math.abs(lng - originRoute.lng);
-              const endDist = Math.abs(lat - destyRoute.lat) + Math.abs(lng - destyRoute.lng);
-              if (startDist < minStartDist) { minStartDist = startDist; startIdx = idx; }
-              if (endDist < minEndDist) { minEndDist = endDist; endIdx = idx; }
+              const startDist =
+                Math.abs(lat - originRoute.lat) +
+                Math.abs(lng - originRoute.lng);
+              const endDist =
+                Math.abs(lat - destyRoute.lat) + Math.abs(lng - destyRoute.lng);
+              if (startDist < minStartDist) {
+                minStartDist = startDist;
+                startIdx = idx;
+              }
+              if (endDist < minEndDist) {
+                minEndDist = endDist;
+                endIdx = idx;
+              }
             });
             return { link, startIdx, endIdx, minStartDist, minEndDist };
           })
-          .filter((item) => item.minStartDist < threshold && item.minEndDist < threshold)
-          .sort((a, b) => a.minStartDist + a.minEndDist - (b.minStartDist + b.minEndDist));
-  
+          .filter(
+            (item) =>
+              item.minStartDist < threshold && item.minEndDist < threshold
+          )
+          .sort(
+            (a, b) =>
+              a.minStartDist + a.minEndDist - (b.minStartDist + b.minEndDist)
+          );
+
         if (candidates.length > 0) {
           // 대체 경로도 API 링크 순서를 고려하여 구성
           const allPaths = [];
@@ -290,7 +338,11 @@ function KaokaoMain(props) {
               .slice(candidate.startIdx, candidate.endIdx + 1)
               .map(([x, y]) => {
                 const [lng, lat] = proj4("EPSG:5182", "EPSG:4326", [x, y]);
-                const matchedItem = links.find((item) => String(item.linkId) === String(candidate.link.properties.link_id));
+                const matchedItem = links.find(
+                  (item) =>
+                    String(item.linkId) ===
+                    String(candidate.link.properties.link_id)
+                );
                 return {
                   lat,
                   lng,
@@ -301,17 +353,32 @@ function KaokaoMain(props) {
               });
             allPaths.push(path);
           }
-  
+
           bestPath = [
-            { lat: originRoute.lat, lng: originRoute.lng, dir: 0, routeNo: step.routeNo },
+            {
+              lat: originRoute.lat,
+              lng: originRoute.lng,
+              dir: 0,
+              routeNo: step.routeNo,
+            },
             ...allPaths.flat(),
-            { lat: destyRoute.lat, lng: destyRoute.lng, dir: 0, routeNo: step.routeNo },
-          ].filter((point, index, self) =>
-            index === 0 || index === self.length - 1 || !self.slice(0, index).some(p => p.lat === point.lat && p.lng === point.lng)
+            {
+              lat: destyRoute.lat,
+              lng: destyRoute.lng,
+              dir: 0,
+              routeNo: step.routeNo,
+            },
+          ].filter(
+            (point, index, self) =>
+              index === 0 ||
+              index === self.length - 1 ||
+              !self
+                .slice(0, index)
+                .some((p) => p.lat === point.lat && p.lng === point.lng)
           );
         }
       }
-  
+
       // 5. 상태 업데이트
       if (bestPath) {
         const variableList = [bestPath];
@@ -325,7 +392,9 @@ function KaokaoMain(props) {
           apiLinks: links.length,
           geoJsonLinks: linkGeoJson.features.length,
         });
-        alert("출발지와 도착지를 연결하는 경로를 찾을 수 없습니다. 다른 노선을 선택해주세요.");
+        alert(
+          "출발지와 도착지를 연결하는 경로를 찾을 수 없습니다. 다른 노선을 선택해주세요."
+        );
         setCustomPathLink(null);
       }
     } catch (error) {
@@ -422,8 +491,8 @@ function KaokaoMain(props) {
         openFind={openFind}
         setOpenFind={setOpenFind}
         handleRouteClick={handleRouteClick}
-        linkData={linkData}
-        setLinkData={setLinkData}
+        // linkData={linkData}
+        // setLinkData={setLinkData}
       />
 
       <article className={styles.main}>

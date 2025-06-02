@@ -270,61 +270,102 @@ function BusRoute(props) {
     }
   };
 
+  const handleRouteSegmentClick = async (step) => {
+    console.log("경로 구간 클릭:", step.stBsNm, "->", step.edBsNm);
+
+    try {
+      const [originStop, destinationStop] = await Promise.all([
+        searchBusRoute(step.stBsNm, "origin"),
+        searchBusRoute(step.edBsNm, "destination"),
+      ]);
+
+      if (originStop) {
+        setOrigin(originStop.bsNm);
+        setSelectedOrigin(originStop);
+        props.setOriginRoute(originStop);
+      }
+
+      if (destinationStop) {
+        setDestination(destinationStop.bsNm);
+        setSelectedDestination(destinationStop);
+        props.setDestyRoute(destinationStop);
+      }
+    } catch (error) {
+      console.error("정류장 검색 실패:", error);
+    }
+  };
+
+  // const handleRouteSegmentClick = (step) => {
+  //   if (props.linkData?.target !== event.target)
+  //     props.setLinkData(event.target);
+  //   console.log("경로 구간 클릭:", step.stBsNm, "->", step.edBsNm);
+  //   console.log("step : ", step);
+  //   // 출발 정류장 정보 설정
+  //   searchBusRoute(step.stBsNm, "origin").then((originStop) => {
+  //     if (originStop) {
+  //       props.setOpenFind(true);
+  //       setOrigin(originStop.bsNm);
+  //       setSelectedOrigin(originStop);
+  //       props.setOriginRoute(originStop); // 부모 컴포넌트로 출발지 정보 전달
+  //     }
+  //   });
+
+  //   // 도착 정류장 정보 설정
+  //   searchBusRoute(step.edBsNm, "destination").then((destinationStop) => {
+  //     if (destinationStop) {
+  //       props.setOpenFind(true);
+  //       setDestination(destinationStop.bsNm);
+  //       setSelectedDestination(destinationStop);
+  //       props.setDestyRoute(destinationStop); // 부모 컴포넌트로 도착지 정보 전달
+  //     }
+  //   });
+  // };
+
   // const handleRouteSegmentClick = async (step) => {
   //   console.log("경로 구간 클릭:", step.stBsNm, "->", step.edBsNm);
+  //   console.log("step : ", step);
 
   //   try {
-  //     const [originStop, destinationStop] = await Promise.all([
-  //       searchBusRoute(step.stBsNm, "origin"),
-  //       searchBusRoute(step.edBsNm, "destination"),
-  //     ]);
+  //     // 출발지와 도착지를 순차적으로 검색
+  //     const originStop = await searchBusRoute(step.stBsNm, "origin");
+  //     const destinationStop = await searchBusRoute(step.edBsNm, "destination");
 
   //     if (originStop) {
   //       setOrigin(originStop.bsNm);
   //       setSelectedOrigin(originStop);
   //       props.setOriginRoute(originStop);
   //     }
-
   //     if (destinationStop) {
   //       setDestination(destinationStop.bsNm);
   //       setSelectedDestination(destinationStop);
   //       props.setDestyRoute(destinationStop);
   //     }
+  //     if (originStop && destinationStop) {
+  //       props.setOpenFind(true);
+  //       // 모든 데이터가 준비된 후 handleRouteClick 호출
+  //       props.handleRouteClick({ list: [step] });
+  //     } else {
+  //       message.error({
+  //         content: "출발지 또는 도착지 정보를 가져오지 못했습니다.",
+  //         key: `search_error_${Date.now()}`,
+  //         duration: 2,
+  //       });
+  //     }
   //   } catch (error) {
   //     console.error("정류장 검색 실패:", error);
+  //     message.error({
+  //       content: "정류장 정보를 검색하는 중 오류가 발생했습니다.",
+  //       key: `search_error_${Date.now()}`,
+  //       duration: 2,
+  //     });
   //   }
   // };
 
-  const handleRouteSegmentClick = (step) => {
-    console.log(event);
-    if(props.linkData?.target!==event.target)
-    props.setLinkData(event.target);
-    console.log("경로 구간 클릭:", step.stBsNm, "->", step.edBsNm);
-    console.log("step : ",step);
-    // 출발 정류장 정보 설정
-    searchBusRoute(step.stBsNm, "origin").then((originStop) => {
-      if (originStop) {
-        props.setOpenFind(true);
-        setOrigin(originStop.bsNm);
-        setSelectedOrigin(originStop);
-        props.setOriginRoute(originStop); // 부모 컴포넌트로 출발지 정보 전달
-      }
-    });
-
-    // 도착 정류장 정보 설정
-    searchBusRoute(step.edBsNm, "destination").then((destinationStop) => {
-      if (destinationStop) {
-        props.setOpenFind(true);
-        setDestination(destinationStop.bsNm);
-        setSelectedDestination(destinationStop);
-        props.setDestyRoute(destinationStop); // 부모 컴포넌트로 도착지 정보 전달
-      }
-    });
-  };
-
   // 지하철 포함된 경로 안 나오도록 필터링
   const filteredRouteList = routeList.filter(
-    (route) => !route.list.some((step) => step.routeNo.includes("지하철"))
+    (route) =>
+      !route.list.some((step) => step.routeNo.includes("지하철")) &&
+      route.trans !== "환승"
   );
 
   return (
@@ -507,6 +548,7 @@ function BusRoute(props) {
                     padding: selectedRouteIndex === idx ? "8px" : "0",
                   }}
                   onClick={() => {
+                    console.log(route);
                     setSelectedRouteIndex(idx);
                     props.handleRouteClick(route); // 지도에 경로와 마커를 렌더링
                   }}
@@ -520,9 +562,9 @@ function BusRoute(props) {
                     }}
                   >
                     <strong>{idx + 1}번 경로</strong>
-                    <Tag color={route.transCd === "T" ? "blue" : "green"}>
+                    {/* <Tag color={route.transCd === "T" ? "blue" : "green"}>
                       {route.trans}
-                    </Tag>
+                    </Tag> */}
                   </div>
                   <div style={{ marginBottom: 8, fontSize: 14, color: "#555" }}>
                     총 소요 시간: <strong>{route.totalTime}</strong> / 총 거리:{" "}
@@ -545,7 +587,7 @@ function BusRoute(props) {
                         }}
                         onClick={() => {
                           handleRouteSegmentClick(step);
-                          console.log('step', step);
+                          console.log("step", step);
                         }}
                       >
                         <div
