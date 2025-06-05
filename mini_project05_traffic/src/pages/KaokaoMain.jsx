@@ -83,6 +83,11 @@ function KaokaoMain(props) {
   //   if (linkData) linkData.click();
   // }, [linkData]);
   const handleRouteClick = async (route) => {
+    setCustomPathLink(null); // 기존 경로 초기화
+    await new Promise((resolve) => setTimeout(resolve, 0)); // 수정: 렌더링 대기 추가
+    console.log("Route clicked:", route); // 수정: 디버깅 로그 추가
+
+    setCustomPathLink(null); // 기존 경로 초기화
     if (
       !linkGeoJson ||
       !route.list ||
@@ -384,6 +389,12 @@ function KaokaoMain(props) {
         const variableList = [bestPath];
         console.log("생성된 경로:", variableList); // 디버깅 로그 추가
         setCustomPathLink(variableList);
+
+        setCustomPathLink(null); // 수정: 상태 초기화 추가
+        await new Promise((resolve) => setTimeout(resolve, 0)); // 수정: 렌더링 대기 추가
+        setCustomPathLink(variableList); // 수정: 최적 경로 설정
+        console.log("Updated customPathLink:", variableList);
+
         setMapCenter({ lat: originRoute.lat, lng: originRoute.lng });
         setMapLevel(5);
         setOpenedRoute(true);
@@ -502,9 +513,9 @@ function KaokaoMain(props) {
           style={{ width: "100%", height: "100%" }}
           ref={mapRef}
           /*onZoomChanged={(data)=>{
-                  if(data.getLevel()>5)setIsVisible(false);
-                  else setIsVisible(true);
-              }}*/
+                      if(data.getLevel()>5)setIsVisible(false);
+                      else setIsVisible(true);
+                  }}*/
           onClick={() => {
             setMarkerClicked(false);
           }}
@@ -534,7 +545,7 @@ function KaokaoMain(props) {
                   borderRadius: "3px",
                 }}
               >
-                {originRoute.bsNm} (출발)
+                {originRoute.bsNm}
               </div>
             </MapMarker>
           )}
@@ -564,7 +575,7 @@ function KaokaoMain(props) {
                   borderRadius: "3px",
                 }}
               >
-                {destyRoute.bsNm} (도착)
+                {destyRoute.bsNm}
               </div>
             </MapMarker>
           )}
