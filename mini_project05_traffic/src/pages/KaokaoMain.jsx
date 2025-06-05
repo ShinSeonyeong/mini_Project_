@@ -38,6 +38,11 @@ function KaokaoMain({isCommonMobile}) {
   const [destyRoute, setDestyRoute] = useState(null);
   const [customPathLink, setCustomPathLink] = useState(null); // 경로 상태
   const [linkData, setLinkData] = useState(null); // link_20250224.json 데이터를 저장
+  const [prevRoute, setPrevRoute] = useState({ origin: null, desty: null }); // 이전 출발지와 도착지를 추적하기 위한 상태 추가
+  const [selectedRouteIndex, setSelectedRouteIndex] = useState(null); // 추가: 선택된 경로 인덱스
+  // 경로 캐싱을 위한 상태
+  const [pathCache, setPathCache] = useState({});
+
 
     useKakaoLoader({
         appkey: import.meta.env.VITE_KAKAO_API_KEY,
@@ -81,6 +86,24 @@ function KaokaoMain({isCommonMobile}) {
       alert("출발지, 도착지 또는 경로 데이터가 없습니다.");
       setCustomPathLink(null);
       return;
+    }
+
+    // 출발지와 도착지가 이전과 다른지 확인
+    const isRouteChanged =
+        !prevRoute.origin ||
+        !prevRoute.desty ||
+        prevRoute.origin.bsId !== originRoute.bsId ||
+        prevRoute.desty.bsId !== destyRoute.bsId;
+
+    // 경로가 변경되었으면 기존 경로선을 지움
+    if (isRouteChanged) {
+      setCustomPathLink(null);
+      setPrevRoute({ origin: originRoute, desty: destyRoute });
+    }
+
+    // 이미 동일한 경로가 선택된 경우, 경로선을 다시 표시
+    if (customPathLink && !isRouteChanged && selectedRouteIndex === route.list[0].routeId) {
+      return; // 동일한 경로를 다시 클릭했으나 이미 표시 중이므로 아무 작업도 하지 않음
     }
 
     try {
@@ -369,6 +392,7 @@ function KaokaoMain({isCommonMobile}) {
         setMapCenter({ lat: originRoute.lat, lng: originRoute.lng });
         setMapLevel(5);
         setOpenedRoute(true);
+        setSelectedRouteIndex(route.list[0].routeId); // 선택된 경로 ID 저장
       } else {
         console.warn("유효한 경로를 찾을 수 없습니다:", {
           apiLinks: links.length,
@@ -489,6 +513,7 @@ const drawLine = (data) => {
                 openFind={openFind}
                 setOpenFind={setOpenFind}
                 handleRouteClick={handleRouteClick}
+                setCustomPathLink={setCustomPathLink}
             />
 
             {isCommonMobile ||

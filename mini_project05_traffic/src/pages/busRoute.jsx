@@ -382,6 +382,9 @@ function BusRoute(props) {
   const handleRouteSegmentClick = async (step) => {
     console.log("경로 구간 클릭:", step.stBsNm, "->", step.edBsNm);
 
+    // 경로선 초기화
+    props.setCustomPathLink(null);
+
     // try {
     // 첫 번째 클릭 시 기존 경로선 초기화
     // props.setCustomPathLink(null); // KaokaoMain의 customPathLink 상태를 null로 설정하여 경로선 제거
@@ -416,6 +419,17 @@ function BusRoute(props) {
           !route.list.some((step) => step.routeNo.includes("지하철")) &&
           route.trans !== "환승"
   );
+
+    const handleRouteClick = (route, idx) => {
+      // 경로선 초기화
+      props.setCustomPathLink(null);
+
+      // 선택된 경로 인덱스 설정
+      setSelectedRouteIndex(idx);
+
+      // KaokaoMain의 handleRouteClick 호출
+      props.handleRouteClick(route);
+    };
 
   return (
       <>
@@ -646,8 +660,9 @@ function BusRoute(props) {
                               onClick={() => {
                                 console.log(route);
                                 setSelectedRouteIndex(idx);
-                                props.handleRouteClick(route); // 지도에 경로와 마커를 렌더링
+                                handleRouteClick(route, idx); // 지도에 경로와 마커를 렌더링
                               }}
+
                           >
                             <div
                                 style={{
