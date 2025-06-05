@@ -3,6 +3,7 @@ import { Button, Card, Collapse, Input, List, message, Space, Tag } from "antd";
 import axios from "axios";
 import proj4 from "proj4";
 import { SwapOutlined } from "@ant-design/icons";
+import MobileKakaoMap from "../component/MobileKakaoMap";
 
 const { Panel } = Collapse;
 const styles = `
@@ -496,7 +497,6 @@ function BusRoute(props) {
             </Button>
           </Space>
         </div>
-
         {/*<Card*/}
         {/*    style={{marginBottom: 16, borderRadius: 12, background: "#fafafa"}}*/}
         {/*>*/}
@@ -549,6 +549,12 @@ function BusRoute(props) {
             </Panel>
           </Collapse>
         </div>
+        
+        {props.isCommonMobile&&(
+          <div style={{width: "100%", height: "400px", marginTop: "10px"}}>
+          <MobileKakaoMap {...props} />
+          </div>
+          )}
 
         {!isRouteSearched && searchResults.length > 0 && (
           <div style={{ padding: "10px" }}>
