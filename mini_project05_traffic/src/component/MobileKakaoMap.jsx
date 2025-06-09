@@ -401,6 +401,8 @@ function MobileKakaoMap(props) {
         }
     };
 
+
+    console.log("경로값 있는지",props.customPathLink);
     return (
         <Map id={"jh_mobile_kakao_map"} center={props.mapCenter} level={props.mapLevel}
              style={{width:'100%',height:'100%'}}
