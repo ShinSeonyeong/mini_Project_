@@ -533,7 +533,7 @@ function BusRoute(props) {
           {/*)}*/}
 
           {props.isCommonMobile && (
-              <div style={{width: "100%", height: "400px", marginTop: "10px"}}>
+              <div style={{width: "100%", height: "300px", marginTop: "10px"}}>
                 <MobileKakaoMap {...props} />
               </div>
           )}
