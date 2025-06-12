@@ -1,0 +1,112 @@
+/* src/css/BoardManage.css */
+.content {
+    flex: 1;
+    padding: 20px;
+    background: #fff;
+}
+
+.header {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.header h1 {
+    color: #1f1f1f;
+    margin: 0;
+}
+
+.filter_section {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* 이미지 미리보기 스타일 */
+.ant-image {
+    display: block;
+}
+
+.ellipsis-content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+/* 카드 레이아웃 스타일 */
+.post_cards_container {
+    max-height: 60vh; /* 화면 높이의 60%로 제한 */
+    overflow-y: auto; /* Y축 스크롤 활성화 */
+    padding-bottom: 16px;
+}
+
+.post_cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 8px;
+}
+
+.post_card {
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    /*padding: 16px;*/
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.post_card_content {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.post_image {
+    flex-shrink: 0;
+}
+
+.post_details {
+    flex: 1;
+}
+
+.post_title {
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 10px;
+}
+
+.title_content {
+    display: flex;
+    align-items: center; /* 추가: 게시글 번호와 공지 태그를 수평 정렬 */
+    gap: 8px; /* 추가: 태그와 번호 간 간격 유지 */
+    margin-bottom: 10px;
+}
+
+.title_content p {
+    margin: 0;
+}
+
+.post_meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+    color: #595959;
+}
+
+.post_actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.pagination_container{
+    width: fit-content;
+    margin: 0 auto;
+}

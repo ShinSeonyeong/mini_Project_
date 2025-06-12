@@ -1,0 +1,16 @@
+.searchCondition{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    flex-wrap: wrap;
+    &>:last-child{
+        margin-left:auto;
+    }
+}
+
+.content{
+    padding:20px;
+    &>div{
+        margin-bottom:1rem;
+    }
+}

@@ -1,0 +1,27 @@
+.all_screen {
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1000;
+    height:100vh;
+    width:100vw;
+    padding:0;
+    margin:0;
+    background-color:#dddddd;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.container{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:1rem;
+}
+.login_form{
+    background-color:white;
+    padding:2rem;
+    border:1px solid;
+}

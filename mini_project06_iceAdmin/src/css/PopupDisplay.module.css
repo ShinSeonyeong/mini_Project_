@@ -1,0 +1,37 @@
+.popupModal {
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.popupModal :global(.ant-modal-content) {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+.popupModal :global(.ant-modal-close) {
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    top: -12px;
+    right: -12px;
+}
+
+.popupModal :global(.ant-modal-close:hover) {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.popupLink {
+    display: block;
+    cursor: pointer;
+}
+
+.popupImage {
+    max-width: 100%;
+    height: auto;
+    display: block;
+} 

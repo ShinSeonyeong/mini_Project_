@@ -1,0 +1,94 @@
+
+/* 테이블 반응형 스타일 (데스크톱 화면) */
+@media (min-width: 769px) {
+    .ant-table-thead > tr > th,
+    .ant-table-tbody > tr:nth-child(n+2) > td {
+
+        white-space: normal !important;
+        word-break: break-word !important;
+    }
+
+    .ant-table-container {
+        overflow-x: auto !important;
+    }
+}
+
+/* 모바일 화면 */
+@media (max-width: 768px) {
+    .content {
+        padding: 10px !important;
+    }
+
+    .filter-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-section .ant-input,
+    .filter-section .ant-select {
+        width: 100% !important;
+    }
+
+    .post_title {
+        font-size: 14px;
+    }
+
+    .post_meta {
+        font-size: 12px;
+    }
+
+    .post_actions .ant-btn {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    /* 페이지네이션 스타일 조정 */
+    .ant-pagination {
+        font-size: 12px;
+    }
+
+    .ant-pagination-item,
+    .ant-pagination-prev,
+    .ant-pagination-next {
+        min-width: 24px;
+        height: 24px;
+        line-height: 24px;
+    }
+}
+
+/* 480px 이하 (모바일 화면) */
+@media (max-width: 480px) {
+    .post_card {
+        padding: 12px;
+    }
+
+    .post_card_content {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .post_title {
+        font-size: 12px;
+    }
+
+    .post_meta {
+        font-size: 10px;
+    }
+
+    .post_actions .ant-btn {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .ant-pagination {
+        font-size: 10px;
+    }
+
+    .ant-pagination-item,
+    .ant-pagination-prev,
+    .ant-pagination-next {
+        min-width: 20px;
+        height: 20px;
+        line-height: 20px;
+    }
+}
