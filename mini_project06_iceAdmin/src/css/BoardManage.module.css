@@ -1,4 +1,8 @@
 /* src/css/BoardManage.css */
+.body {
+    overflow: hidden;
+}
+
 .content {
     flex: 1;
     padding: 20px;

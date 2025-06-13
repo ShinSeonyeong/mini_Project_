@@ -1,107 +1,236 @@
-import React, {useState} from 'react';
-import {NavLink, useNavigate} from "react-router-dom";
-import sideMenu from '../js/sideMenu.js';
-import { AutoComplete } from 'antd';
-import {CloseCircleOutlined} from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import sideMenu from "../js/sideMenu.js";
+import { AutoComplete } from "antd";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
-function Side({toggleAside,setToggleAside,login}) {
-    const [currentSide, setCurrentSide] = useState('dashboard');
-    const sideNav = useNavigate();
-    const autocompleteSelect = (value,option)=>{
-        setCurrentSide(option.state);
-        setToggleAside(!toggleAside);
-        sideNav(option.link);
-    }
-    return (
-        <>
-            <aside className={`login ${toggleAside ? "toggleSide" : ""}`}>
-                <div>
-                    <NavLink style={{marginInlineStart:"20px"}} to="/">
-                        <img src="/images/side_logo.png" width={150} alt="Logo"/>
-                    </NavLink>
-                    <div className={`${toggleAside?"toggleSide":""}`}>
-                    <CloseCircleOutlined style={{ fontSize: '30px' }} onClick={()=>{setToggleAside(!toggleAside)}} />
-                    </div>
-                </div>
-                <div>
-                    <h1 style={{marginBlockStart:"0.5rem",marginInlineStart:"20px"}}>관리자 센터</h1>
-                </div>
+const styles = {
+  adminInfo: {
+    padding: "20px",
+    background: "#ffffff",
+    borderRadius: "8px",
+    marginBottom: "50px",
+    marginTop: "20px",
+  },
+  adminProfile: {
+    display: "flex",
+    alignItems: "center",
+    gap: "20px",
+  },
+  profileImage: {
+    width: "60px",
+    height: "60px",
+    borderRadius: "50%",
+  },
+  adminDetails: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
+  adminId: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+  },
+  adminIdH4: {
+    color: "#595959",
+    fontSize: "13px",
+    fontWeight: "600",
+    margin: 0,
+    width: "60px",
+  },
+  adminIdH5: {
+    color: "black",
+    fontSize: "15px",
+    fontWeight: "500",
+    margin: 0,
+    background: "#f5f5f5",
+    padding: "2px 8px",
+    borderRadius: "4px",
+  },
+  adminAuth: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  },
+  adminAuthH4: {
+    color: "#595959",
+    fontSize: "13px",
+    fontWeight: "600",
+    margin: 0,
+    width: "60px",
+  },
+  adminAuthH5: {
+    color: "#1890ff",
+    fontSize: "15px",
+    fontWeight: "500",
+    margin: 0,
+    background: "#e6f7ff",
+    padding: "2px 8px",
+    borderRadius: "4px",
+  },
+};
 
-                <nav>
-                    <h4>Dashboard</h4>
-                    <div>
-                        <div className={`${currentSide==="dashboard"?"select":""}`} onClick={() => {setCurrentSide("dashboard");setToggleAside(!toggleAside);sideNav("/")}}>
-                            <h3>대시보드</h3>
-                        </div>
-                    </div>
-                    <h4>General</h4>
-                    <AutoComplete
-                        style={{ width: 150 }}
-                        options={sideMenu}
-                        onSelect={autocompleteSelect}
-                        getPopupContainer={() => document.querySelector('aside.login')}
-                        dropdownStyle={{zIndex:1050}}
-                        placeholder="메뉴검색"
-                        filterOption={(inputValue, option) =>
-                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                        }
-                    />
-                    {/*<div>
-                        <div className={isFavorite?"":"select"} onClick={() => setIsFavorite(!isFavorite)}>
-                            <h3>즐겨찾기</h3>
-                            <img className={isFavorite?"":"rotate"} src="/src/images/polygon.png" alt="" width={10} height={10}/>
-                        </div>
-                        <ul className={isFavorite ? "none" : ""}>
+function Side({ toggleAside, setToggleAside, login }) {
+  const location = useLocation();
+  const [currentSide, setCurrentSide] = useState(() => {
+    // URL 경로에 따라 초기 상태 설정
+    const path = location.pathname;
+    if (path === "/") return "dashboard";
+    if (path === "/contact") return "contact";
+    if (path === "/reservation") return "reservation";
+    if (path === "/popup") return "popup";
+    if (path === "/employee") return "employee";
+    return "dashboard";
+  });
+  const sideNav = useNavigate();
 
-                        </ul>
-                    </div>*/}
-                    <div>
-                        <div className={`${currentSide==="reservation"? "select" : ""}`} onClick={() => {setCurrentSide("reservation");setToggleAside(!toggleAside);sideNav("/reservation")}}>
-                            <h3>예약관리</h3>
-                            {/*<img className={`${currentSide==="reservation"?"rotate":""}`} src="/images/polygon.png" alt="" width={10} height={10}/>*/}
-                        </div>
-                        {/*<ul className={`${currentSide==="reservation"? '' : 'none'}`}>
-                            <li>예약 등록</li>
-                            <li>예약 수정</li>
-                            <li>예약 조회</li>
-                        </ul>*/}
-                    </div>
-                    <div>
-                        <div className={`${currentSide==="contact"? "select" : ""}`} onClick={() => {setCurrentSide("contact");setToggleAside(!toggleAside);sideNav("/contact")}}>
-                            <h3>게시판</h3>
-                            {/*<img className={`${currentSide==="contact"? "rotate" : ""}`} src="/images/polygon.png" alt="" width={10} height={10}/>*/}
-                        </div>
-                        {/*<ul className={`${currentSide==="contact" ? '' : 'none'}`}>
-                            <li>게시글 등록</li>
-                            <li>게시글 수정</li>
-                            <li>게시글 조회</li>
-                        </ul>*/}
-                    </div>
-                    <div>
-                        <div className={`${currentSide==="popup" ? "select" : ""}`} onClick={() => {setCurrentSide("popup");setToggleAside(!toggleAside);sideNav("/popup")}}>
-                            <h3>팝업관리</h3>
-                        </div>
-                    </div>
-                    <div>
-                        <div className={`${currentSide==="employee" ? "select" : ""}`} onClick={() => {setCurrentSide("employee");setToggleAside(!toggleAside);sideNav("/employee")}}>
-                            <h3>직원관리</h3>
-                            {/*<img className={`${currentSide==="employee"? "rotate" : ""}`} src="/images/polygon.png" alt="" width={10} height={10}/>*/}
-                        </div>
-                       {/* <ul className={`${currentSide==="employee" ? '' : 'none'}`}>
-                            <li>메뉴관리</li>
-                            <li>사원관리</li>
-                        </ul>*/}
-                    </div>
-                </nav>
-                <div>
-                    <h4>ID</h4>
-                    <h5 id={"id"}>{login.id}</h5>
-                    <h4>AUTH</h4>
-                    <h5 id={"pw"}>{login.auth===9?"최고관리자":"관리자"}</h5>
-                </div>
-            </aside>
-        </>
-    );
+  // URL이 변경될 때마다 currentSide 업데이트
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === "/") setCurrentSide("dashboard");
+    else if (path === "/contact") setCurrentSide("contact");
+    else if (path === "/reservation") setCurrentSide("reservation");
+    else if (path === "/popup") setCurrentSide("popup");
+    else if (path === "/employee") setCurrentSide("employee");
+  }, [location.pathname]);
+
+  return (
+    <>
+      <aside className={`login ${toggleAside ? "toggleSide" : ""}`}>
+        <div className={`${toggleAside ? "toggleSide" : ""}`}>
+          <CloseCircleOutlined
+            style={{
+              fontSize: "30px",
+              position: "absolute",
+              right: "20px",
+              top: "20px",
+            }}
+            onClick={() => {
+              setToggleAside(!toggleAside);
+            }}
+          />
+        </div>
+        <div style={styles.adminInfo}>
+          <div style={styles.adminProfile}>
+            <img
+              src="/images/admin-profile.jpg"
+              alt="Admin Profile"
+              style={styles.profileImage}
+            />
+            <div style={styles.adminDetails}>
+              <div style={styles.adminId}>
+                <h4 style={styles.adminIdH4}>ID</h4>
+                <h5 style={styles.adminIdH5}>{login.id}</h5>
+              </div>
+              <div style={styles.adminAuth}>
+                <h4 style={styles.adminAuthH4}>AUTH</h4>
+                <h5 style={styles.adminAuthH5}>
+                  {login.auth === 9 ? "최고관리자" : "관리자"}
+                </h5>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginBottom: "20px" }}>
+          <NavLink style={{ marginInlineStart: "20px" }} to="/">
+            <img src="/images/side_logo.png" width={180} alt="Logo" />
+          </NavLink>
+          <h2 style={{marginInlineStart: "20px"}}>관리자 센터</h2>
+        </div>
+
+        <nav>
+          <div>
+            <div
+              className={`${currentSide === "dashboard" ? "select" : ""}`}
+              onClick={() => {
+                setCurrentSide("dashboard");
+                setToggleAside(!toggleAside);
+                sideNav("/");
+              }}
+            >
+              <h3>대시보드</h3>
+            </div>
+          </div>
+
+          <div>
+            <div
+              className={`${currentSide === "contact" ? "select" : ""}`}
+              onClick={() => {
+                setCurrentSide("contact");
+                setToggleAside(!toggleAside);
+                sideNav("/contact");
+              }}
+            >
+              <h3>게시판</h3>
+            </div>
+          </div>
+          <div>
+            <div
+              className={`${currentSide === "reservation" ? "select" : ""}`}
+              onClick={() => {
+                setCurrentSide("reservation");
+                setToggleAside(!toggleAside);
+                sideNav("/reservation");
+              }}
+            >
+              <h3>예약관리</h3>
+            </div>
+          </div>
+          <div>
+            <div
+              className={`${currentSide === "popup" ? "select" : ""}`}
+              onClick={() => {
+                setCurrentSide("popup");
+                setToggleAside(!toggleAside);
+                sideNav("/popup");
+              }}
+            >
+              <h3>팝업관리</h3>
+            </div>
+          </div>
+          <div>
+            <div
+              className={`${currentSide === "employee" ? "select" : ""}`}
+              onClick={() => {
+                setCurrentSide("employee");
+                setToggleAside(!toggleAside);
+                sideNav("/employee");
+              }}
+            >
+              <h3>직원관리</h3>
+            </div>
+          </div>
+          {/* <div>
+            <div
+              className={`${currentSide === "employee" ? "select" : ""}`}
+              onClick={() => {
+                setCurrentSide("employee");
+                setToggleAside(!toggleAside);
+                sideNav("/");
+              }}
+            >
+              <h3>점주관리</h3>
+            </div>
+          </div>
+          <div>
+            <div
+              className={`${currentSide === "employee" ? "select" : ""}`}
+              onClick={() => {
+                setCurrentSide("employee");
+                setToggleAside(!toggleAside);
+                sideNav("/");
+              }}
+            >
+              <h3>기사관리</h3>
+            </div>
+          </div> */}
+        </nav>
+      </aside>
+    </>
+  );
 }
 
 export default Side;

@@ -1,0 +1,81 @@
+/* 공지사항/FAQ 탭 버튼 스타일 */
+.custom-filter-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  justify-content: flex-end;
+}
+.custom-tab-group {
+  display: flex;
+  border-radius: 8px;
+  background: #f3f3f7;
+  padding: 2px;
+  height: 36px;
+}
+.custom-tab-btn {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #888;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0 18px;
+  height: 36px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.custom-tab-btn.active {
+  background: #132272;
+  color: #fff;
+}
+.custom-search-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.custom-search-input {
+  border-radius: 20px !important;
+  background: #fafafd !important;
+  border: 1.5px solid #e0e0e0 !important;
+  height: 36px !important;
+  font-size: 15px;
+  padding-left: 14px !important;
+  box-shadow: none !important;
+  width: 230px;
+}
+.custom-search-input input {
+  background: transparent !important;
+}
+
+@media (max-width: 768px) {
+  .custom-filter-section {
+    flex-wrap: nowrap;
+    min-width: 0;
+    padding: 0 4px;
+    box-sizing: border-box;
+  }
+  .custom-tab-group {
+    min-width: 0;
+    flex-shrink: 1;
+    gap: 2px;
+  }
+  .custom-tab-btn {
+    min-width: 40px;
+    font-size: 13px;
+    padding: 0 8px;
+    white-space: nowrap;
+    flex-shrink: 1;
+  }
+  .custom-search-group {
+    min-width: 80px;
+    flex: 1;
+    margin-left: 6px;
+  }
+  .custom-search-input {
+    min-width: 60px;
+    font-size: 13px;
+  }
+} 

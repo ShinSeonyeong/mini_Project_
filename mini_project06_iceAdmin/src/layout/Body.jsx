@@ -13,8 +13,8 @@ function Body(props) {
                 <Routes>
                     <Route path="/" element={<Home/>} />
                     <Route path="/login" element={<Login setLogin={props.setLogin} />}/>
-                    <Route path="/reservation" element={<Reservation/>} />
                     <Route path="/contact" element={<BoardManage/>} />
+                    <Route path="/reservation" element={<Reservation/>} />
                     <Route path="/employee" element={<Employee/>} />
                     <Route path="/popup" element={<PopupManage />} />
                 </Routes>
