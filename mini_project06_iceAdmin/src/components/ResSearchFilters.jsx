@@ -11,7 +11,7 @@ const ResSearchFilters = ({ filters, setFilters, onSearch, showModal }) => {
         const resetFilters = {
             name: '',
             tel: '',
-            email: '',
+            user_email: '',
             addr: '',
         };
         setFilters(resetFilters);
@@ -52,8 +52,8 @@ const ResSearchFilters = ({ filters, setFilters, onSearch, showModal }) => {
             <Form.Item style={{marginInlineEnd:'0'}}>
                 <Input
                     placeholder="이메일"
-                    value={filters.email}
-                    onChange={(e) => handleChange('email', e.target.value)}
+                    value={filters.user_email}
+                    onChange={(e) => handleChange('user_email', e.target.value)}
                 />
             </Form.Item>
             <Form.Item style={{marginInlineEnd:'0'}}>

@@ -4,6 +4,7 @@ import { supabase } from '../js/supabase.js';
 import DaumPostcode from 'react-daum-postcode';
 import dayjs from 'dayjs';
 import locale from 'antd/es/date-picker/locale/ko_KR';
+import styles from '../css/reservationForm.module.css';
 dayjs.locale('ko');
 
 const { Option } = Select;
@@ -11,12 +12,6 @@ const { Option } = Select;
 const ReservationForm = ({ reservation, onSuccess }) => {
     const [form] = Form.useForm();
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-
-    const depositMap = {
-        1: 2, // 20~50kg
-        2: 3, // 50~100kg
-        3: 4, // 100kg 이상
-    };
 
     const formatDepositForDisplay = (value) => {
         if (!value) return '';
@@ -49,16 +44,17 @@ const ReservationForm = ({ reservation, onSuccess }) => {
         if (reservation) {
             const addrParts = reservation.addr ? reservation.addr.split(',') : ['', '', ''];
             const postcode = addrParts[0]?.trim() || '';
-            const basicAddr = addrParts.slice(1, -1).join(',').trim() || '';
-            const detailAddr = addrParts[addrParts.length - 1]?.trim() || '';
+            const addr = [
+                addrParts.slice(1, -1).join(',').trim(),
+                addrParts[addrParts.length - 1]?.trim()
+            ].filter(Boolean).join(' ') || '';
 
             form.setFieldsValue({
-                name: reservation.name,
-                tel: reservation.tel ? formatPhoneNumber(reservation.tel) : '', // 초기값도 포맷팅
-                email: reservation.email,
+                name: reservation.customer?.name,
+                tel: reservation.tel ? formatPhoneNumber(reservation.tel) : '',
+                user_email: reservation.user_email,
                 postcode: postcode,
-                basicAddr: basicAddr,
-                detailAddr: detailAddr,
+                addr: addr,
                 date: reservation.date ? dayjs(reservation.date) : null,
                 time: reservation.time,
                 model: reservation.model,
@@ -67,7 +63,6 @@ const ReservationForm = ({ reservation, onSuccess }) => {
                 cycle: reservation.cycle || null,
                 add: reservation.add || null,
                 remark: reservation.remark || null,
-                deposit: formatDepositForDisplay(reservation.deposit),
                 state: reservation.state ? parseInt(reservation.state, 10) : 1,
             });
         } else {
@@ -75,312 +70,304 @@ const ReservationForm = ({ reservation, onSuccess }) => {
         }
     }, [reservation, form]);
 
-    const handleCapacityChange = (value) => {
-        const numericValue = parseInt(value, 10); // 문자열 값을 숫자로 변환
-        const deposit = depositMap[numericValue]; // 예약금 매핑
-        form.setFieldsValue({ deposit: formatDepositForDisplay(deposit) });
-    };
-
     const onFinish = async (values) => {
+        // addr와 detailAddr을 합쳐서 addr에 저장
+        const fullAddr = [values.addr, values.detailAddr].filter(Boolean).join(' ');
+        // detailAddr은 DB에 저장하지 않음
+        const saveValues = { ...values, addr: fullAddr };
+        delete saveValues.detailAddr;
+        delete saveValues.name; // name 필드는 reservation 테이블에서 제거
+
         try {
-            const addr = [values.postcode, values.basicAddr, values.detailAddr]
-                .filter((v) => v)
-                .join(', ')
-                .replace(/\s*,\s*/g, ',');
-            const data = {
-                name: values.name,
-                tel: values.tel,
-                email: values.email,
-                addr: addr,
-                date: values.date ? values.date.format('YYYY-MM-DD') : null,
-                time: values.time,
-                model: values.model,
-                capacity: parseInt(values.capacity, 10),
-                service: values.service || null,
-                cycle: values.cycle || null,
-                add: values.add || null,
-                remark: values.remark || null,
-                deposit: depositMap[parseInt(values.capacity, 10)] || null,
-                state: parseInt(values.state, 10) || 1,
-            };
-
-            if (!values.postcode || !values.basicAddr) {
-                Modal.error({
-                    title: '오류',
-                    content: '우편번호와 주소를 입력해주세요.',
-                });
-                return;
-            }
-            if (!data.name || !data.tel || !data.email || !data.addr || !data.date || !data.time || !data.model || !data.capacity) {
-                Modal.error({
-                    title: '오류',
-                    content: '모든 필수 항목을 입력해주세요.',
-                });
-                return;
-            }
-
-            console.log('Supabase에 전송할 데이터:', data);
-
             if (reservation) {
-                const { error } = await supabase
-                    .from('ice_res')
-                    .update(data)
+                // customer 테이블 업데이트
+                const { error: customerError } = await supabase
+                    .from('customer')
+                    .update({ name: values.name })
                     .eq('res_no', reservation.res_no);
-                if (error) throw error;
-            } else {
-                const { error } = await supabase.from('ice_res').insert([data]);
-                if (error) throw error;
-            }
+                if (customerError) throw customerError;
 
-            Modal.success({
-                title: reservation ? '수정 완료' : '등록 완료',
-                content: reservation
-                    ? '예약 정보가 성공적으로 수정되었습니다.'
-                    : '새 예약이 성공적으로 등록되었습니다.',
-                onOk: () => {
-                    onSuccess();
-                    form.resetFields();
-                },
-            });
+                // reservation 테이블 업데이트 (name 필드 제외)
+                const { error: reservationError } = await supabase
+                    .from('reservation')
+                    .update({
+                        tel: saveValues.tel,
+                        user_email: saveValues.user_email,
+                        postcode: saveValues.postcode,
+                        addr: saveValues.addr,
+                        date: saveValues.date,
+                        time: saveValues.time,
+                        model: saveValues.model,
+                        remark: saveValues.remark,
+                        state: saveValues.state
+                    })
+                    .eq('res_no', reservation.res_no);
+                if (reservationError) throw reservationError;
+            } else {
+                // 새로운 예약 생성 (name 필드 제외)
+                const { data: newReservation, error: reservationError } = await supabase
+                    .from('reservation')
+                    .insert([{
+                        tel: saveValues.tel,
+                        user_email: saveValues.user_email,
+                        postcode: saveValues.postcode,
+                        addr: saveValues.addr,
+                        date: saveValues.date,
+                        time: saveValues.time,
+                        model: saveValues.model,
+                        remark: saveValues.remark,
+                        state: saveValues.state
+                    }])
+                    .select()
+                    .single();
+                if (reservationError) throw reservationError;
+
+                // customer 테이블에 고객 정보 저장
+                const { error: customerError } = await supabase
+                    .from('customer')
+                    .insert([{
+                        res_no: newReservation.res_no,
+                        name: values.name
+                    }]);
+                if (customerError) throw customerError;
+            }
+            onSuccess();
         } catch (error) {
-            console.error('Error submitting reservation:', error);
-            Modal.error({
-                title: '오류 발생',
-                content: `예약 ${reservation ? '수정' : '등록'} 중 오류가 발생했습니다: ${error.message}`,
-            });
+            console.error('Error saving reservation:', error);
         }
     };
 
     const handleAddressComplete = (data) => {
-        console.log('주소 검색 결과:', data);
         form.setFieldsValue({
             postcode: data.zonecode,
-            basicAddr: data.address,
+            addr: data.address,
             detailAddr: '',
         });
-        console.log('폼에 설정된 값:', form.getFieldsValue(['postcode', 'basicAddr', 'detailAddr']));
         setIsAddressModalOpen(false);
     };
 
     return (
-        <Form
-            form={form}
-            layout="vertical"
-            onFinish={onFinish}
-            initialValues={{
-                time: '오전 10시 ~ 오후 1시',
-                capacity: '1',
-                service: '청소',
-                cycle: '이번 한 번만',
-                add: '선택 안함',
-                state: 1,
-                deposit: formatDepositForDisplay(depositMap[1]),
-                postcode: '',
-                basicAddr: '',
-                detailAddr: '',
-            }}
-            style={{ padding: '0 8px' }}
-        >
-            <Form.Item
-                label="이름"
-                name="name"
-                rules={[{ required: true, message: '이름을 입력해주세요!' }]}
+        <div className={styles.formContainer}>
+            <Form
+                form={form}
+                layout="vertical"
+                onFinish={onFinish}
+                initialValues={{
+                    time: '오전 10시 ~ 오후 1시',
+                    state: 1,
+                    postcode: '',
+                    user_email: '',
+                    addr: '',
+                    detailAddr: '',
+                }}
+                className={styles.reservationForm}
             >
-                <Input size="middle" />
-            </Form.Item>
+                <div className={styles.formSection}>
+                    <h3 className={styles.sectionTitle}>기본 정보</h3>
+                    <div className={styles.formGrid}>
+                        <Form.Item
+                            label="이름"
+                            name="name"
+                            rules={[{ required: true, message: '이름을 입력해주세요!' }]}
+                            className={styles.formItem}
+                        >
+                            <Input size="large" className={styles.input} />
+                        </Form.Item>
 
-            <Form.Item
-                label="연락처"
-                name="tel"
-                rules={[
-                    { required: true, message: '연락처를 입력해주세요!' },
-                    {
-                        pattern: /^\d{3}-\d{3,4}-\d{4}$/,
-                        message: '유효한 전화번호 형식이 아닙니다. 예: 010-1234-5678',
-                    },
-                ]}
-            >
-                <Input
-                    size="middle"
-                    onChange={handlePhoneNumberChange}
-                    placeholder="010-1234-5678"
-                    maxLength={13}
-                    type="tel"
-                />
-            </Form.Item>
+                        <Form.Item
+                            label="연락처"
+                            name="tel"
+                            rules={[
+                                { required: true, message: '연락처를 입력해주세요!' },
+                                {
+                                    pattern: /^\d{3}-\d{3,4}-\d{4}$/,
+                                    message: '유효한 전화번호 형식이 아닙니다. 예: 010-1234-5678',
+                                },
+                            ]}
+                            className={styles.formItem}
+                        >
+                            <Input
+                                size="large"
+                                onChange={handlePhoneNumberChange}
+                                placeholder="010-1234-5678"
+                                maxLength={13}
+                                type="tel"
+                                className={styles.input}
+                            />
+                        </Form.Item>
 
-            <Form.Item
-                label="이메일"
-                name="email"
-                rules={[
-                    { required: true, message: '이메일을 입력해주세요!' },
-                    {
-                        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                        message: '유효한 이메일 형식이 아닙니다. 예: example@domain.com',
-                    },
-                ]}
-            >
-                <Input size="middle" />
-            </Form.Item>
-
-            <Form.Item
-                label="우편번호"
-                name="postcode"
-                rules={[{ required: true, message: '우편번호를 입력해주세요!' }]}
-            >
-                <div style={{ display: 'flex', gap: '8px' }}>
-                    <Form.Item name="postcode" noStyle>
-                        <Input
-                            style={{ width: '100px', color: 'black', background: 'white', border: '1px solid #d9d9d9' }}
-                            disabled
-                            size="middle"
-                        />
-                    </Form.Item>
-                    <Button onClick={() => setIsAddressModalOpen(true)} size="middle">
-                        검색
-                    </Button>
+                        <Form.Item
+                            label="이메일"
+                            name="user_email"
+                            rules={[
+                                { required: true, message: '이메일을 입력해주세요!' },
+                                {
+                                    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: '유효한 이메일 형식이 아닙니다. 예: example@domain.com',
+                                },
+                            ]}
+                            className={styles.formItem}
+                        >
+                            <Input size="large" className={styles.input} />
+                        </Form.Item>
+                    </div>
                 </div>
-            </Form.Item>
+
+                <div className={styles.formSection}>
+                    <h3 className={styles.sectionTitle}>주소 정보</h3>
+                    <div className={styles.formGrid}>
+                        <Form.Item
+                            label="우편번호"
+                            name="postcode"
+                            rules={[{ required: true, message: '우편번호를 입력해주세요!' }]}
+                            className={styles.formItem}
+                        >
+                            <div className={styles.postcodeContainer}>
+                                <Input
+                                    className={styles.postcodeInput}
+                                    disabled
+                                    size="large"
+                                />
+                                <Button 
+                                    onClick={() => setIsAddressModalOpen(true)} 
+                                    size="large"
+                                    className={styles.searchButton}
+                                >
+                                    검색
+                                </Button>
+                            </div>
+                        </Form.Item>
+
+                        <Form.Item
+                            label="주소"
+                            name="addr"
+                            rules={[{ required: true, message: '주소를 입력해주세요!' }]}
+                            className={styles.formItem}
+                        >
+                            <Input
+                                disabled
+                                size="large"
+                                className={styles.input}
+                            />
+                        </Form.Item>
+
+                        <Form.Item 
+                            label="상세주소" 
+                            name="detailAddr"
+                            className={styles.formItem}
+                        >
+                            <Input 
+                                placeholder="상세 주소를 입력하세요" 
+                                size="large"
+                                className={styles.input}
+                            />
+                        </Form.Item>
+                    </div>
+                </div>
+
+                <div className={styles.formSection}>
+                    <h3 className={styles.sectionTitle}>예약 정보</h3>
+                    <div className={styles.formGrid}>
+                        <Form.Item
+                            label="예약 날짜"
+                            name="date"
+                            rules={[{ required: true, message: '예약 날짜를 선택해주세요!' }]}
+                            className={styles.formItem}
+                        >
+                            <DatePicker
+                                locale={locale}
+                                style={{ width: '100%' }}
+                                size="large"
+                                className={styles.datePicker}
+                                disabledDate={(current) => {
+                                    const today = dayjs().startOf('day');
+                                    const threeMonthsLater = today.add(3, 'month').endOf('day');
+                                    return current && (current < today || current > threeMonthsLater);
+                                }}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="시간"
+                            name="time"
+                            rules={[{ required: true, message: '시간을 선택해주세요!' }]}
+                            className={styles.formItem}
+                        >
+                            <Select size="large" className={styles.select}>
+                                <Option value="오전 10시 ~ 오후 1시">오전 10시 ~ 오후 1시</Option>
+                                <Option value="오후 2시 ~ 오후 5시">오후 2시 ~ 오후 5시</Option>
+                                <Option value="오후 4시 ~ 오후 7시">오후 4시 ~ 오후 7시</Option>
+                                <Option value="오후 6시 ~ 오후 9시">오후 6시 ~ 오후 9시</Option>
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item
+                            label="모델명"
+                            name="model"
+                            rules={[{ required: true, message: '모델명을 입력해주세요!' }]}
+                            className={styles.formItem}
+                        >
+                            <Input size="large" className={styles.input} />
+                        </Form.Item>
+                    </div>
+                </div>
+
+                <div className={styles.formSection}>
+                    <h3 className={styles.sectionTitle}>추가 정보</h3>
+                    <div className={styles.formGrid}>
+                        <Form.Item 
+                            label="특별 요청사항" 
+                            name="remark"
+                            className={styles.formItem}
+                        >
+                            <Input.TextArea
+                                rows={3}
+                                className={styles.textarea}
+                                placeholder="특별 요청사항을 입력하세요"
+                            />
+                        </Form.Item>
+
+                        
+
+                        <Form.Item 
+                            label="상태" 
+                            name="state"
+                            className={styles.formItem}
+                        >
+                            <Select size="large" className={styles.select}>
+                                <Option value={1}>예약대기</Option>
+                                <Option value={2}>배정대기</Option>
+                                <Option value={3}>배정완료</Option>
+                                <Option value={4}>처리중</Option>
+                                <Option value={5}>처리완료</Option>
+                                <Option value={9}>취소</Option>
+                            </Select>
+                        </Form.Item>
+                    </div>
+                </div>
+
+                <Form.Item className={styles.submitButtonContainer}>
+                    <Button 
+                        type="primary" 
+                        htmlType="submit" 
+                        size="large"
+                        className={styles.submitButton}
+                    >
+                        {reservation ? '수정' : '등록'}
+                    </Button>
+                </Form.Item>
+            </Form>
 
             <Modal
                 title="주소 검색"
                 open={isAddressModalOpen}
                 onCancel={() => setIsAddressModalOpen(false)}
                 footer={null}
+                className={styles.addressModal}
             >
                 <DaumPostcode onComplete={handleAddressComplete} />
             </Modal>
-
-            <Form.Item
-                label="주소"
-                name="basicAddr"
-                rules={[{ required: true, message: '주소를 입력해주세요!' }]}
-            >
-                <Input
-                    style={{ color: 'black', background: 'white', border: '1px solid #d9d9d9' }}
-                    disabled
-                    size="middle"
-                />
-            </Form.Item>
-
-            <Form.Item label="상세주소" name="detailAddr">
-                <Input placeholder="상세 주소를 입력하세요" size="middle" />
-            </Form.Item>
-
-            <Form.Item
-                label="예약 날짜"
-                name="date"
-                rules={[{ required: true, message: '예약 날짜를 선택해주세요!' }]}
-            >
-                <DatePicker
-                    locale={locale}
-                    style={{ width: '100%' }}
-                    size="middle"
-                    disabledDate={(current) => {
-                        const today = dayjs().startOf('day');
-                        const threeMonthsLater = today.add(3, 'month').endOf('day');
-                        return current && (current < today || current > threeMonthsLater);
-                    }}
-                />
-
-            </Form.Item>
-
-            <Form.Item
-                label="시간"
-                name="time"
-                rules={[{ required: true, message: '시간을 선택해주세요!' }]}
-            >
-                <Select size="middle" style={{ border: '1px solid #d9d9d9', borderRadius: 6 }}>
-                    <Option value="오전 10시 ~ 오후 1시">오전 10시 ~ 오후 1시</Option>
-                    <Option value="오후 2시 ~ 오후 5시">오후 2시 ~ 오후 5시</Option>
-                    <Option value="오후 4시 ~ 오후 7시">오후 4시 ~ 오후 7시</Option>
-                    <Option value="오후 6시 ~ 오후 9시">오후 6시 ~ 오후 9시</Option>
-                </Select>
-            </Form.Item>
-
-            <Form.Item
-                label="모델명"
-                name="model"
-                rules={[{ required: true, message: '모델명을 입력해주세요!' }]}
-            >
-                <Input size="middle" />
-            </Form.Item>
-
-            <Form.Item
-                label="용량"
-                name="capacity"
-                rules={[{ required: true, message: '용량을 선택해주세요!' }]}
-            >
-                <Select
-                    onChange={handleCapacityChange}
-                    size="middle"
-                    style={{ border: '1px solid #d9d9d9', borderRadius: 6 }}
-                >
-                    <Option value="1">20~50kg</Option>
-                    <Option value="2">50~100kg</Option>
-                    <Option value="3">100kg 이상</Option>
-                </Select>
-            </Form.Item>
-
-            <Form.Item label="선택 서비스" name="service">
-                <Select size="middle" style={{ border: '1px solid #d9d9d9', borderRadius: 6 }}>
-                    <Option value="청소">청소</Option>
-                    <Option value="수리">수리</Option>
-                </Select>
-            </Form.Item>
-
-            <Form.Item label="서비스 주기" name="cycle">
-                <Select size="middle" style={{ border: '1px solid #d9d9d9', borderRadius: 6 }}>
-                    <Option value="이번 한 번만">이번 한 번만</Option>
-                    <Option value="한 달에 한 번">한 달에 한 번</Option>
-                </Select>
-            </Form.Item>
-
-            <Form.Item label="추가 서비스 선택" name="add">
-                <Select size="middle" style={{ border: '1px solid #d9d9d9', borderRadius: 6 }}>
-                    <Option value="심화 청소">심화 청소</Option>
-                    <Option value="물탱크 청소">물탱크 청소</Option>
-                    <Option value="필터 교체">필터 교체</Option>
-                    <Option value="선택 안함">선택 안함</Option>
-                </Select>
-            </Form.Item>
-
-            <Form.Item label="특별 요청사항" name="remark">
-                <Input.TextArea
-                    rows={3}
-                    style={{ fontSize: '12px', resize: 'vertical', padding: '4px 8px' }}
-                    placeholder="특별 요청사항을 입력하세요"
-                />
-            </Form.Item>
-
-            <Form.Item
-                label="예약금"
-                name="deposit"
-            >
-                <Input
-                    disabled
-                    style={{ color: 'black', background: 'white', border: '1px solid #d9d9d9' }}
-                    size="middle"
-                />
-            </Form.Item>
-
-            <Form.Item label="상태" name="state">
-                <Select size="middle" style={{ border: '1px solid #d9d9d9', borderRadius: 6 }}>
-                    <Option value={1}>예약대기</Option>
-                    <Option value={2}>배정대기</Option>
-                    <Option value={3}>배정완료</Option>
-                    <Option value={4}>처리중</Option>
-                    <Option value={5}>처리완료</Option>
-                    <Option value={9}>취소</Option>
-                </Select>
-            </Form.Item>
-
-            <Form.Item style={{ textAlign: 'right' }}>
-                <Button type="primary" htmlType="submit" size="middle">
-                    {reservation ? '수정' : '등록'}
-                </Button>
-            </Form.Item>
-        </Form>
+        </div>
     );
 };
 

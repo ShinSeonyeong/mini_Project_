@@ -1,0 +1,134 @@
+.formContainer {
+    padding: 24px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reservationForm {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.formSection {
+    margin-bottom: 32px;
+    padding: 24px;
+    background: #fafafa;
+    border-radius: 8px;
+}
+
+.sectionTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #1890ff;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.formItem {
+    margin-bottom: 0;
+}
+
+.formItem :global(.ant-form-item-label) {
+    padding-bottom: 8px;
+}
+
+.formItem :global(.ant-form-item-label > label) {
+    font-weight: 500;
+    color: #262626;
+}
+
+.input {
+    border-radius: 6px;
+    border: 1px solid #d9d9d9;
+    transition: all 0.3s;
+}
+
+.input:hover,
+.input:focus {
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+}
+
+.select {
+    width: 100%;
+    border-radius: 6px;
+}
+
+.select :global(.ant-select-selector) {
+    border-radius: 6px !important;
+}
+
+.datePicker {
+    width: 100%;
+    border-radius: 6px;
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 100px;
+    border-radius: 6px;
+}
+
+.postcodeContainer {
+    display: flex;
+    gap: 8px;
+}
+
+.postcodeInput {
+    flex: 1;
+    border-radius: 6px;
+}
+
+.searchButton {
+    min-width: 80px;
+    border-radius: 6px;
+}
+
+.submitButtonContainer {
+    margin-top: 32px;
+    text-align: right;
+}
+
+.submitButton {
+    min-width: 120px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 6px;
+}
+
+.addressModal {
+    max-width: 500px;
+}
+
+.addressModal :global(.ant-modal-content) {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .formContainer {
+        padding: 16px;
+    }
+
+    .formSection {
+        padding: 16px;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .submitButton {
+        width: 100%;
+    }
+} 
