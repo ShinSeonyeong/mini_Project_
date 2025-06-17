@@ -61,55 +61,66 @@
 /*}*/
 
 .custom-filter-section {
-    margin: 16px 0;
-    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    justify-content: space-between;
 }
 
 .custom-tab-group {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
+    padding: 2px;
+    height: 36px;
 }
 
 .custom-tab-btn {
-    padding: 8px 16px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid #e6e1f4;
+    outline: none;
     background: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s;
+    color: #6f5cc4;
+    font-weight: 500;
     font-size: 14px;
-    color: #666;
+    padding: 0 20px;
+    height: 36px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
 .custom-tab-btn:hover {
-    color: #1890ff;
-    border-color: #1890ff;
+    background: #f7f5ff;
+    border-color: #6f5cc4;
 }
 
 .custom-tab-btn.active {
-    color: #1890ff;
-    border-color: #1890ff;
-    background: #e6f7ff;
+    background: #6f5cc4;
+    color: #fff;
+    border-color: #6f5cc4;
 }
 
 .custom-search-group {
-    margin-top: 16px;
-    margin-bottom: 16px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .custom-search-input {
-    width: 100%;
-    max-width: 400px;
+    border-radius: 20px !important;
+    background: #fafafd !important;
+    border: 1.5px solid #e0e0e0 !important;
+    height: 36px !important;
+    font-size: 15px;
+    padding-left: 14px !important;
+    box-shadow: none !important;
+    width: 230px;
 }
 
-.custom-search-input :global(.ant-input) {
-    border-radius: 4px;
-}
-
-.custom-search-input :global(.ant-input:hover),
-.custom-search-input :global(.ant-input:focus) {
-    border-color: #1890ff;
+.custom-search-input input {
+    background: transparent !important;
 }
 
 /* 테이블 스타일 */
@@ -215,18 +226,36 @@
         padding: 16px;
     }
 
-    .custom-tab-group {
-        flex-wrap: wrap;
+    .custom-filter-section {
+        flex-wrap: nowrap;
+        min-width: 0;
+        padding: 0 4px;
+        box-sizing: border-box;
     }
-
+    
+    .custom-tab-group {
+        min-width: 0;
+        flex-shrink: 1;
+        gap: 4px;
+    }
+    
     .custom-tab-btn {
-        flex: 1;
-        text-align: center;
-        min-width: 100px;
+        min-width: 40px;
+        font-size: 13px;
+        padding: 0 12px;
+        white-space: nowrap;
+        flex-shrink: 1;
     }
 
     .custom-search-group {
-        margin: 12px 0;
+        min-width: 80px;
+        flex: 1;
+        margin-left: 6px;
+    }
+    
+    .custom-search-input {
+        min-width: 60px;
+        font-size: 13px;
     }
 
     :global(.ant-table-wrapper) {
