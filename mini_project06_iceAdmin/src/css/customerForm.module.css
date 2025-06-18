@@ -1,0 +1,109 @@
+.formContainer {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.customerForm {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.formSection {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.formItem {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.detailAddrItem {
+  width: 100%;
+}
+
+.formItem label {
+  font-weight: 500;
+  color: #333;
+}
+
+.input {
+  border-radius: 6px;
+}
+
+.input:focus {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.addressContainer {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.addressInput {
+  flex: 1;
+  border-radius: 6px;
+  width: 100%;
+}
+
+.searchButton {
+  border-radius: 6px;
+  height: 40px;
+  white-space: nowrap;
+}
+
+.submitButtonContainer {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.submitButton {
+  min-width: 120px;
+  height: 40px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.addressModal {
+  max-width: 600px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .customerForm {
+    padding: 16px;
+  }
+  
+  .addressContainer {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .searchButton {
+    width: 100%;
+  }
+} 

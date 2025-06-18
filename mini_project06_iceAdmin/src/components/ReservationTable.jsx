@@ -129,9 +129,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
   };
 
   const handleChange = (res_no, field, value) => {
-    console.log("handleChange called with:", { res_no, field, value });
     setPendingUpdate({ res_no, field, value });
-    console.log("Updated pendingUpdate:", { res_no, field, value });
   };
 
   const confirmUpdate = () => {
@@ -180,13 +178,16 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
   };
 
   const handleAssignClick = (record) => {
+    if (record.state === 5) {
+      message.warning('청소완료 상태에서는 기사 배정을 변경할 수 없습니다.');
+      return;
+    }
     setSelectedReservation(record);
     setAssignModalVisible(true);
   };
 
   const handleAssignSuccess = () => {
-    setAssignModalVisible(false);
-    setSelectedReservation(null);
+    onDataChange();
   };
 
   const columns = [
@@ -261,7 +262,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
       title: <div style={{ textAlign: "center" }}>정산</div>,
       dataIndex: "price",
       key: "price",
-      width: 100,
+      width: 130,
       render: (price, record) => {
         const isEditable = ![3, 4, 5].includes(record.state); // 결제완료(3), 기사배정(4), 청소완료(5) 상태가 아닐 때만 수정 가능
 
@@ -330,7 +331,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
                 backgroundColor: `${stateConfig.color}15`,
                 border: `1px solid ${stateConfig.color}30`,
                 whiteSpace: "nowrap",
-              }}
+              }}onFinish
             >
               {stateConfig.text}
             </span>
@@ -346,9 +347,9 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
       render: (gisa_email, record) => {
         const assignedCleaner = cleaners.find(c => c.id === gisa_email);
         const isAssignable = record.state === 3; // 결제완료 상태일 때만 기사 배정 가능
-        const canChange = record.state >= 3; // 결제완료 이상 상태에서 기사 변경 가능
+        const canChange = record.state >= 3 && record.state < 5; // 결제완료 이상, 청소완료 미만에서 기사 변경 가능
 
-        if (record.state >= 4) {  // 기사배정 또는 청소완료 상태
+        if (record.state >= 4 && record.state < 5) {  // 기사배정 상태
           return (
             <div style={{ textAlign: "center" }}>
               <div style={{ marginBottom: 4 }}>
@@ -361,6 +362,19 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
               >
                 기사변경
               </Button>
+            </div>
+          );
+        }
+
+        if (record.state === 5) {  // 청소완료 상태
+          return (
+            <div style={{ textAlign: "center" }}>
+              <div style={{ marginBottom: 4 }}>
+                {assignedCleaner ? assignedCleaner.nm : "미지정"}
+              </div>
+              <div style={{ fontSize: '12px', color: '#999' }}>
+                변경 불가
+              </div>
             </div>
           );
         }
@@ -422,7 +436,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
           <div className="custom-search-group">
             <Input
               className="custom-search-input"
-              placeholder="이름, 전화번호, 이메일, 주소, 모델명 검색"
+              placeholder="검색어를 입력해주세요."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               prefix={<SearchOutlined style={{ color: "#bdbdbd" }} />}
@@ -583,7 +597,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
         <div className="custom-search-group">
           <Input
             className="custom-search-input"
-            placeholder="이름, 전화번호, 이메일, 주소, 모델명 검색"
+            placeholder="검색어를 입력해주세요."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             prefix={<SearchOutlined style={{ color: "#bdbdbd" }} />}

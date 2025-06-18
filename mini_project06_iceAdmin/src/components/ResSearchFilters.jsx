@@ -40,6 +40,7 @@ const ResSearchFilters = ({ filters, setFilters, onSearch, showModal }) => {
                     placeholder="이름"
                     value={filters.name}
                     onChange={(e) => handleChange('name', e.target.value)}
+                    onPressEnter={() => onSearch(filters)}
                 />
             </Form.Item>
             <Form.Item style={{marginInlineEnd:'0'}}>
@@ -47,6 +48,7 @@ const ResSearchFilters = ({ filters, setFilters, onSearch, showModal }) => {
                     placeholder="연락처"
                     value={filters.tel}
                     onChange={(e) => handleTelChange(e.target.value)}
+                    onPressEnter={() => onSearch(filters)}
                 />
             </Form.Item>
             <Form.Item style={{marginInlineEnd:'0'}}>
@@ -54,6 +56,7 @@ const ResSearchFilters = ({ filters, setFilters, onSearch, showModal }) => {
                     placeholder="이메일"
                     value={filters.user_email}
                     onChange={(e) => handleChange('user_email', e.target.value)}
+                    onPressEnter={() => onSearch(filters)}
                 />
             </Form.Item>
             <Form.Item style={{marginInlineEnd:'0'}}>
@@ -61,6 +64,7 @@ const ResSearchFilters = ({ filters, setFilters, onSearch, showModal }) => {
                     placeholder="주소"
                     value={filters.addr}
                     onChange={(e) => handleChange('addr', e.target.value)}
+                    onPressEnter={() => onSearch(filters)}
                 />
             </Form.Item>
             <Form.Item>

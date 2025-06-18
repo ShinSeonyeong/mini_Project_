@@ -105,6 +105,12 @@ const CleanerAssignModal = ({ visible, onCancel, reservation, onAssign, onDataCh
       return;
     }
 
+    // 청소완료 상태일 때는 기사 배정 불가
+    if (reservation.state === 5) {
+      message.error('청소완료 상태에서는 기사 배정을 변경할 수 없습니다.');
+      return;
+    }
+
     if (isTimeConflict(selectedCleaner.id)) {
       message.error('선택한 기사의 스케줄과 시간이 겹칩니다.');
       return;

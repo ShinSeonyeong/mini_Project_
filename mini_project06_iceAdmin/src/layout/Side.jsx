@@ -179,18 +179,7 @@ function Side({ toggleAside, setToggleAside, login }) {
               <h3>예약관리</h3>
             </div>
           </div>
-          <div>
-            <div
-              className={`${currentSide === "popup" ? "select" : ""}`}
-              onClick={() => {
-                setCurrentSide("popup");
-                setToggleAside(!toggleAside);
-                sideNav("/popup");
-              }}
-            >
-              <h3>팝업관리</h3>
-            </div>
-          </div>
+          
           <div>
             <div
               className={`${currentSide === "employee" ? "select" : ""}`}
@@ -201,6 +190,30 @@ function Side({ toggleAside, setToggleAside, login }) {
               }}
             >
               <h3>직원관리</h3>
+            </div>
+          </div>
+          <div>
+            <div
+              className={`${currentSide === "customer" ? "select" : ""}`}
+              onClick={() => {
+                setCurrentSide("customer");
+                setToggleAside(!toggleAside);
+                sideNav("/customer");
+              }}
+            >
+              <h3>고객관리</h3>
+            </div>
+          </div>
+          <div>
+            <div
+              className={`${currentSide === "popup" ? "select" : ""}`}
+              onClick={() => {
+                setCurrentSide("popup");
+                setToggleAside(!toggleAside);
+                sideNav("/popup");
+              }}
+            >
+              <h3>팝업관리</h3>
             </div>
           </div>
           {/* <div>

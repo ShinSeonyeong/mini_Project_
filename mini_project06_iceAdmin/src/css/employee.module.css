@@ -1,11 +1,12 @@
-.searchCondition{
+.searchContainer{
     display: flex;
     flex-direction: row;
     gap: 8px;
-    flex-wrap: wrap;
-    &>:last-child{
-        margin-left:auto;
-    }
+    align-items: center;
+}
+
+.searchInput {
+    width: 180px;
 }
 
 .content{

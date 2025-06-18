@@ -14,7 +14,6 @@ export const getEmpl = async(type,nm)=>{
     if(res.error){
         notification.error({message:"에러발생:"+res.error});
     }
-    console.log(res);
     return res.data;
 }
 
@@ -46,14 +45,10 @@ export const profileUpload = async (file,isModify,props) =>{
 }
 
 export const modifyProfile = async(props) =>{
-    console.log("modify");
-    console.log(props);
+    // 수정 로직 구현 예정
 }
 
 export const insertProfile = async(props) =>{
-    console.log("insert");
-    console.log(props);
-
     let pw = await bcrypt.hash(props.pw,10);
 
     let res = await supabase.from("member").insert([
@@ -73,12 +68,10 @@ export const insertProfile = async(props) =>{
             file_url:props.file_url?props.file_url:null,
         }
         ]);
-    console.log(res);
     if(res.error){
         notification.error({message:"에러발생:"+res.error});
     }else{
         notification.success({message:"등록 성공"});
     }
     return res;
-
 }

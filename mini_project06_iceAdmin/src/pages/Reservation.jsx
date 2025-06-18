@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Layout, Button, Modal, Card, Flex, Breadcrumb, Pagination} from 'antd';
+import {Layout, Button, Modal, Card, Flex, Breadcrumb, Pagination, DatePicker} from 'antd';
 import {PlusOutlined} from "@ant-design/icons";
 import ReservationTable from '../components/ReservationTable';
 import ReservationForm from '../components/ReservationForm';
@@ -8,8 +8,10 @@ import { supabase } from "../js/supabase.js";
 
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import locale from 'antd/es/date-picker/locale/ko_KR';
 
 const { Content } = Layout;
+const { RangePicker } = DatePicker;
 
 const Reservation = () => {
     const [reservations, setReservations] = useState([]);
@@ -23,8 +25,8 @@ const Reservation = () => {
         addr: '',
     });
     const [dateRange, setDateRange] = useState([
-        dayjs().subtract(1, 'month').startOf('day'),
-        dayjs().endOf('day'),
+        dayjs().startOf('day'),
+        dayjs().add(1, 'month').endOf('day'),
     ]);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize] = useState(10);
@@ -32,8 +34,12 @@ const Reservation = () => {
     // 데이터 가져오기 (전달된 filters 사용)
     const fetchReservations = async (appliedFilters) => {
         try {
-            // 날짜 필터링 없이 모든 데이터 조회
-            let query = supabase.from('reservation').select('*');
+            // 날짜 범위로 필터링하여 데이터 조회
+            let query = supabase
+                .from('reservation')
+                .select('*')
+                .gte('date', dateRange[0].format('YYYY-MM-DD'))
+                .lte('date', dateRange[1].format('YYYY-MM-DD'));
 
             const { data: reservations, error } = await query;
             // console.log('Reservations data:', reservations);
@@ -102,7 +108,6 @@ const Reservation = () => {
                     setFilteredReservations(filtered);
                 }
             } else {
-                console.log('No reservations found');
                 setReservations([]);
                 setFilteredReservations([]);
             }
@@ -133,6 +138,15 @@ const Reservation = () => {
         setEditingReservation(null);
     };
 
+    // 날짜 범위 변경 핸들러
+    const handleDateChange = (dates) => {
+        if (dates && dates.length === 2 && dayjs.isDayjs(dates[0]) && dayjs.isDayjs(dates[1])) {
+            setDateRange([dates[0].startOf('day'), dates[1].endOf('day')]);
+        } else {
+            setDateRange([dayjs().startOf('day'), dayjs().add(1, 'month').endOf('day')]);
+        }
+    };
+
     return (
         <>
             <div className={styles.content}>
@@ -147,6 +161,21 @@ const Reservation = () => {
                                 title: '예약관리',
                             },
                         ]}
+                    />
+                </div>
+
+                <div style={{ marginBottom: 16 }}>
+                    <RangePicker
+                        locale={locale}
+                        value={dateRange}
+                        onChange={handleDateChange}
+                        format="YYYY-MM-DD"
+                        style={{ marginBottom: 16 }}
+                        allowClear={false}
+                        disabledDate={(current) => {
+                            // 과거 1년 이전 날짜만 선택 불가
+                            return current && current < dayjs().subtract(1, 'year').startOf('day');
+                        }}
                     />
                 </div>
 
