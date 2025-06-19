@@ -331,7 +331,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
                 backgroundColor: `${stateConfig.color}15`,
                 border: `1px solid ${stateConfig.color}30`,
                 whiteSpace: "nowrap",
-              }}onFinish
+              }}
             >
               {stateConfig.text}
             </span>

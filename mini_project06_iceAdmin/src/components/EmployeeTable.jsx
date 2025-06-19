@@ -1,17 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {useMediaQuery} from "react-responsive";
 import {Button, Card, Row, Col, Table} from "antd";
 import {EditOutlined} from "@ant-design/icons";
 
-function EmployeeTable(props) {
+const EmployeeTable = ({ employeeList, setIsInsert, setIsModify, setModifyData, currentPage }) => {
 
     const isMobile = useMediaQuery({maxWidth: 767});
-    const setModifyData = props.setModifyData;
-    const setIsModify = props.setIsModify;
-    const setIsInsert = props.setIsInsert;
-    const employeeColumns=[
+    const columns = [
         {
-            title: '계약형태',
+            title: <div style={{ textAlign: "center" }}>계약형태</div>,
             dataIndex: 'type',
             key: 'type',
             width: 100,
@@ -23,23 +20,10 @@ function EmployeeTable(props) {
             ),
         },
         {
-            title: '아이디',
-            dataIndex: 'id',
-            key: 'id',
-            width: 90,
-            render: (text) => {
-                return (
-                    <div style={{textAlign: 'center'}}>
-                        {text}
-                    </div>
-                );
-            },
-        },
-        {
-            title: '이름',
+            title: <div style={{ textAlign: "center" }}>이름</div>,
             dataIndex: 'nm',
             key: 'nm',
-            width: 90,
+            width: 100,
             render: (text) => {
                 return (
                     <div style={{textAlign: 'center'}}>
@@ -49,7 +33,7 @@ function EmployeeTable(props) {
             },
         },
         {
-            title: '연락처',
+            title: <div style={{ textAlign: "center" }}>연락처</div>,
             dataIndex: 'tel',
             key: 'tel',
             width: 150,
@@ -60,7 +44,7 @@ function EmployeeTable(props) {
             ),
         },
         {
-            title: '이메일',
+            title: <div style={{ textAlign: "center" }}>이메일</div>,
             dataIndex: 'mail',
             key: 'mail',
             width: 200,
@@ -71,7 +55,7 @@ function EmployeeTable(props) {
             ),
         },
         {
-            title: '입사일',
+            title: <div style={{ textAlign: "center" }}>입사일</div>,
             dataIndex: 'entr_date',
             key: 'entr_date',
             width: 110,
@@ -83,35 +67,45 @@ function EmployeeTable(props) {
             ),
         },
         {
-            title: '퇴사일',
-            dataIndex: 'rsg_dt',
-            key: 'rsg_dt',
-            width: 110,
-            sorter: (a, b) => a - b,
-            render: (text) => (
+            title: <div style={{ textAlign: "center" }}>스케줄</div>,
+            dataIndex: 'next_reservation',
+            key: 'schedule',
+            width: 250,
+            align:"center",
+            render: (reservation) => (
                 <div style={{textAlign: 'center'}}>
-                    {text}
+                    {reservation ? 
+                        `${new Date(reservation.date).toLocaleDateString('ko-KR')} | ${reservation.time}` 
+                        : '예정된 예약 없음'}
                 </div>
-            ),
+            )
         },
         {
-            title:"수정",
+            title: <div style={{ textAlign: "center" }}>관리</div>,
             key:"modify_btn",
-            width: 70,
+            width: 100,
             align:"center",
             render: (_,record) =>(
                 <Button
-                    icon={<EditOutlined />}
                     onClick={() => {setModifyData(record);setIsModify(true);setIsInsert(true);}}
                     style={{ color: '#1890ff' }}
                     size="small"
-                />
+                >
+                    수정하기
+                </Button>
             )
         },
     ];
+
+    // 페이지네이션된 데이터 계산
+    const pageSize = 10;
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const paginatedData = employeeList.slice(startIndex, endIndex);
+
     return isMobile ? (
         <>
-            {props.employeeList.map(el=>(
+            {employeeList.map(el=>(
                 <Card key={el.idx}
                       style={{ marginBottom: 16, borderRadius: 8 }}
                       title={`직원정보 : ${el.nm}`}
@@ -152,11 +146,15 @@ function EmployeeTable(props) {
         </>
     ):(
       <>
-          <Table rowKey={"idx"} columns={employeeColumns} dataSource={props.employeeList} size={"small"}scroll={{ x: 'max-content' }}
-
-                 tableLayout="fixed">
-
-          </Table>
+          <Table
+            columns={columns}
+            dataSource={paginatedData}
+            rowKey={(record) => record.id}
+            pagination={false}
+            size="small"
+            scroll={{ x: 'max-content' }}
+            tableLayout="fixed"
+          />
       </>
     );
 }

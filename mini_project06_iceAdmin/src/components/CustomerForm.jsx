@@ -64,7 +64,7 @@ const CustomerForm = ({ customer, onSuccess }) => {
       
       if (customer) {
         // 기존 고객 수정
-        const { error } = await supabase
+        const { error: customerError } = await supabase
           .from("customer")
           .update({
             name: values.name,
@@ -74,8 +74,19 @@ const CustomerForm = ({ customer, onSuccess }) => {
           })
           .eq("res_no", customer.res_no);
 
-        if (error) throw error;
-        message.success("고객이 수정되었습니다.");
+        if (customerError) throw customerError;
+
+        // 해당 고객의 예약 주소도 함께 업데이트
+        const { error: reservationError } = await supabase
+          .from("reservation")
+          .update({
+            addr: fullAddr
+          })
+          .eq("user_email", values.email);
+
+        if (reservationError) throw reservationError;
+        
+        message.success("고객 정보가 수정되었습니다.");
       } else {
         // 새로운 고객 생성
         const { error } = await supabase

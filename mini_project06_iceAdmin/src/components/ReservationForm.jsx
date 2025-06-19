@@ -85,12 +85,20 @@ const ReservationForm = ({ reservation, onSuccess }) => {
     setSelectedCustomer(customer);
     setIsCustomerModalOpen(false);
 
+    // 고객 주소를 쉼표로 분리 (우편번호, 주소, 상세주소)
+    const addressParts = customer.addr ? customer.addr.split(", ") : ["", "", ""];
+    const [postcode = "", addr = "", detailAddr = ""] = addressParts;
+
     // 선택된 고객 정보로 폼 설정
     form.setFieldsValue({
       name: customer.name,
       phone: customer.phone ? formatPhoneNumber(customer.phone) : "",
       email: customer.email || "",
       customerAddr: customer.addr || "",
+      // 주소 필드도 설정
+      postcode: postcode,
+      addr: addr,
+      detailAddr: detailAddr,
     });
   };
 
@@ -161,11 +169,10 @@ const ReservationForm = ({ reservation, onSuccess }) => {
           }
         }
 
-        // 1. customer 테이블 업데이트 (예약 주소로 customer 주소 업데이트)
+        // 1. customer 테이블 업데이트 (이메일과 기본 정보만 업데이트)
         const customerUpdateData = {
           name: values.name,
           phone: values.phone,
-          addr: fullAddr, // reservation 주소로 customer 주소 업데이트
         };
 
         // 이메일이 변경된 경우에만 추가
@@ -204,27 +211,36 @@ const ReservationForm = ({ reservation, onSuccess }) => {
           .from("reservation")
           .insert([
             {
+              user_email: selectedCustomer.email,
+              gisa_email: null,  // 초기에는 기사 미배정
+              state: values.state || 1,  // 기본값 1 (신규예약)
+              price: 0,  // 초기 가격 0
+              agree: false,  // 초기 동의 상태 false
               addr: fullAddr || selectedCustomer.addr, // 예약 주소가 없으면 고객 주소 사용
-              date: values.date,
+              date: values.date.format('YYYY-MM-DD'),  // dayjs 객체를 문자열로 변환
               time: values.time,
               model: values.model,
-              remark: values.remark,
-              state: values.state,
+              remark: values.remark
             },
           ])
           .select()
           .single();
-        if (reservationError) throw reservationError;
+        if (reservationError) {
+          console.error('Reservation Error:', reservationError);
+          throw reservationError;
+        }
 
         // 2. customer 테이블의 res_no를 새로운 reservation의 res_no로 업데이트
         const { error: customerError } = await supabase
           .from("customer")
           .update({ 
             res_no: newReservation.res_no,
-            addr: fullAddr || selectedCustomer.addr, // 예약 주소가 없으면 고객 주소 유지
           })
           .eq("res_no", selectedCustomer.res_no);
-        if (customerError) throw customerError;
+        if (customerError) {
+          console.error('Customer Error:', customerError);
+          throw customerError;
+        }
       }
 
       message.success(
@@ -253,20 +269,12 @@ const ReservationForm = ({ reservation, onSuccess }) => {
     const extraAddress = data.addressType === "R" ? data.bname : "";
     const detailAddress = data.buildingName ? data.buildingName : "";
 
-    // 우편번호 설정
+    // 우편번호와 주소 설정
     form.setFieldsValue({
       postcode: data.zonecode,
       addr: fullAddress,
       detailAddr: detailAddress,
     });
-
-    // 고객 주소도 함께 업데이트 (예약 수정 시)
-    if (reservation) {
-      const customerFullAddr = [data.zonecode, fullAddress, detailAddress].filter(Boolean).join(" ");
-      form.setFieldsValue({
-        customerAddr: customerFullAddr,
-    });
-    }
 
     setIsAddressModalOpen(false);
   };
@@ -278,26 +286,21 @@ const ReservationForm = ({ reservation, onSuccess }) => {
     const detailAddr = form.getFieldValue("detailAddr");
 
     console.log("주소 변경 감지:", { postcode, addr, detailAddr });
-
-    // 예약 수정 시: reservation 주소가 변경되면 customer 주소도 함께 업데이트
-    if (reservation) {
-      const fullAddr = [postcode, addr, detailAddr].filter(Boolean).join(" ");
-      form.setFieldsValue({
-        customerAddr: fullAddr,
-      });
-    }
   };
 
   // 고객 주소 변경 시 예약 주소 업데이트 (신규 예약 시에만)
   const handleCustomerAddressChange = (e) => {
-    const customerAddr = e.target.value;
-
     // 신규 예약 시에만 예약 주소 필드에 설정
     if (!reservation) {
+      const customerAddr = e.target.value;
+      // 고객 주소를 쉼표로 분리 (우편번호, 주소, 상세주소)
+      const addressParts = customerAddr ? customerAddr.split(", ") : ["", "", ""];
+      const [postcode = "", addr = "", detailAddr = ""] = addressParts;
+
       form.setFieldsValue({
-        addr: customerAddr,
-        postcode: "",
-        detailAddr: "",
+        postcode: postcode,
+        addr: addr,
+        detailAddr: detailAddr,
       });
     }
   };
@@ -506,7 +509,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
 
                     <div className={styles.formSection}>
                       <h3 className={styles.sectionTitle}>
-                        예약 정보 (reservation 테이블)
+                        예약 정보
                       </h3>
                       <div className={styles.formGrid}>
                         <Form.Item
@@ -559,7 +562,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
 
                     <div className={styles.formSection}>
                       <h3 className={styles.sectionTitle}>
-                        추가 정보 (reservation 테이블)
+                        추가 정보
                       </h3>
                       <div className={styles.formGrid}>
                         <Form.Item
@@ -635,7 +638,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
             </div>
 
         <div className={styles.formSection}>
-          <h3 className={styles.sectionTitle}>고객 정보 (customer 테이블)</h3>
+          <h3 className={styles.sectionTitle}>고객 정보</h3>
           <div className={styles.formGrid}>
             <Form.Item
               label="이름"
@@ -646,7 +649,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
               <Input
                 size="large"
                 className={styles.input}
-                    disabled={reservation ? true : !!selectedCustomer}
+                    disabled={true}
               />
             </Form.Item>
 
@@ -668,7 +671,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
                 maxLength={13}
                 type="tel"
                 className={styles.input}
-                    disabled={reservation ? true : !!selectedCustomer}
+                disabled={true}
               />
             </Form.Item>
 
@@ -688,7 +691,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
               <Input
                 size="large"
                 className={styles.input}
-                    disabled={reservation ? true : !!selectedCustomer}
+                disabled={true}
                   />
                 </Form.Item>
 
@@ -700,7 +703,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
                   <Input.TextArea
                     rows={3}
                     className={styles.textarea}
-                    disabled={reservation ? true : !!selectedCustomer}
+                    disabled={true}
                     onChange={handleCustomerAddressChange}
               />
             </Form.Item>
@@ -768,7 +771,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
 
         <div className={styles.formSection}>
           <h3 className={styles.sectionTitle}>
-            예약 정보 (reservation 테이블)
+            예약 정보
           </h3>
           <div className={styles.formGrid}>
             <Form.Item
@@ -821,7 +824,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
 
         <div className={styles.formSection}>
           <h3 className={styles.sectionTitle}>
-            추가 정보 (reservation 테이블)
+            추가 정보
           </h3>
           <div className={styles.formGrid}>
             <Form.Item

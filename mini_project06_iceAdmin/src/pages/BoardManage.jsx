@@ -272,7 +272,7 @@ const BoardManage = () => {
     );
   };
 
-  const handleCancel = () => {
+  const handlePreviewCancel = () => {
     setPreviewOpen(false);
     setPreviewImage("");
     setPreviewTitle("");
@@ -501,6 +501,24 @@ const BoardManage = () => {
     </div>
   );
 
+  useEffect(() => {
+    if (isModalOpen) {
+      if (isEditMode && selectedPost) {
+        form.setFieldsValue({
+          title: selectedPost.title,
+          content: selectedPost.content,
+          category_id: selectedPost.category_id,
+          author: "관리자"
+        });
+      } else {
+        form.setFieldsValue({
+          category_id: "1",
+          author: "관리자"
+        });
+      }
+    }
+  }, [isModalOpen, isEditMode, selectedPost, form]);
+
   return (
     <div className={styles.content}>
       <div className={styles.header}>
@@ -607,11 +625,7 @@ const BoardManage = () => {
       </div>
 
       <Modal
-        title={
-          <div style={{ paddingLeft: "20px", fontSize: "23px" }}>
-            {isEditMode ? "게시글 수정" : "게시글 등록"}
-          </div>
-        }
+        title={isEditMode ? "게시글 수정" : "새 게시글 등록"}
         open={isModalOpen}
         onCancel={() => {
           setIsModalOpen(false);
@@ -621,14 +635,15 @@ const BoardManage = () => {
           setSelectedPost(null);
         }}
         footer={null}
-        width={800} // 조금 더 넓게 보기 좋게
+        width={800}
+        destroyOnHidden={true}
+        maskClosable={true}
       >
         <Form
           form={form}
-          onFinish={handleSave}
           layout="vertical"
-          colon={false}
-          style={{ padding: "8px 16px" }}
+          onFinish={handleSave}
+          preserve={false}
         >
           <Form.Item
             name="title"
@@ -650,7 +665,6 @@ const BoardManage = () => {
             <Form.Item
               name="author"
               label="작성자"
-              initialValue="관리자"
               style={{ flex: 1 }}
               rules={[{ required: false, message: "작성자를 입력해주세요." }]}
             >
@@ -685,18 +699,6 @@ const BoardManage = () => {
                 </div>
               )}
             </Upload>
-            <Modal
-              open={previewOpen}
-              title={previewTitle}
-              footer={null}
-              onCancel={handleCancel}
-            >
-              <img
-                alt="이미지 미리보기"
-                style={{ width: "100%" }}
-                src={previewImage}
-              />
-            </Modal>
           </Form.Item>
 
           <Form.Item style={{ textAlign: "right", marginTop: "24px" }}>
@@ -709,6 +711,17 @@ const BoardManage = () => {
             </Button>
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handlePreviewCancel}
+        destroyOnHidden={true}
+        maskClosable={true}
+      >
+        <img alt="이미지 미리보기" style={{ width: "100%" }} src={previewImage} />
       </Modal>
     </div>
   );

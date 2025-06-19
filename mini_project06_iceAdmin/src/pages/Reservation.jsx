@@ -30,6 +30,7 @@ const Reservation = () => {
     ]);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize] = useState(10);
+    const [modalKey, setModalKey] = useState(0);
 
     // 데이터 가져오기 (전달된 filters 사용)
     const fetchReservations = async (appliedFilters) => {
@@ -52,13 +53,16 @@ const Reservation = () => {
 
             if (reservations && reservations.length > 0) {
                 // customer 정보 가져오기
-                const resNos = reservations.map(r => r.res_no);
+                const resNos = reservations.map(r => {
+                    if(r.user_email)
+                    return r.user_email
+                }).filter(el=>!!el);
                 // console.log('Reservation numbers:', resNos);
                 
                 const { data: customers, error: customerError } = await supabase
                     .from('customer')
                     .select('*')
-                    .in('res_no', resNos);
+                    .in('email', resNos);
                 
                 // console.log('Customers data:', customers);
                 // console.log('Customers error:', customerError);
@@ -72,12 +76,12 @@ const Reservation = () => {
                     // customer 정보를 reservation에 병합
                     const customerMap = {};
                     customers.forEach(c => {
-                        customerMap[c.res_no] = c;
+                        customerMap[c.email] = c;
                     });
                     
                     const mergedData = reservations.map(r => ({
                         ...r,
-                        customer: customerMap[r.res_no] || null
+                        customer: customerMap[r.user_email] || null
                     }));
                     
                     // console.log('Merged data:', mergedData);
@@ -211,6 +215,7 @@ const Reservation = () => {
                                 type="primary"
                                 onClick={() => {
                                     setEditingReservation(null);
+                                    setModalKey(prevKey => prevKey + 1);
                                     setIsModalOpen(true);
                                 }}
                             >
@@ -227,8 +232,10 @@ const Reservation = () => {
                     onCancel={handleCancel}
                     footer={null}
                     width={800}
+                    destroyOnClose={true}
                 >
                     <ReservationForm
+                        key={modalKey}
                         reservation={editingReservation}
                         onSuccess={handleOk}
                     />
