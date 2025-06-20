@@ -45,7 +45,7 @@ function Home(props) {
     const monthFormat = 'YYYY-MM';
     const dateFormat = 'YYYY-MM-DD';
     const yearFormat = 'YYYY';
-    const timeRole = ["오전 10시 ~ 오후 1시","오후 2시 ~ 오후 5시","오후 4시 ~ 오후 7시","오후 6시 ~ 오후 9시"];
+    const timeRole = ["10:00", "12:00", "14:00", "16:00"];
     const stateRole = {
         5: "처리완료",
         9: "취소",

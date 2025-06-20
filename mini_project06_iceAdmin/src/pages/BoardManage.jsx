@@ -625,92 +625,86 @@ const BoardManage = () => {
       </div>
 
       <Modal
-        title={isEditMode ? "게시글 수정" : "새 게시글 등록"}
+        title={isEditMode ? "게시글 수정" : "게시글 등록"}
         open={isModalOpen}
         onCancel={() => {
           setIsModalOpen(false);
-          setFileList([]);
-          form.resetFields();
           setIsEditMode(false);
           setSelectedPost(null);
+          setFileList([]);
+          form.resetFields();
         }}
         footer={null}
         width={800}
         destroyOnHidden={true}
-        maskClosable={true}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSave}
-          preserve={false}
-        >
-          <Form.Item
-            name="title"
-            label="제목"
-            rules={[{ required: true, message: "제목을 입력해주세요." }]}
+        <Card size="small" className={styles.formCard}>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleSave}
+            initialValues={{
+              category_id: "1",
+            }}
           >
-            <Input placeholder="게시글 제목을 입력하세요" />
-          </Form.Item>
-
-          <Form.Item
-            name="content"
-            label="내용"
-            rules={[{ required: true, message: "내용을 입력해주세요." }]}
-          >
-            <Input.TextArea rows={4} placeholder="내용을 입력하세요" />
-          </Form.Item>
-
-          <div style={{ display: "flex", gap: "16px" }}>
             <Form.Item
-              name="author"
-              label="작성자"
-              style={{ flex: 1 }}
-              rules={[{ required: false, message: "작성자를 입력해주세요." }]}
+              label="카테고리"
+              name="category_id"
+              rules={[{ required: true, message: "카테고리를 선택해주세요!" }]}
             >
-              <Input placeholder="작성자" readOnly />
+              <Select size="large">
+                {categories.slice(1).map((cat) => (
+                  <Option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </Option>
+                ))}
+              </Select>
             </Form.Item>
-          </div>
 
-          <Form.Item
-            name="category_id"
-            label="카테고리"
-            rules={[{ required: true, message: "카테고리를 선택해주세요." }]}
-          >
-            <Select placeholder="카테고리 선택">
-              {categories
-                .filter((category) => category.id !== "all")
-                .map((category) => {
-                  return (
-                    <Option key={category.id} value={category.id}>
-                      {category.name}
-                    </Option>
-                  );
-                })}
-            </Select>
-          </Form.Item>
-
-          <Form.Item label="이미지">
-            <Upload {...uploadProps}>
-              {fileList.length >= 1 ? null : (
-                <div>
-                  <PlusOutlined />
-                  <div style={{ marginTop: 8 }}>이미지 업로드</div>
-                </div>
-              )}
-            </Upload>
-          </Form.Item>
-
-          <Form.Item style={{ textAlign: "right", marginTop: "24px" }}>
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={{ background: "#1890ff", borderColor: "#1890ff" }}
+            <Form.Item
+              label="제목"
+              name="title"
+              rules={[{ required: true, message: "제목을 입력해주세요!" }]}
             >
-              {isEditMode ? "수정" : "등록"}
-            </Button>
-          </Form.Item>
-        </Form>
+              <Input size="large" placeholder="제목을 입력하세요" />
+            </Form.Item>
+
+            <Form.Item
+              label="내용"
+              name="content"
+              rules={[{ required: true, message: "내용을 입력해주세요!" }]}
+            >
+              <Input.TextArea
+                rows={6}
+                placeholder="내용을 입력하세요"
+              />
+            </Form.Item>
+
+            <Form.Item label="이미지">
+              <Upload
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={({ fileList: newFileList }) => setFileList(newFileList)}
+                beforeUpload={() => false}
+                maxCount={1}
+              >
+                {fileList.length < 1 && (
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+                )}
+              </Upload>
+            </Form.Item>
+
+            <Form.Item className={styles.submitButtonContainer}>
+              <Button type="primary" htmlType="submit" size="large">
+                {isEditMode ? "수정" : "등록"}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
       </Modal>
 
       <Modal
@@ -718,10 +712,8 @@ const BoardManage = () => {
         title={previewTitle}
         footer={null}
         onCancel={handlePreviewCancel}
-        destroyOnHidden={true}
-        maskClosable={true}
       >
-        <img alt="이미지 미리보기" style={{ width: "100%" }} src={previewImage} />
+        <img alt="preview" style={{ width: "100%" }} src={previewImage} />
       </Modal>
     </div>
   );

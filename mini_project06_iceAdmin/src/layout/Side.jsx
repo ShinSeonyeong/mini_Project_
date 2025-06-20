@@ -82,6 +82,7 @@ function Side({ toggleAside, setToggleAside, login }) {
     if (path === "/reservation") return "reservation";
     if (path === "/popup") return "popup";
     if (path === "/employee") return "employee";
+    if (path === "/customer") return "customer";
     return "dashboard";
   });
   const sideNav = useNavigate();
@@ -94,6 +95,7 @@ function Side({ toggleAside, setToggleAside, login }) {
     else if (path === "/reservation") setCurrentSide("reservation");
     else if (path === "/popup") setCurrentSide("popup");
     else if (path === "/employee") setCurrentSide("employee");
+    else if (path === "/customer") setCurrentSide("customer");
   }, [location.pathname]);
 
   return (

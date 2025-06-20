@@ -23,7 +23,8 @@ export const getEmplWithNextReservation = async(type,nm)=>{
         let memberQuery = supabase
             .from("member")
             .select('*')
-            .eq('auth', 2); // 기사 권한만 선택
+            .eq('auth', 2) // 기사 권한만 선택
+            .order('entr_date', { ascending: false }); // 입사일자 기준 내림차순 정렬
 
         if(type){
             memberQuery = memberQuery.eq("type",type);
@@ -126,3 +127,86 @@ export const insertProfile = async(props) =>{
     }
     return res;
 }
+
+export const updateEmployeeApproval = async (employeeId, isApproved) => {
+    try {
+        const { data, error } = await supabase
+            .from("member")
+            .update({ indentify: isApproved }) // true: 승인, false: 미승인
+            .eq('id', employeeId)
+            .select();
+
+        if (error) {
+            notification.error({
+                message: "승인 상태 변경 실패",
+                description: error.message
+            });
+            throw error;
+        }
+
+        notification.success({
+            message: isApproved ? "승인 완료" : "승인 취소",
+            description: `기사님의 승인 상태가 ${isApproved ? '승인' : '미승인'}으로 변경되었습니다.`
+        });
+
+        return data[0];
+    } catch (error) {
+        console.error('승인 상태 변경 중 오류 발생:', error);
+        throw error;
+    }
+}
+
+export const getApprovedCleaners = async () => {
+    try {
+        const { data, error } = await supabase
+            .from("member")
+            .select("*")
+            .eq('auth', 2)  // 기사 권한
+            .eq('indentify', true)  // 승인된 기사만
+            .order('nm');  // 이름순 정렬
+
+        if (error) throw error;
+        return data || [];
+    } catch (error) {
+        console.error('승인된 기사 목록 조회 실패:', error);
+        return [];
+    }
+};
+
+export const checkCleanerAvailability = async (cleanerId, date, time) => {
+    try {
+        // 해당 날짜에 기사의 예약 목록 조회
+        const { data: reservations, error } = await supabase
+            .from("reservation")
+            .select("time")
+            .eq('gisa_email', cleanerId)
+            .eq('date', date)
+            .in('state', [4, 5]); // 기사 배정 상태(4)와 청소 완료 상태(5)만 체크
+
+        if (error) throw error;
+
+        // 예약이 없으면 가능
+        if (!reservations || reservations.length === 0) {
+            return true;
+        }
+
+        // 시간대 중복 체크
+        const timeSlots = {
+            "10:00": 1,
+            "12:00": 2,
+            "14:00": 3,
+            "16:00": 4
+        };
+
+        const requestedTimeSlot = timeSlots[time];
+        const existingTimeSlots = reservations.map(r => timeSlots[r.time]);
+
+        // 시간대가 겹치는지 확인
+        // 시간대 간 2시간 이상 차이나면 배정 가능
+        return !existingTimeSlots.some(slot => Math.abs(slot - requestedTimeSlot) < 2);
+
+    } catch (error) {
+        console.error('기사 가용성 체크 실패:', error);
+        return false;
+    }
+};

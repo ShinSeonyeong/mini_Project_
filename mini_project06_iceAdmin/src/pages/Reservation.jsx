@@ -232,7 +232,7 @@ const Reservation = () => {
                     onCancel={handleCancel}
                     footer={null}
                     width={800}
-                    destroyOnClose={true}
+                    destroyOnHidden={true}
                 >
                     <ReservationForm
                         key={modalKey}

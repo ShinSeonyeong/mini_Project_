@@ -119,7 +119,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
         addr: reservation.addr || "",
         detailAddr: reservation.detailAddr || "",
         date: reservation.date ? dayjs(reservation.date) : null,
-        time: reservation.time || "오전 10시 ~ 오후 1시",
+        time: reservation.time || "10:00",
         model: reservation.model || "",
         remark: reservation.remark || "",
         state: reservation.state ? parseInt(reservation.state, 10) : 1,
@@ -355,7 +355,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
         layout="vertical"
         onFinish={onFinish}
         initialValues={{
-          time: "오전 10시 ~ 오후 1시",
+          time: "10:00",
           state: 1,
           postcode: "",
           addr: "",
@@ -540,12 +540,10 @@ const ReservationForm = ({ reservation, onSuccess }) => {
                           className={styles.formItem}
                         >
                           <Select size="large" className={styles.select}>
-                            <Option value="오전 10시 ~ 오후 1시">
-                              오전 10시 ~ 오후 1시
-                            </Option>
-                            <Option value="오후 2시 ~ 오후 5시">오후 2시 ~ 오후 5시</Option>
-                            <Option value="오후 4시 ~ 오후 7시">오후 4시 ~ 오후 7시</Option>
-                            <Option value="오후 6시 ~ 오후 9시">오후 6시 ~ 오후 9시</Option>
+                            <Option value="10:00">10:00</Option>
+                            <Option value="12:00">12:00</Option>
+                            <Option value="14:00">14:00</Option>
+                            <Option value="16:00">16:00</Option>
                           </Select>
                         </Form.Item>
 
@@ -566,14 +564,14 @@ const ReservationForm = ({ reservation, onSuccess }) => {
                       </h3>
                       <div className={styles.formGrid}>
                         <Form.Item
-                          label="특별 요청사항"
+                          label="요청사항"
                           name="remark"
                           className={styles.formItem}
                         >
                           <Input.TextArea
                             rows={3}
                             className={styles.textarea}
-                            placeholder="특별 요청사항을 입력하세요"
+                            placeholder="요청사항을 입력하세요"
                           />
                         </Form.Item>
 
@@ -637,61 +635,61 @@ const ReservationForm = ({ reservation, onSuccess }) => {
               </div>
             </div>
 
-        <div className={styles.formSection}>
-          <h3 className={styles.sectionTitle}>고객 정보</h3>
-          <div className={styles.formGrid}>
-            <Form.Item
-              label="이름"
-              name="name"
-              rules={[{ required: true, message: "이름을 입력해주세요!" }]}
-              className={styles.formItem}
-            >
-              <Input
-                size="large"
-                className={styles.input}
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>고객 정보</h3>
+              <div className={styles.formGrid}>
+                <Form.Item
+                  label="이름"
+                  name="name"
+                  rules={[{ required: true, message: "이름을 입력해주세요!" }]}
+                  className={styles.formItem}
+                >
+                  <Input
+                    size="large"
+                    className={styles.input}
                     disabled={true}
-              />
-            </Form.Item>
+                  />
+                </Form.Item>
 
-            <Form.Item
-              label="연락처"
-              name="phone"
-              rules={[
-                { required: true, message: "연락처를 입력해주세요!" },
-                {
-                  pattern: /^\d{3}-\d{3,4}-\d{4}$/,
-                  message: "유효한 전화번호 형식이 아닙니다. 예: 010-1234-5678",
-                },
-              ]}
-              className={styles.formItem}
-            >
-              <Input
-                size="large"
-                onChange={handlePhoneNumberChange}
-                maxLength={13}
-                type="tel"
-                className={styles.input}
-                disabled={true}
-              />
-            </Form.Item>
+                <Form.Item
+                  label="연락처"
+                  name="phone"
+                  rules={[
+                    { required: true, message: "연락처를 입력해주세요!" },
+                    {
+                      pattern: /^\d{3}-\d{3,4}-\d{4}$/,
+                      message: "유효한 전화번호 형식이 아닙니다. 예: 010-1234-5678",
+                    },
+                  ]}
+                  className={styles.formItem}
+                >
+                  <Input
+                    size="large"
+                    onChange={handlePhoneNumberChange}
+                    maxLength={13}
+                    type="tel"
+                    className={styles.input}
+                    disabled={true}
+                  />
+                </Form.Item>
 
-            <Form.Item
-              label="이메일"
-              name="email"
-              rules={[
-                { required: true, message: "이메일을 입력해주세요!" },
-                {
-                  pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message:
-                    "유효한 이메일 형식이 아닙니다. 예: example@domain.com",
-                },
-              ]}
-              className={styles.formItem}
-            >
-              <Input
-                size="large"
-                className={styles.input}
-                disabled={true}
+                <Form.Item
+                  label="이메일"
+                  name="email"
+                  rules={[
+                    { required: true, message: "이메일을 입력해주세요!" },
+                    {
+                      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message:
+                        "유효한 이메일 형식이 아닙니다. 예: example@domain.com",
+                    },
+                  ]}
+                  className={styles.formItem}
+                >
+                  <Input
+                    size="large"
+                    className={styles.input}
+                    disabled={true}
                   />
                 </Form.Item>
 
@@ -705,152 +703,150 @@ const ReservationForm = ({ reservation, onSuccess }) => {
                     className={styles.textarea}
                     disabled={true}
                     onChange={handleCustomerAddressChange}
-              />
-            </Form.Item>
-          </div>
-        </div>
+                  />
+                </Form.Item>
+              </div>
+            </div>
 
-        <div className={styles.formSection}>
-          <h3 className={styles.sectionTitle}>
-                주소 정보
-          </h3>
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>
+                    주소 정보
+              </h3>
               <div className={styles.addressGrid}>
-            <Form.Item
-              label="우편번호"
-              name="postcode"
-              rules={[{ message: "우편번호를 입력해주세요!" }]}
-              className={styles.formItem}
-            >
-              <div className={styles.postcodeContainer}>
-                <Input
-                  className={styles.postcodeInput}
-                  size="large"
-                  placeholder="주소 검색 버튼을 클릭하세요"
+                <Form.Item
+                  label="우편번호"
+                  name="postcode"
+                  rules={[{ message: "우편번호를 입력해주세요!" }]}
+                  className={styles.formItem}
+                >
+                  <div className={styles.postcodeContainer}>
+                    <Input
+                      className={styles.postcodeInput}
+                      size="large"
+                      placeholder="주소 검색 버튼을 클릭하세요"
                       onChange={handleAddressChange}
                       readOnly
-                />
-                <Button
-                  onClick={() => setIsAddressModalOpen(true)}
-                  size="large"
-                  className={styles.searchButton}
-                >
-                  주소 검색
-                </Button>
-              </div>
-            </Form.Item>
+                    />
+                    <Button
+                      onClick={() => setIsAddressModalOpen(true)}
+                      size="large"
+                      className={styles.searchButton}
+                    >
+                      주소 검색
+                    </Button>
+                  </div>
+                </Form.Item>
 
-            <Form.Item
-              label="주소"
-              name="addr"
+                <Form.Item
+                  label="주소"
+                  name="addr"
                   rules={[{ message: "주소를 입력해주세요!" }]}
-              className={styles.formItem}
-            >
-              <Input
-                disabled
-                size="large"
+                  className={styles.formItem}
+                >
+                  <Input
+                    disabled
+                    size="large"
                     className={`${styles.input} ${styles.addressInput}`}
-                placeholder="주소 검색으로 자동 입력됩니다"
+                    placeholder="주소 검색으로 자동 입력됩니다"
                     onChange={handleAddressChange}
-              />
-            </Form.Item>
+                  />
+                </Form.Item>
 
-            <Form.Item
-              label="상세주소"
-              name="detailAddr"
+                <Form.Item
+                  label="상세주소"
+                  name="detailAddr"
                   className={`${styles.formItem} ${styles.addressFullWidth}`}
-            >
-              <Input
-                placeholder="상세 주소를 입력하세요 (동, 호수 등)"
-                size="large"
+                >
+                  <Input
+                    placeholder="상세 주소를 입력하세요 (동, 호수 등)"
+                    size="large"
                     className={`${styles.input} ${styles.detailAddressInput}`}
                     onChange={handleAddressChange}
-              />
-            </Form.Item>
-          </div>
-        </div>
+                  />
+                </Form.Item>
+              </div>
+            </div>
 
-        <div className={styles.formSection}>
-          <h3 className={styles.sectionTitle}>
-            예약 정보
-          </h3>
-          <div className={styles.formGrid}>
-            <Form.Item
-              label="예약 날짜"
-              name="date"
-              rules={[{ required: true, message: "예약 날짜를 선택해주세요!" }]}
-              className={styles.formItem}
-            >
-              <DatePicker
-                locale={locale}
-                style={{ width: "100%" }}
-                size="large"
-                className={styles.datePicker}
-                disabledDate={(current) => {
-                  const today = dayjs().startOf("day");
-                  const threeMonthsLater = today.add(3, "month").endOf("day");
-                  return (
-                    current && (current < today || current > threeMonthsLater)
-                  );
-                }}
-              />
-            </Form.Item>
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>
+                예약 정보
+              </h3>
+              <div className={styles.formGrid}>
+                <Form.Item
+                  label="예약 날짜"
+                  name="date"
+                  rules={[{ required: true, message: "예약 날짜를 선택해주세요!" }]}
+                  className={styles.formItem}
+                >
+                  <DatePicker
+                    locale={locale}
+                    style={{ width: "100%" }}
+                    size="large"
+                    className={styles.datePicker}
+                    disabledDate={(current) => {
+                      const today = dayjs().startOf("day");
+                      const threeMonthsLater = today.add(3, "month").endOf("day");
+                      return (
+                        current && (current < today || current > threeMonthsLater)
+                      );
+                    }}
+                  />
+                </Form.Item>
 
-            <Form.Item
-              label="시간"
-              name="time"
-              rules={[{ required: true, message: "시간을 선택해주세요!" }]}
-              className={styles.formItem}
-            >
-              <Select size="large" className={styles.select}>
-                <Option value="오전 10시 ~ 오후 1시">
-                  오전 10시 ~ 오후 1시
-                </Option>
-                <Option value="오후 2시 ~ 오후 5시">오후 2시 ~ 오후 5시</Option>
-                <Option value="오후 4시 ~ 오후 7시">오후 4시 ~ 오후 7시</Option>
-                <Option value="오후 6시 ~ 오후 9시">오후 6시 ~ 오후 9시</Option>
-              </Select>
-            </Form.Item>
+                <Form.Item
+                  label="시간"
+                  name="time"
+                  rules={[{ required: true, message: "시간을 선택해주세요!" }]}
+                  className={styles.formItem}
+                >
+                  <Select size="large" className={styles.select}>
+                    <Option value="10:00">10:00</Option>
+                    <Option value="12:00">12:00</Option>
+                    <Option value="14:00">14:00</Option>
+                    <Option value="16:00">16:00</Option>
+                  </Select>
+                </Form.Item>
 
-            <Form.Item
-              label="모델명"
-              name="model"
-              rules={[{ required: true, message: "모델명을 입력해주세요!" }]}
-              className={styles.formItem}
-            >
-              <Input size="large" className={styles.input} />
-            </Form.Item>
-          </div>
-        </div>
+                <Form.Item
+                  label="모델명"
+                  name="model"
+                  rules={[{ required: true, message: "모델명을 입력해주세요!" }]}
+                  className={styles.formItem}
+                >
+                  <Input size="large" className={styles.input} />
+                </Form.Item>
+              </div>
+            </div>
 
-        <div className={styles.formSection}>
-          <h3 className={styles.sectionTitle}>
-            추가 정보
-          </h3>
-          <div className={styles.formGrid}>
-            <Form.Item
-              label="특별 요청사항"
-              name="remark"
-              className={styles.formItem}
-            >
-              <Input.TextArea
-                rows={3}
-                className={styles.textarea}
-                placeholder="특별 요청사항을 입력하세요"
-              />
-            </Form.Item>
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>
+                추가 정보
+              </h3>
+              <div className={styles.formGrid}>
+                <Form.Item
+                  label="요청사항"
+                  name="remark"
+                  className={styles.formItem}
+                >
+                  <Input.TextArea
+                    rows={3}
+                    className={styles.textarea}
+                    placeholder="요청사항을 입력하세요"
+                  />
+                </Form.Item>
 
-            <Form.Item label="상태" name="state" className={styles.formItem}>
-              <Select size="large" className={styles.select}>
-                <Option value={1}>신규예약</Option>
-                <Option value={2}>결제대기</Option>
-                <Option value={3}>결제완료</Option>
-                <Option value={4}>기사배정</Option>
-                <Option value={5}>청소완료</Option>
-                <Option value={6}>예약취소</Option>
-              </Select>
-            </Form.Item>
-          </div>
-        </div>
+                <Form.Item label="상태" name="state" className={styles.formItem}>
+                  <Select size="large" className={styles.select}>
+                    <Option value={1}>신규예약</Option>
+                    <Option value={2}>결제대기</Option>
+                    <Option value={3}>결제완료</Option>
+                    <Option value={4}>기사배정</Option>
+                    <Option value={5}>청소완료</Option>
+                    <Option value={6}>예약취소</Option>
+                  </Select>
+                </Form.Item>
+              </div>
+            </div>
           </>
         )}
 

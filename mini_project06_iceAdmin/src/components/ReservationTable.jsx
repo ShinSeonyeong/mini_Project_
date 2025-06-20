@@ -232,7 +232,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
       title: <div style={{ textAlign: "center" }}>모델명</div>,
       dataIndex: "model",
       key: "model",
-      width: 100,
+      width: 80,
       responsive: ["lg"],
     },
     {
@@ -252,7 +252,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
       title: <div style={{ textAlign: "center" }}>예약 시간</div>,
       dataIndex: "time",
       key: "time",
-      width: 150,
+      width: 80,
       render: (time) => (
         <div style={{ textAlign: "center" }}>{time || "미지정"}</div>
       ),
@@ -343,7 +343,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
       title: <div style={{ textAlign: "center" }}>담당기사</div>,
       dataIndex: "gisa_email",
       key: "gisa_email",
-      width: 150,
+      width: 130,
       render: (gisa_email, record) => {
         const assignedCleaner = cleaners.find(c => c.id === gisa_email);
         const isAssignable = record.state === 3; // 결제완료 상태일 때만 기사 배정 가능
@@ -496,18 +496,10 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
                     />
                   }
                 >
-                  <Option value="오전 10시 ~ 오후 1시">
-                    오전 10시 ~ 오후 1시
-                  </Option>
-                  <Option value="오후 2시 ~ 오후 5시">
-                    오후 2시 ~ 오후 5시
-                  </Option>
-                  <Option value="오후 4시 ~ 오후 7시">
-                    오후 4시 ~ 오후 7시
-                  </Option>
-                  <Option value="오후 6시 ~ 오후 9시">
-                    오후 6시 ~ 오후 9시
-                  </Option>
+                  <Option value="10:00">10:00</Option>
+                  <Option value="12:00">12:00</Option>
+                  <Option value="14:00">14:00</Option>
+                  <Option value="16:00">16:00</Option>
                 </Select>
                 {pendingUpdate.res_no === record.res_no &&
                   pendingUpdate.field === "time" &&

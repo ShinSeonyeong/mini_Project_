@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import {useMediaQuery} from "react-responsive";
-import {Button, Card, Row, Col, Table} from "antd";
-import {EditOutlined} from "@ant-design/icons";
+import {Button, Card, Row, Col, Table, Modal, Badge} from "antd";
+import {EditOutlined, CheckOutlined, CloseOutlined} from "@ant-design/icons";
 
-const EmployeeTable = ({ employeeList, setIsInsert, setIsModify, setModifyData, currentPage }) => {
+const EmployeeTable = ({ employeeList, setIsInsert, setIsModify, setModifyData, currentPage, onUpdateApproval }) => {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [approvalAction, setApprovalAction] = useState(null);
 
     const isMobile = useMediaQuery({maxWidth: 767});
     const columns = [
@@ -81,6 +84,41 @@ const EmployeeTable = ({ employeeList, setIsInsert, setIsModify, setModifyData, 
             )
         },
         {
+            title: <div style={{ textAlign: "center" }}>회원승인</div>,
+            dataIndex: 'indentify',
+            key: 'approval',
+            width: 250,
+            align:"center",
+            render: (indentify, record) => (
+                <div style={{textAlign: 'center'}}>
+                    <Badge 
+                        status={indentify ? "success" : "warning"} 
+                        text={indentify ? "승인됨" : "승인대기"}
+                    />
+                    <div style={{ marginTop: 8 }}>
+                        <Button
+                            type={indentify ? "default" : "primary"}
+                            size="small"
+                            onClick={() => handleApprovalAction(record, 'approve')}
+                            style={{ marginRight: 8, width: 100 }}
+                            disabled={indentify}
+                        >
+                            승인
+                        </Button>
+                        <Button
+                            type={!indentify ? "default" : "danger"}
+                            size="small"
+                            onClick={() => handleApprovalAction(record, 'reject')}
+                            style={{ marginRight: 8, width: 100 }}
+                            disabled={!indentify}
+                        >
+                            승인취소
+                        </Button>
+                    </div>
+                </div>
+            )
+        },
+        {
             title: <div style={{ textAlign: "center" }}>관리</div>,
             key:"modify_btn",
             width: 100,
@@ -102,6 +140,21 @@ const EmployeeTable = ({ employeeList, setIsInsert, setIsModify, setModifyData, 
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     const paginatedData = employeeList.slice(startIndex, endIndex);
+
+    const handleApprovalAction = (employee, action) => {
+        setSelectedEmployee(employee);
+        setApprovalAction(action);
+        setIsModalVisible(true);
+    };
+
+    const handleModalConfirm = async () => {
+        if (selectedEmployee && approvalAction) {
+            await onUpdateApproval(selectedEmployee.id, approvalAction === 'approve');
+            setIsModalVisible(false);
+            setSelectedEmployee(null);
+            setApprovalAction(null);
+        }
+    };
 
     return isMobile ? (
         <>
@@ -155,6 +208,18 @@ const EmployeeTable = ({ employeeList, setIsInsert, setIsModify, setModifyData, 
             scroll={{ x: 'max-content' }}
             tableLayout="fixed"
           />
+          <Modal
+            title={approvalAction === 'approve' ? "회원 승인 확인" : "회원 승인 취소 확인"}
+            open={isModalVisible}
+            onOk={handleModalConfirm}
+            onCancel={() => setIsModalVisible(false)}
+            okText={approvalAction === 'approve' ? "승인" : "승인 취소"}
+            cancelText="취소"
+          >
+            <p>
+                {selectedEmployee?.nm} 기사님의 회원 {approvalAction === 'approve' ? "승인" : "승인을 취소"}하시겠습니까?
+            </p>
+          </Modal>
       </>
     );
 }
