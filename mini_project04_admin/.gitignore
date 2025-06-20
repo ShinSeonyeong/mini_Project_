@@ -23,4 +23,7 @@ node_modules/
 *.njsproj
 *.sln
 *.sw?
+
+
 package-lock.json
+.vercel

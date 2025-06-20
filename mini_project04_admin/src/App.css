@@ -15,8 +15,8 @@ aside.login {
     position: fixed;
     top: 0;
     left: 0;
-    width: calc(15vw - 49px);
-    padding: 24px;
+    width: calc(15vw - 10px);
+    padding: 46px 24px;
     height: 100vh;
     background-color: black;
     display: flex;
@@ -24,13 +24,14 @@ aside.login {
     justify-content: flex-start;
     align-items: flex-start;
     color:white;
+
     h4 {
         font-size: 0.8rem;
         margin-block-end: 0;
         margin-block-start: 0;
-        text-align: right;
+        margin-inline-start: 20px;
     }
-    &>div:nth-child(3) {
+    &>div:nth-child(4) {
         display:grid;
         grid-template-columns:1.5fr 3fr;
         width:100%;
@@ -53,7 +54,7 @@ aside.login {
         &>div>div{
             display:grid;
             grid-template-columns:3fr 1fr;
-            place-items:center;
+            padding-left:20px;
             border-radius:10px;
             cursor:pointer;
             margin: 0.7rem 0;
@@ -75,6 +76,7 @@ aside.login {
             padding-top:10px;
             color:#5A5C5F;
             text-align:left;
+            margin-inline-start: 0;
         }
 
     }
@@ -88,18 +90,25 @@ main.login {
     flex-direction: column;
     justify-content: flex-start;
     width: calc(80vw - 1px);
+    min-height: calc(100vh - 24px);
     background-color:black;
+
+    h1,h2,h3,h4,h5,h6,p {
+        margin-block-end: 0;
+        margin-block-start: 0;
+        padding-block-start: 0;
+        padding-block-end: 0;
+    }
     &>nav{
         box-shadow: rgba(0, 0, 0, 0.06) 0 12px 40px -12px;
         border-bottom: 1px solid #DDE7EE;
-        /*border-radius: 16px 16px 0 0;*/
-        /*min-height:50px;*/
         position: sticky;
         padding-top:24px;
         top:0;
         background-color:black;
         z-index:999;
         width: 100%;
+        max-height:10vh;
         section{
             border-radius: 20px 20px 0 0;
             min-height:50px;
@@ -109,6 +118,9 @@ main.login {
             flex-direction: row;
             justify-content: flex-end;
             padding:5px 24px;
+            &>span:first-child{
+                display:none;
+            }
             svg{
                 cursor: pointer;
             }
@@ -116,13 +128,14 @@ main.login {
     }
     &>div{
         display:flex;
-        min-height: 96vh;
+        min-height: calc(90vh - 37px);
         height: auto;
         background-color: white;
         width: calc(100% - 20px);
         flex-direction: column;
         border-radius: 0 0 20px 20px;
         padding:10px;
+
     }
 }
 .none{
@@ -134,20 +147,87 @@ main.login {
 .select{
     background-color:#4940FA;
 }
+.recharts-tooltip-item{
+    color:black !important;
+}
+.ant-statistic-title{
+    white-space:nowrap;
+}
+.ant-statistic-content{
+    white-space:nowrap;
+}
 @media (min-width:1200px){
     aside.login{
         display:flex;
+        &>div:first-child{
+            &>div{
+                display:none!important;
+            }
+        }
+    }
+
+    .recharts-cartesian-axis-tick-value{
+        font-size:0.8rem;
+        transform:rotate(0deg);
+
     }
 }
 @media (max-width: 1199px){
     aside.login{
-        display:none;
+        width:300px;
+        z-index:9999;
+        &>div:first-child {
+            display:flex;
+            justify-content: space-between;
+            width:100%;
+        }
+    }
+
+    main.login>nav>section{
+        justify-content: space-between;
+        &>span:first-child{
+            display:flex;
+            cursor:pointer;
+        }
     }
     #root{
-        padding-left:24px;
+        padding:0;
         width:100vw;
     }
     main.login {
-        width:calc(100% - 48px);
+        width:100%;
+        &>nav{
+            padding:0;
+            &>section{
+                border-radius:0;
+            }
+        }
+        &>div{
+            border-radius:0;
+        }
     }
+
+    .recharts-cartesian-axis-tick-value{
+        font-size:0.5rem;
+    }
+
+    .toggleSide{
+        display:none!important;
+    }
+}
+@media (max-width: 620px) {
+    .recharts-text,.recharts-label,.recharts-legend-item-text{
+        font-size:2vw;
+    }
+}
+div.toggleSide{
+    display:none;
+}
+.recharts-surface{
+    overflow:visible;
+}
+
+.ant-card-bordered{
+    border: 0;
+    box-shadow: 1.2px 1.5px #f0f0f0;
 }
