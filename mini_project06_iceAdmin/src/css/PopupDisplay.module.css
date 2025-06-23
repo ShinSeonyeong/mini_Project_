@@ -8,30 +8,58 @@
     background: transparent;
     box-shadow: none;
     padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .popupModal :global(.ant-modal-close) {
-    color: white;
-    background: rgba(0, 0, 0, 0.5);
+    color: #333;
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    top: -12px;
-    right: -12px;
+    width: 28px;
+    height: 28px;
+    line-height: 32px;
+    top: 10px;
+    right: 10px;
+    z-index: 20;
 }
 
 .popupModal :global(.ant-modal-close:hover) {
-    background: rgba(0, 0, 0, 0.7);
+    background: white;
 }
 
-.popupLink {
-    display: block;
-    cursor: pointer;
+.popupBody {
+    line-height: 0;
 }
 
 .popupImage {
     max-width: 100%;
     height: auto;
     display: block;
+    vertical-align: middle;
+}
+
+.popupFooter {
+    display: flex;
+    justify-content: stretch;
+    background-color: white;
+}
+
+.footerButton {
+    flex: 1;
+    height: 50px;
+    border-radius: 0;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    background: white !important;
+}
+
+.footerButton:not(:last-child) {
+    border-right: 1px solid #f0f0f0;
+}
+
+.footerButton:hover {
+    color: #1677ff;
 } 

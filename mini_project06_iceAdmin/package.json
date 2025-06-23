@@ -31,6 +31,7 @@
     "react-router-dom": "^7.5.0",
     "recharts": "^2.15.2",
     "styled-components": "^6.1.17",
+    "timezone": "^1.0.23",
     "vercel": "^41.6.1"
   },
   "devDependencies": {

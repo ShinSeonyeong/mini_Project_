@@ -112,17 +112,16 @@ export const updatePopup = async (id, popupData) => {
             .from('popups')
             .update({
                 title: popupData.title,
-                display_type: popupData.displayType,
-                display_status: popupData.displayStatus,
-                start_date: popupData.startDate,
-                end_date: popupData.endDate,
-                display_environment: popupData.displayEnvironment,
-                image_url: popupData.imageUrl,
-                mobile_image_url: popupData.mobileImageUrl,
-                link_url: popupData.linkUrl,
-                close_option: popupData.closeOption,
-                position_x: popupData.positionX,
-                position_y: popupData.positionY,
+                display_type: popupData.display_type,
+                display_status: popupData.display_status,
+                start_date: popupData.start_date,
+                end_date: popupData.end_date,
+                display_environment: popupData.display_environment,
+                image_url: popupData.image_url,
+                link_url: popupData.link_url,
+                close_option: popupData.close_option,
+                position_x: popupData.position_x,
+                position_y: popupData.position_y,
                 width: popupData.width,
                 height: popupData.height
             })

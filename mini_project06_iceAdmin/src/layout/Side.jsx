@@ -6,7 +6,7 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 
 const styles = {
   adminInfo: {
-    padding: "20px",
+    padding: "10px",
     background: "#ffffff",
     borderRadius: "8px",
     marginBottom: "50px",
