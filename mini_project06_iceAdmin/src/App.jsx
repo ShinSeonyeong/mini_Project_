@@ -32,12 +32,12 @@ function App() {
         registration.pushManager
           .subscribe({
             userVisibleOnly: true,
-            // 공개키 설정
+            // 공개키 설정 - mobile에서 푸시 받을 때 사용(모바일에서 가져온 공개키)
             applicationServerKey:
               "BBAM2GOE13h59ZDNqToC23HdNafs2eypet_bh6sRh0wvxIbZknpiVijBqrSealSwYBkBLyTE_DTQmzmp8yTDCZE",
           })
           .then((subscription) => {
-            console.log(subscription);
+            // console.log(subscription);
             return fetch(`${API_URL}/push/subscribe`, {
               //   return fetch(`${API_URL}/push/subscribe`, {
               method: "POST",
