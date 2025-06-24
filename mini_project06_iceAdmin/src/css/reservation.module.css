@@ -296,3 +296,36 @@
 .status-badge.state-4 { border-color: #722ed1; color: #722ed1; }
 .status-badge.state-5 { border-color: #222; color: #222; }
 .status-badge.state-9 { border-color: #ff4d4f; color: #ff4d4f; }
+
+.pagination_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    gap: 8px;
+}
+
+.pagination_container :global(.ant-pagination) {
+    margin: 0;
+}
+
+.pagination_container :global(.ant-pagination-item),
+.pagination_container :global(.ant-pagination-prev),
+.pagination_container :global(.ant-pagination-next) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    margin-right: 8px;
+    border-radius: 4px;
+}
+
+.pagination_container :global(.ant-pagination-item-active) {
+    background: #1890ff;
+    border-color: #1890ff;
+}
+
+.pagination_container :global(.ant-pagination-item-active a) {
+    color: white;
+}

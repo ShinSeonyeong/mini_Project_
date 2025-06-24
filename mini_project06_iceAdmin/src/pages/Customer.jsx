@@ -123,24 +123,14 @@ const Customer = () => {
                     <CustomerTable
                         data={filteredCustomers}
                         onEdit={showModal}
-                        onDelete={async (res_no) => {
-                            await supabase.from('customer').delete().eq('res_no', res_no);
+                        onDelete={async (email) => {
+                            await supabase.from('customer').delete().eq('email', email);
                             fetchCustomers(filters);
                         }}
                         onDataChange={() => fetchCustomers(filters)}
-                        searchText={searchText}
-                        onSearchChange={handleSearchChange}
                     />
 
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginTop: 16,
-                            gap: "8px",
-                        }}
-                    >
+                    <div className={styles.pagination_container}>
                         <Pagination
                             current={currentPage}
                             pageSize={pageSize}
@@ -148,6 +138,17 @@ const Customer = () => {
                             onChange={(page) => setCurrentPage(page)}
                             showSizeChanger={false}
                         />
+                        <div style={{ display: "flex", gap: "20px" }}>
+                            <Button
+                                type="primary"
+                                onClick={() => {
+                                    setEditingCustomer(null);
+                                    setIsModalOpen(true);
+                                }}
+                            >
+                                신규등록
+                            </Button>
+                        </div>
                     </div>
                 </div>
 

@@ -135,22 +135,9 @@
                 overflow-y: auto;
                 cursor: move;
                 user-select: none;
+                position: relative;
             ">
-                <div class="ice-popup-header" style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 15px;
-                    cursor: move;
-                ">
-                    <h3 style="margin: 0;">${popup.title || '팝업'}</h3>
-                    <button onclick="this.parentElement.parentElement.remove()" style="
-                        background: none;
-                        border: none;
-                        font-size: 20px;
-                        cursor: pointer;
-                    ">×</button>
-                </div>
+                <div id="popup-close-btn" style="position:absolute;top:5px;right:5px;width:18px;height:18px;background:rgba(255,255,255,0.8);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:#333;z-index:10000;" onclick="this.parentElement.parentElement.remove()">×</div>
                 <div class="ice-popup-content">
                     ${popup.content || ''}
                 </div>

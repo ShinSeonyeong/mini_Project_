@@ -14,18 +14,26 @@
 
 .popupModal :global(.ant-modal-close) {
     color: #333;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     line-height: 32px;
     top: 10px;
     right: 10px;
     z-index: 20;
+    border: 2px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
 }
 
 .popupModal :global(.ant-modal-close:hover) {
     background: white;
+    color: #1677ff;
+    border-color: #1677ff;
+    transform: scale(1.1);
 }
 
 .popupBody {

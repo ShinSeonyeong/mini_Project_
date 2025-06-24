@@ -224,14 +224,7 @@ function Employee(props) {
             onUpdateApproval={handleApprovalUpdate}
           />
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              marginTop: 16,
-            }}
-          >
+          <div className={boardStyles.pagination_container}>
             <Pagination
               current={currentPage}
               pageSize={pageSize}
@@ -239,6 +232,17 @@ function Employee(props) {
               onChange={(page) => setCurrentPage(page)}
               showSizeChanger={false}
             />
+            <div style={{ display: "flex", gap: "20px" }}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setIsModify(false);
+                  setIsInsert(true);
+                }}
+              >
+                신규등록
+              </Button>
+            </div>
           </div>
         </div>
         <Modal

@@ -6,6 +6,10 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {MenuUnfoldOutlined} from "@ant-design/icons";
 import {useNavigate} from "react-router-dom";
 
+
+const LOCAL_API_URL = "http://192.168.0.113:4000";
+const API_URL = "https://port-0-icemobile-manaowvf213a09cd.sel4.cloudtype.app";
+
 function App() {
     const [toggleAside, setToggleAside] = useState(true);
     const [login, setLogin] = useState("");
@@ -21,6 +25,40 @@ function App() {
     }
 
     useEffect(() => {
+        if ("serviceWorker" in navigator && "PushManager" in window) {
+            console.log("service worker");
+            navigator.serviceWorker.ready.then((registration) => {
+              console.log("service worker ready");
+              registration.pushManager
+                .subscribe({
+                  userVisibleOnly: true,
+                  // 공개키 설정
+                  applicationServerKey: "BBAM2GOE13h59ZDNqToC23HdNafs2eypet_bh6sRh0wvxIbZknpiVijBqrSealSwYBkBLyTE_DTQmzmp8yTDCZE",
+                })
+                .then((subscription) => {
+                  console.log(subscription);
+                  return fetch(`${LOCAL_API_URL}/push/subscribe`, {
+                //   return fetch(`${API_URL}/push/subscribe`, {
+                    method: "POST",
+                    body: JSON.stringify(subscription),
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  })
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((data) => {
+                      console.log(data);
+                    });
+                })
+                .catch((error) => {
+                  console.error("푸시 구독 실패:", error);
+                });
+            });
+          }
+
+
         window.scrollTo({top: 0, left: 0});
 
         if (localStorage.getItem("log") && isValidJson(localStorage.getItem("log"))) {

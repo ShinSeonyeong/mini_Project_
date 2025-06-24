@@ -25,15 +25,20 @@ import CleanerAssignModal from "./CleanerAssignModal";
 
 const { Option } = Select;
 
-const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
+const ReservationTable = ({ 
+  data, 
+  onEdit, 
+  onDelete, 
+  onDataChange,
+  onFilterStateChange,
+  currentFilterState 
+}) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [pendingUpdate, setPendingUpdate] = useState({
     res_no: null,
     field: null,
     value: null,
   });
-  const [filterState, setFilterState] = useState("all");
-  const [filteredData, setFilteredData] = useState(data);
   const [searchText, setSearchText] = useState("");
   const [cleaners, setCleaners] = useState([]);
   const [assignModalVisible, setAssignModalVisible] = useState(false);
@@ -46,35 +51,6 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  useEffect(() => {
-    let filtered = data;
-
-    // 상태 필터 적용
-    if (filterState !== "all") {
-      filtered = filtered.filter(
-        (item) => item.state === parseInt(filterState)
-      );
-    }
-
-    // 검색 필터 적용
-    if (searchText) {
-      filtered = filtered.filter(
-        (item) =>
-          item.customer?.name
-            ?.toLowerCase()
-            .includes(searchText.toLowerCase()) ||
-          item.customer?.phone?.includes(searchText) ||
-          item.customer?.email
-            ?.toLowerCase()
-            .includes(searchText.toLowerCase()) ||
-          item.addr?.toLowerCase().includes(searchText.toLowerCase()) ||
-          item.model?.toLowerCase().includes(searchText.toLowerCase())
-      );
-    }
-
-    setFilteredData(filtered);
-  }, [data, filterState, searchText]);
 
   useEffect(() => {
     fetchCleaners();
@@ -95,7 +71,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
   };
 
   const handleStateTab = (stateValue) => {
-    setFilterState(stateValue);
+    onFilterStateChange(stateValue);
   };
 
   const stateOptions = [
@@ -135,7 +111,6 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
   const confirmUpdate = () => {
     const { res_no, field, value } = pendingUpdate;
     if (res_no && field && value !== null) {
-      console.log("Confirming update:", { res_no, field, value });
       handleUpdate(res_no, field, value);
     }
   };
@@ -144,8 +119,8 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
     setPendingUpdate({ res_no: null, field: null, value: null });
   };
 
-  const handleSearch = () => {
-    // 검색은 useEffect에서 자동으로 처리됨
+  const handleSearch = (value) => {
+    setSearchText(value);
   };
 
   const handlePriceChange = async (res_no, newPrice) => {
@@ -169,7 +144,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
       });
       onDataChange();
     } catch (error) {
-      // message.error("금액 업데이트 실패: " + error.message);
+      message.error("금액 업데이트 실패: " + error.message);
     }
   };
 
@@ -245,6 +220,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
         return <div style={{ textAlign: "center" }}>{formattedDate}</div>;
       },
       sortDirections: ["ascend", "descend"],
+      sorter: (a, b) => new Date(a.date) - new Date(b.date),
       responsive: ["xs", "sm", "md", "lg"],
     },
 
@@ -425,7 +401,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
               <button
                 key={option.value}
                 className={`custom-tab-btn${
-                  filterState === option.value ? " active" : ""
+                  currentFilterState === option.value ? " active" : ""
                 }`}
                 onClick={() => handleStateTab(option.value)}
               >
@@ -440,13 +416,13 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               prefix={<SearchOutlined style={{ color: "#bdbdbd" }} />}
-              onPressEnter={handleSearch}
+              onPressEnter={() => handleSearch(searchText)}
               allowClear
             />
           </div>
         </div>
 
-        {filteredData.map((record) => (
+        {data.map((record) => (
           <Card
             key={record.res_no}
             style={{ marginBottom: 16, borderRadius: 8 }}
@@ -578,7 +554,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
             <button
               key={option.value}
               className={`custom-tab-btn${
-                filterState === option.value ? " active" : ""
+                currentFilterState === option.value ? " active" : ""
               }`}
               onClick={() => handleStateTab(option.value)}
             >
@@ -593,7 +569,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             prefix={<SearchOutlined style={{ color: "#bdbdbd" }} />}
-            onPressEnter={handleSearch}
+            onPressEnter={() => handleSearch(searchText)}
             allowClear
           />
         </div>
@@ -601,7 +577,7 @@ const ReservationTable = ({ data, onEdit, onDelete, onDataChange }) => {
 
       <Table
         columns={columns}
-        dataSource={filteredData}
+        dataSource={data}
         rowKey="res_no"
         pagination={false}
         scroll={{ x: "max-content" }}

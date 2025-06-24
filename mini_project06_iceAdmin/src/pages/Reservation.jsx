@@ -25,12 +25,15 @@ const Reservation = () => {
         addr: '',
     });
     const [dateRange, setDateRange] = useState([
-        dayjs().startOf('day'),
+        dayjs().subtract(7, 'days').startOf('day'),
         dayjs().add(1, 'month').endOf('day'),
     ]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize] = useState(10);
+    const [totalReservations, setTotalReservations] = useState(0);
+    const pageSize = 10;
     const [modalKey, setModalKey] = useState(0);
+    const [filterState, setFilterState] = useState("all");
+    const [searchText, setSearchText] = useState("");
 
     // 데이터 가져오기 (전달된 filters 사용)
     const fetchReservations = async (appliedFilters) => {
@@ -38,16 +41,25 @@ const Reservation = () => {
             // 날짜 범위로 필터링하여 데이터 조회
             let query = supabase
                 .from('reservation')
-                .select('*')
+                .select('*', { count: 'exact' })
                 .gte('date', dateRange[0].format('YYYY-MM-DD'))
-                .lte('date', dateRange[1].format('YYYY-MM-DD'));
+                .lte('date', dateRange[1].format('YYYY-MM-DD'))
+                .range((currentPage - 1) * pageSize, currentPage * pageSize - 1)
+                .order('date', { ascending: false });
 
-            const { data: reservations, error } = await query;
-            // console.log('Reservations data:', reservations);
-            // console.log('Reservations error:', error);
+            // 상태 필터 적용
+            if (filterState !== "all") {
+                query = query.eq('state', parseInt(filterState));
+            }
+
+            // 검색어 필터 적용
+            if (searchText) {
+                query = query.or(`addr.ilike.%${searchText}%,model.ilike.%${searchText}%`);
+            }
+
+            const { data: reservations, error, count } = await query;
             
             if (error) {
-                // console.error('Error fetching reservations:', error);
                 return;
             }
 
@@ -57,21 +69,27 @@ const Reservation = () => {
                     if(r.user_email)
                     return r.user_email
                 }).filter(el=>!!el);
-                // console.log('Reservation numbers:', resNos);
                 
-                const { data: customers, error: customerError } = await supabase
+                let customerQuery = supabase
                     .from('customer')
-                    .select('*')
-                    .in('email', resNos);
-                
-                // console.log('Customers data:', customers);
-                // console.log('Customers error:', customerError);
+                    .select('*');
+
+                if (searchText) {
+                    customerQuery = customerQuery.or(
+                        `name.ilike.%${searchText}%,phone.ilike.%${searchText}%,email.ilike.%${searchText}%`
+                    );
+                }
+
+                if (resNos.length > 0) {
+                    customerQuery = customerQuery.in('email', resNos);
+                }
+
+                const { data: customers, error: customerError } = await customerQuery;
                 
                 if (customerError) {
-                    // console.error('Error fetching customers:', customerError);
-                    // customer 정보 없이도 reservation 데이터는 표시
                     setReservations(reservations);
                     setFilteredReservations(reservations);
+                    setTotalReservations(count || 0);
                 } else {
                     // customer 정보를 reservation에 병합
                     const customerMap = {};
@@ -83,37 +101,15 @@ const Reservation = () => {
                         ...r,
                         customer: customerMap[r.user_email] || null
                     }));
-                    
-                    // console.log('Merged data:', mergedData);
-                    
-                    // 필터 적용
-                    let filtered = [...mergedData];
-                    if (appliedFilters.name) {
-                        filtered = filtered.filter((r) =>
-                            r.customer?.name?.toLowerCase().includes(appliedFilters.name.toLowerCase())
-                        );
-                    }
-                    if (appliedFilters.tel) {
-                        filtered = filtered.filter((r) => r.customer?.phone?.includes(appliedFilters.tel));
-                    }
-                    if (appliedFilters.email) {
-                        filtered = filtered.filter((r) =>
-                            r.customer?.email?.toLowerCase().includes(appliedFilters.email.toLowerCase())
-                        );
-                    }
-                    if (appliedFilters.addr) {
-                        filtered = filtered.filter((r) =>
-                            r.addr?.toLowerCase().includes(appliedFilters.addr.toLowerCase())
-                        );
-                    }
 
-                    // console.log('Final filtered data:', filtered);
                     setReservations(mergedData);
-                    setFilteredReservations(filtered);
+                    setFilteredReservations(mergedData);
+                    setTotalReservations(count || 0);
                 }
             } else {
                 setReservations([]);
                 setFilteredReservations([]);
+                setTotalReservations(0);
             }
         } catch (error) {
             console.error('Unexpected error:', error);
@@ -123,7 +119,12 @@ const Reservation = () => {
     // 초기 데이터 로드
     useEffect(() => {
         fetchReservations(filters);
-    }, [dateRange]);
+    }, [dateRange, filterState, currentPage, searchText]); // searchText 추가
+
+    // 필터나 날짜가 변경될 때 첫 페이지로 이동
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [dateRange, filterState, searchText]); // searchText 추가
 
     // 모달 핸들러
     const showModal = (reservation = null) => {
@@ -149,6 +150,14 @@ const Reservation = () => {
         } else {
             setDateRange([dayjs().startOf('day'), dayjs().add(1, 'month').endOf('day')]);
         }
+    };
+
+    const handleFilterStateChange = (state) => {
+        setFilterState(state);
+    };
+
+    const handleSearch = (value) => {
+        setSearchText(value);
     };
 
     return (
@@ -191,22 +200,18 @@ const Reservation = () => {
                             await supabase.from('reservation').delete().eq('res_no', res_no);
                             fetchReservations(filters);
                         }}
-                        onDataChange={() => fetchReservations(filters)}
+                        onDataChange={fetchReservations}
+                        onFilterStateChange={handleFilterStateChange}
+                        currentFilterState={filterState}
+                        onSearch={handleSearch}
+                        searchText={searchText}
                     />
 
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginTop: 16,
-                            gap: "8px",
-                        }}
-                    >
+                    <div className={styles.pagination_container}>
                         <Pagination
                             current={currentPage}
                             pageSize={pageSize}
-                            total={filteredReservations.length}
+                            total={totalReservations}
                             onChange={(page) => setCurrentPage(page)}
                             showSizeChanger={false}
                         />
