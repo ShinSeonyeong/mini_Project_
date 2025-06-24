@@ -198,6 +198,11 @@ const ReservationForm = ({ reservation, onSuccess }) => {
             state: values.state,
           })
           .eq("res_no", reservation.res_no);
+        if( values.state === 4) {
+          alert("기사배정");
+          alert(values.phone);
+          axios.get(`${API_URL}/push/send/${values.phone}`);
+        }
         if (reservationError) throw reservationError;
       } else {
         // 새로운 예약 생성
