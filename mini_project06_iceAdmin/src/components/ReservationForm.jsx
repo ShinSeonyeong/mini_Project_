@@ -17,7 +17,11 @@ import locale from "antd/locale/ko_KR";
 import styles from "../css/reservationForm.module.css";
 dayjs.locale("ko");
 
+import axios from "axios";
+
 const { Option } = Select;
+
+const API_URL = "https://port-0-icemobile-manaowvf213a09cd.sel4.cloudtype.app";
 
 const ReservationForm = ({ reservation, onSuccess }) => {
   const [form] = Form.useForm();

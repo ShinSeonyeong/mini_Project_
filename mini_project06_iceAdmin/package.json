@@ -21,6 +21,7 @@
     "@mui/x-data-grid": "^7.28.3",
     "@supabase/supabase-js": "^2.49.4",
     "antd": "^5.24.6",
+    "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
     "dayjs": "^1.11.13",
     "install": "^0.13.0",
