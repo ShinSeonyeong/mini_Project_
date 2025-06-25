@@ -6,69 +6,66 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 
 const styles = {
   adminInfo: {
-    padding: "10px",
-    background: "#ffffff",
-    borderRadius: "8px",
-    marginBottom: "50px",
+    padding: "20px",
+    background: "transparent",
+    marginBottom: "20px",
     marginTop: "20px",
+    marginInline: "20px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
   },
   adminProfile: {
     display: "flex",
     alignItems: "center",
-    gap: "20px",
+    gap: "15px",
   },
   profileImage: {
-    width: "60px",
-    height: "60px",
+    width: "50px",
+    height: "50px",
     borderRadius: "50%",
+    border: "none",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
   },
   adminDetails: {
     flex: 1,
     display: "flex",
     flexDirection: "column",
-    gap: "10px",
+    gap: "4px",
   },
   adminId: {
     display: "flex",
     alignItems: "center",
-    gap: "10px",
+    gap: "8px",
   },
   adminIdH4: {
-    color: "#595959",
-    fontSize: "13px",
+    color: "#6c757d",
+    fontSize: "12px",
     fontWeight: "600",
     margin: 0,
-    width: "60px",
+    width: "40px",
   },
   adminIdH5: {
-    color: "black",
+    color: "#1890ff",
     fontSize: "15px",
-    fontWeight: "500",
+    fontWeight: "400",
     margin: 0,
-    background: "#f5f5f5",
-    padding: "2px 8px",
-    borderRadius: "4px",
   },
   adminAuth: {
     display: "flex",
     alignItems: "center",
-    gap: "12px",
+    gap: "8px",
   },
   adminAuthH4: {
-    color: "#595959",
-    fontSize: "13px",
+    color: "#6c757d",
+    fontSize: "12px",
     fontWeight: "600",
     margin: 0,
-    width: "60px",
+    width: "40px",
   },
   adminAuthH5: {
     color: "#1890ff",
     fontSize: "15px",
-    fontWeight: "500",
+    fontWeight: "400",
     margin: 0,
-    background: "#e6f7ff",
-    padding: "2px 8px",
-    borderRadius: "4px",
   },
 };
 
@@ -101,23 +98,31 @@ function Side({ toggleAside, setToggleAside, login }) {
   return (
     <>
       <aside className={`login ${toggleAside ? "toggleSide" : ""}`}>
-        <div className={`${toggleAside ? "toggleSide" : ""}`}>
+        <div className="close-button-container">
           <CloseCircleOutlined
+            className="close-button"
             style={{
-              fontSize: "30px",
+              fontSize: "24px",
               position: "absolute",
               right: "20px",
               top: "20px",
+              cursor: "pointer",
+              zIndex: 1000,
+              color: "#6c757d",
+              transition: "color 0.3s ease",
+              ":hover": {
+                color: "#1890ff",
+              },
             }}
             onClick={() => {
-              setToggleAside(!toggleAside);
+              setToggleAside(true);
             }}
           />
         </div>
         <div style={styles.adminInfo}>
           <div style={styles.adminProfile}>
             <img
-              src="/images/admin-profile.jpg"
+              src="/images/admin-profile.png"
               alt="Admin Profile"
               style={styles.profileImage}
             />
@@ -136,24 +141,57 @@ function Side({ toggleAside, setToggleAside, login }) {
           </div>
         </div>
 
-        <div style={{ marginBottom: "20px" }}>
-          <NavLink style={{ marginInlineStart: "20px" }} to="/">
-            <img src="/images/side_logo.png" width={180} alt="Logo" />
+        <div style={{ marginBottom: "20px", marginLeft: "20px", }}>
+          <NavLink
+            style={{
+              display: "block",
+              marginBottom: "10px",
+            }}
+            to="/"
+          >
+            <img
+              src="/images/ICECARE.png"
+              style={{
+                width: "140px",
+                height: "auto",
+                marginBottom: "5px",
+              }}
+              alt="Logo"
+            />
           </NavLink>
-          <h2 style={{marginInlineStart: "20px"}}>관리자 센터</h2>
+          <h2
+            style={{
+              fontSize: "25px",
+              color: "#fff",
+              fontWeight: "500",
+              margin: "0",
+            }}
+          >
+            관리자 센터
+          </h2>
         </div>
 
-        <nav>
+        <nav
+          style={{
+            marginTop: "20px",
+            width: "100%",
+          }}
+        >
           <div>
             <div
               className={`${currentSide === "dashboard" ? "select" : ""}`}
               onClick={() => {
                 setCurrentSide("dashboard");
-                setToggleAside(!toggleAside);
+                setToggleAside(true);
                 sideNav("/");
               }}
+              style={{
+                padding: "12px 20px",
+                borderRadius: "8px",
+                transition: "background-color 0.3s ease",
+              }}
             >
-              <h3>대시보드</h3>
+              <h3 style={{ margin: 0, fontSize: "18px" }}>대시보드</h3>
             </div>
           </div>
 
@@ -162,86 +200,72 @@ function Side({ toggleAside, setToggleAside, login }) {
               className={`${currentSide === "contact" ? "select" : ""}`}
               onClick={() => {
                 setCurrentSide("contact");
-                setToggleAside(!toggleAside);
+                setToggleAside(true);
                 sideNav("/contact");
               }}
+              style={{
+                padding: "12px 20px",
+                borderRadius: "8px",
+                transition: "background-color 0.3s ease",
+              }}
             >
-              <h3>게시판</h3>
+              <h3 style={{ margin: 0, fontSize: "18px" }}>게시판</h3>
             </div>
           </div>
+
           <div>
             <div
               className={`${currentSide === "reservation" ? "select" : ""}`}
               onClick={() => {
                 setCurrentSide("reservation");
-                setToggleAside(!toggleAside);
+                setToggleAside(true);
                 sideNav("/reservation");
               }}
+              style={{
+                padding: "12px 20px",
+                borderRadius: "8px",
+                transition: "background-color 0.3s ease",
+              }}
             >
-              <h3>예약관리</h3>
+              <h3 style={{ margin: 0, fontSize: "18px" }}>예약관리</h3>
             </div>
           </div>
-          
+
           <div>
             <div
               className={`${currentSide === "employee" ? "select" : ""}`}
               onClick={() => {
                 setCurrentSide("employee");
-                setToggleAside(!toggleAside);
+                setToggleAside(true);
                 sideNav("/employee");
               }}
+              style={{
+                padding: "12px 20px",
+                borderRadius: "8px",
+                transition: "background-color 0.3s ease",
+              }}
             >
-              <h3>직원관리</h3>
+              <h3 style={{ margin: 0, fontSize: "18px" }}>직원관리</h3>
             </div>
           </div>
+
           <div>
             <div
               className={`${currentSide === "customer" ? "select" : ""}`}
               onClick={() => {
                 setCurrentSide("customer");
-                setToggleAside(!toggleAside);
+                setToggleAside(true);
                 sideNav("/customer");
               }}
-            >
-              <h3>고객관리</h3>
-            </div>
-          </div>
-          <div>
-            <div
-              className={`${currentSide === "popup" ? "select" : ""}`}
-              onClick={() => {
-                setCurrentSide("popup");
-                setToggleAside(!toggleAside);
-                sideNav("/popup");
+              style={{
+                padding: "12px 20px",
+                borderRadius: "8px",
+                transition: "background-color 0.3s ease",
               }}
             >
-              <h3>팝업관리</h3>
+              <h3 style={{ margin: 0, fontSize: "18px" }}>고객관리</h3>
             </div>
           </div>
-          {/* <div>
-            <div
-              className={`${currentSide === "employee" ? "select" : ""}`}
-              onClick={() => {
-                setCurrentSide("employee");
-                setToggleAside(!toggleAside);
-                sideNav("/");
-              }}
-            >
-              <h3>점주관리</h3>
-            </div>
-          </div>
-          <div>
-            <div
-              className={`${currentSide === "employee" ? "select" : ""}`}
-              onClick={() => {
-                setCurrentSide("employee");
-                setToggleAside(!toggleAside);
-                sideNav("/");
-              }}
-            >
-              <h3>기사관리</h3>
-            </div>
-          </div> */}
         </nav>
       </aside>
     </>

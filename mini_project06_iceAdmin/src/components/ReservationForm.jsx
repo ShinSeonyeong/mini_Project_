@@ -198,10 +198,13 @@ const ReservationForm = ({ reservation, onSuccess }) => {
             state: values.state,
           })
           .eq("res_no", reservation.res_no);
+
         if( values.state === 4) {
           alert("기사배정");
           alert(values.phone);
-          axios.get(`${API_URL}/push/send/${values.phone}`);
+          axios.post(`${API_URL}/push/send/${values.phone}`,{
+            res_no: reservation.res_no,
+          });
         }
         if (reservationError) throw reservationError;
       } else {
@@ -856,14 +859,25 @@ const ReservationForm = ({ reservation, onSuccess }) => {
         )}
 
         <Form.Item className={styles.submitButtonContainer}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            size="large"
-            className={styles.submitButton}
-          >
-            {reservation ? "수정" : "등록"}
-          </Button>
+          <div>
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              className={styles.submitButton}
+            >
+              {reservation ? "수정" : "등록"}
+            </Button>
+            <Button
+              danger
+              size="large"
+              className={styles.submitButton}
+              onClick={onSuccess}
+              style={{ marginLeft: '10px' }}
+            >
+              닫기
+            </Button>
+          </div>
         </Form.Item>
       </Form>
 

@@ -29,7 +29,7 @@ async function getReservations(page, limit = 10) {
     .select("res_no, date, time, state, customer:user_email(name, phone)", {
       count: "exact",
     })
-    .order("res_no", { ascending: false })
+    .order("res_no", { ascending: true })
     .range(page_idx, page_idx + limit - 1);
 
   if (error) {

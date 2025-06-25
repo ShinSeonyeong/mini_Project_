@@ -62,7 +62,7 @@ const EmployeeTable = ({ employeeList, setIsInsert, setIsModify, setModifyData, 
             dataIndex: 'entr_date',
             key: 'entr_date',
             width: 110,
-            sorter: (a, b) => new Date(a) - new Date(b),
+            sorter: (a, b) => new Date(a.entr_date).getTime() - new Date(b.entr_date).getTime(),
             render: (text) => (
                 <div style={{textAlign: 'center'}}>
                     {text}

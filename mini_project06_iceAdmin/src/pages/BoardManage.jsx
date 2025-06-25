@@ -76,14 +76,17 @@ const BoardManage = () => {
     // console.log('Fetching posts with:', {currentPage, searchText, filterCategory});
     let query = supabase
       .from("board")
-      .select(`
+      .select(
+        `
         *,
         categories:category_id (
           id,
           name
         )
-      `, { count: "exact" })
-      .order("created_at", { ascending: false }) // 내림차순 정렬, 가장 최근 데이터 먼저.
+      `,
+        { count: "exact" }
+      )
+      .order("id", { ascending: false }) // NO(id) 기준 내림차순 정렬
       .range((currentPage - 1) * pageSize, currentPage * pageSize - 1);
 
     // console.log('Fetching postsdd with:', {currentPage, searchText, filterCategory});
@@ -141,34 +144,38 @@ const BoardManage = () => {
   };
 
   const handleSave = async (values) => {
-    const { title, content, category_id } = values; // 폼에서 입력한 값들
-    let imageUrl = null; // 이미지 URL을 저장할 변수
-    const author = "ADMIN"; // 작성자 이름은 ADMIN으로 고정
+    const { title, content, category_id } = values;
+    // 카테고리 이름에 따라 ID 설정
+    const categoryId =
+      categories.find((cat) => cat.name === category_id)?.id || "1";
+
+    let imageUrl = null;
+    const author = "ADMIN";
 
     if (fileList.length > 0) {
       if (fileList[0].originFileObj) {
-        imageUrl = await handleUpload(fileList[0].originFileObj); // 이미지 업로드
+        imageUrl = await handleUpload(fileList[0].originFileObj);
         if (!imageUrl) {
           console.error("Image upload failed, imageUrl is null");
           return;
-        } // 업로드 실패 시 함수 종료
+        }
       } else {
-        imageUrl = isEditMode ? selectedPost.image_url : null; // 수정 모드일 때 기존 이미지 URL 사용
+        imageUrl = isEditMode ? selectedPost.image_url : null;
       }
     }
 
     if (isEditMode) {
-      const { error } = await supabase // 수정할 게시글의 ID를 사용하여 업데이트
+      const { error } = await supabase
         .from("board")
         .update({
           title,
           content,
           author,
-          category_id,
-          image_url: imageUrl || selectedPost.image_url, // 기존 이미지 URL 유지
-          updated_at: new Date(), // 수정일자 업데이트
+          category_id: categoryId,
+          image_url: imageUrl || selectedPost.image_url,
+          updated_at: new Date(),
         })
-        .eq("id", selectedPost.id); // 게시글 ID로 필터링
+        .eq("id", selectedPost.id);
 
       if (error) {
         message.error("수정에 실패했습니다.");
@@ -176,11 +183,16 @@ const BoardManage = () => {
       }
       message.success("게시글이 수정되었습니다.");
     } else {
-      const { error } = await supabase
-        .from("board")
-        .insert([{ title, content, author, category_id, image_url: imageUrl }]); // 게시글 등록
+      const { error } = await supabase.from("board").insert([
+        {
+          title,
+          content,
+          author,
+          category_id: categoryId,
+          image_url: imageUrl,
+        },
+      ]);
       if (error) {
-        // console.log(title, content, author, category_id, imageUrl);
         console.log(error);
         message.error("게시글 등록에 실패했습니다.");
         return;
@@ -188,10 +200,10 @@ const BoardManage = () => {
       message.success("게시글이 등록되었습니다.");
     }
 
-    setIsModalOpen(false); // 모달 닫기
-    setFileList([]); // 파일 리스트 초기화
-    form.resetFields(); // 폼 초기화
-    fetchPosts(); // 게시글 목록 새로고침
+    setIsModalOpen(false);
+    setFileList([]);
+    form.resetFields();
+    fetchPosts();
   };
 
   const selectedPosts = posts.filter((post) => checkedRowIds.includes(post.id)); // 현재 체크된 게시글 목록
@@ -238,10 +250,12 @@ const BoardManage = () => {
   const handleEdit = (post) => {
     setIsEditMode(true);
     setSelectedPost(post);
+
+    // 폼 필드 값 설정 (카테고리 이름 사용)
     form.setFieldsValue({
       title: post.title,
       content: post.content,
-      category_id: post.categories.name,
+      category_id: post.categories.name, // 카테고리 이름으로 설정
     });
 
     // 기존 이미지가 있는 경우 fileList에 추가
@@ -334,13 +348,15 @@ const BoardManage = () => {
       key: "id",
       dataIndex: "id",
       width: 50,
+      defaultSortOrder: "descend", // 내림차순
+      render: (text) => <div style={{ textAlign: "center" }}>{text}</div>, // 가운데 정렬
     },
     {
       title: <div style={{ textAlign: "center" }}>제목</div>,
       dataIndex: "title",
       key: "title",
       width: 150,
-      ellipsis: {showTitle: false},
+      ellipsis: { showTitle: false },
       render: (text) => (
         <Tooltip title={text || ""}>
           <span>
@@ -507,13 +523,13 @@ const BoardManage = () => {
         form.setFieldsValue({
           title: selectedPost.title,
           content: selectedPost.content,
-          category_id: selectedPost.category_id,
-          author: "관리자"
+          category_id: selectedPost.categories.name, // 카테고리 이름으로 설정
+          author: "관리자",
         });
       } else {
         form.setFieldsValue({
-          category_id: "1",
-          author: "관리자"
+          category_id: "공지사항", // 기본값을 이름으로 설정
+          author: "관리자",
         });
       }
     }
@@ -652,12 +668,15 @@ const BoardManage = () => {
               name="category_id"
               rules={[{ required: true, message: "카테고리를 선택해주세요!" }]}
             >
-              <Select size="large">
-                {categories.slice(1).map((cat) => (
-                  <Option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </Option>
-                ))}
+              <Select
+                size="large"
+                placeholder="카테고리를 선택하세요"
+                onChange={(value) =>
+                  form.setFieldsValue({ category_id: value })
+                }
+              >
+                <Option value="공지사항">공지사항</Option>
+                <Option value="FAQ">FAQ</Option>
               </Select>
             </Form.Item>
 
@@ -674,10 +693,7 @@ const BoardManage = () => {
               name="content"
               rules={[{ required: true, message: "내용을 입력해주세요!" }]}
             >
-              <Input.TextArea
-                rows={6}
-                placeholder="내용을 입력하세요"
-              />
+              <Input.TextArea rows={6} placeholder="내용을 입력하세요" />
             </Form.Item>
 
             <Form.Item label="이미지">
@@ -685,7 +701,9 @@ const BoardManage = () => {
                 listType="picture-card"
                 fileList={fileList}
                 onPreview={handlePreview}
-                onChange={({ fileList: newFileList }) => setFileList(newFileList)}
+                onChange={({ fileList: newFileList }) =>
+                  setFileList(newFileList)
+                }
                 beforeUpload={() => false}
                 maxCount={1}
               >

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Layout, Button, Modal, Card, Flex, Breadcrumb, Pagination} from 'antd';
-import {PlusOutlined} from "@ant-design/icons";
+import {Layout, Modal, Card, Flex, Breadcrumb, Pagination} from 'antd';
 import CustomerTable from '../components/CustomerTable';
 import CustomerForm from '../components/CustomerForm';
 import styles from "../css/customer.module.css";
@@ -13,18 +12,12 @@ const Customer = () => {
     const [filteredCustomers, setFilteredCustomers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCustomer, setEditingCustomer] = useState(null);
-    const [filters, setFilters] = useState({
-        name: '',
-        phone: '',
-        email: '',
-        addr: '',
-    });
     const [searchText, setSearchText] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize] = useState(10);
 
     // 데이터 가져오기
-    const fetchCustomers = async (appliedFilters) => {
+    const fetchCustomers = async () => {
         try {
             let query = supabase
                 .from('customer')
@@ -38,18 +31,17 @@ const Customer = () => {
             }
 
             if (customers && customers.length > 0) {
-                // 필터 적용
+                // 검색어로 필터링
                 let filtered = [...customers];
                 
-                // 검색어가 있을 때만 필터링
-                if (appliedFilters.name || appliedFilters.phone || appliedFilters.email || appliedFilters.addr) {
-                    const searchTerm = appliedFilters.name || appliedFilters.phone || appliedFilters.email || appliedFilters.addr;
+                if (searchText) {
                     filtered = filtered.filter((c) => {
+                        const searchLower = searchText.toLowerCase();
                         return (
-                            c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            c.phone?.includes(searchTerm) ||
-                            c.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            c.addr?.toLowerCase().includes(searchTerm.toLowerCase())
+                            c.name?.toLowerCase().includes(searchLower) ||
+                            c.phone?.includes(searchText) ||
+                            c.email?.toLowerCase().includes(searchLower) ||
+                            c.addr?.toLowerCase().includes(searchLower)
                         );
                     });
                 }
@@ -68,8 +60,13 @@ const Customer = () => {
 
     // 초기 데이터 로드
     useEffect(() => {
-        fetchCustomers(filters);
+        fetchCustomers();
     }, []);
+
+    // 검색어가 변경될 때마다 필터링
+    useEffect(() => {
+        fetchCustomers();
+    }, [searchText]);
 
     // 모달 핸들러
     const showModal = (customer = null) => {
@@ -80,7 +77,7 @@ const Customer = () => {
     const handleOk = () => {
         setIsModalOpen(false);
         setEditingCustomer(null);
-        fetchCustomers(filters);
+        fetchCustomers();
     };
 
     const handleCancel = () => {
@@ -91,15 +88,6 @@ const Customer = () => {
     // 검색 핸들러
     const handleSearchChange = (value) => {
         setSearchText(value);
-        // 검색어를 필터에 적용 (전체 검색)
-        const newFilters = {
-            name: value,
-            phone: value,
-            email: value,
-            addr: value,
-        };
-        setFilters(newFilters);
-        fetchCustomers(newFilters);
     };
 
     return (
@@ -125,9 +113,11 @@ const Customer = () => {
                         onEdit={showModal}
                         onDelete={async (email) => {
                             await supabase.from('customer').delete().eq('email', email);
-                            fetchCustomers(filters);
+                            fetchCustomers();
                         }}
-                        onDataChange={() => fetchCustomers(filters)}
+                        onDataChange={() => fetchCustomers()}
+                        searchText={searchText}
+                        onSearchChange={handleSearchChange}
                     />
 
                     <div className={styles.pagination_container}>
@@ -138,17 +128,6 @@ const Customer = () => {
                             onChange={(page) => setCurrentPage(page)}
                             showSizeChanger={false}
                         />
-                        <div style={{ display: "flex", gap: "20px" }}>
-                            <Button
-                                type="primary"
-                                onClick={() => {
-                                    setEditingCustomer(null);
-                                    setIsModalOpen(true);
-                                }}
-                            >
-                                신규등록
-                            </Button>
-                        </div>
                     </div>
                 </div>
 

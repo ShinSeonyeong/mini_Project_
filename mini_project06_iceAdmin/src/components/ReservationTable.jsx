@@ -176,7 +176,7 @@ const ReservationTable = ({
         return <div style={{ textAlign: "center" }}>{text}</div>;
       },
       defaultSortOrder: "ascend",
-    },
+    },    
     {
       title: <div style={{ textAlign: "center" }}>이름</div>,
       dataIndex: ["customer", "name"],

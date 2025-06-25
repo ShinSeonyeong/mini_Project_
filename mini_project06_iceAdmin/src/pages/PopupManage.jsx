@@ -19,6 +19,7 @@ import {
   Pagination,
   Row,
   Col,
+  Image,
 } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -48,6 +49,9 @@ const PopupManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
   const popupNavi = useNavigate();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewTitle, setPreviewTitle] = useState('');
 
   // 팝업 데이터 로드
   useEffect(() => {
@@ -106,6 +110,23 @@ const PopupManage = () => {
       };
     }
   };
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+  };
+
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
 
   // 팝업 추가/수정
   const handleSubmit = async (values) => {
@@ -443,6 +464,7 @@ const PopupManage = () => {
                 maxCount={1}
                 beforeUpload={beforeUpload}
                 onChange={handleUpload}
+                onPreview={handlePreview}
                 fileList={fileList}
                 onRemove={() => {
                   form.setFieldsValue({ image_url: undefined });
@@ -489,6 +511,20 @@ const PopupManage = () => {
             </Form.Item>
           </Form>
         </Card>
+      </Modal>
+
+      {/* 이미지 미리보기 모달 추가 */}
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={() => setPreviewOpen(false)}
+      >
+        <img
+          alt="preview"
+          style={{ width: '100%' }}
+          src={previewImage}
+        />
       </Modal>
     </div>
   );
