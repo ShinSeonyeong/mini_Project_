@@ -25,39 +25,39 @@ function App() {
 
   //   https://github.com/dron512/pwa/tree/test-main/react_work/front02
   useEffect(() => {
-    if ("serviceWorker" in navigator && "PushManager" in window) {
-      // console.log("service worker after");
-      navigator.serviceWorker.ready.then((registration) => {
-        // console.log("service worker ready");
-        registration.pushManager
-          .subscribe({
-            userVisibleOnly: true,
-            // 공개키 설정 - mobile에서 푸시 받을 때 사용(모바일에서 가져온 공개키)
-            applicationServerKey:
-              "BBAM2GOE13h59ZDNqToC23HdNafs2eypet_bh6sRh0wvxIbZknpiVijBqrSealSwYBkBLyTE_DTQmzmp8yTDCZE",
-          })
-          .then((subscription) => {
-            // console.log(subscription);
-            return fetch(`${API_URL}/push/subscribe`, {
-              //   return fetch(`${API_URL}/push/subscribe`, {
-              method: "POST",
-              body: JSON.stringify(subscription),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            })
-              .then((response) => {
-                return response.json();
-              })
-              .then((data) => {
-                console.log(data);
-              });
-          })
-          .catch((error) => {
-            console.error("푸시 구독 실패:", error);
-          });
-      });
-    }
+    // if ("serviceWorker" in navigator && "PushManager" in window) {
+    //   // console.log("service worker after");
+    //   navigator.serviceWorker.ready.then((registration) => {
+    //     // console.log("service worker ready");
+    //     registration.pushManager
+    //       .subscribe({
+    //         userVisibleOnly: true,
+    //         // 공개키 설정 - mobile에서 푸시 받을 때 사용(모바일에서 가져온 공개키)
+    //         applicationServerKey:
+    //           "BBAM2GOE13h59ZDNqToC23HdNafs2eypet_bh6sRh0wvxIbZknpiVijBqrSealSwYBkBLyTE_DTQmzmp8yTDCZE",
+    //       })
+    //       .then((subscription) => {
+    //         // console.log(subscription);
+    //         return fetch(`${API_URL}/push/subscribe`, {
+    //           //   return fetch(`${API_URL}/push/subscribe`, {
+    //           method: "POST",
+    //           body: JSON.stringify(subscription),
+    //           headers: {
+    //             "Content-Type": "application/json",
+    //           },
+    //         })
+    //           .then((response) => {
+    //             return response.json();
+    //           })
+    //           .then((data) => {
+    //             console.log(data);
+    //           });
+    //       })
+    //       .catch((error) => {
+    //         console.error("푸시 구독 실패:", error);
+    //       });
+    //   });
+    // }
 
     window.scrollTo({ top: 0, left: 0 });
 

@@ -34,6 +34,7 @@ const ReservationTable = ({
   onDataChange,
   onFilterStateChange,
   currentFilterState,
+  onSearch,
 }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [pendingUpdate, setPendingUpdate] = useState({
@@ -124,6 +125,7 @@ const ReservationTable = ({
 
   const handleSearch = (value) => {
     setSearchText(value);
+    onSearch(value);
   };
 
   const handlePriceChange = async (res_no, newPrice) => {
@@ -135,10 +137,15 @@ const ReservationTable = ({
       return;
     }
 
+    if (newPrice === null || newPrice === undefined || newPrice === '') {
+      message.error("금액을 입력해주세요.");
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from("reservation")
-        .update({ price: newPrice })
+        .update({ price: newPrice || 0 })
         .eq("res_no", res_no);
 
       if (error) throw error;
@@ -256,14 +263,13 @@ const ReservationTable = ({
           >
             {isEditable ? (
               <InputNumber
-                style={{ width: "100%" }}
-                value={price}
-                formatter={(value) => `₩ ${formatPrice(value)}`}
-                parser={(value) => value.replace(/[₩\s,]/g, "")}
-                onChange={(value) => handlePriceChange(record.res_no, value)}
                 min={0}
-                step={1000}
-                disabled={!isEditable}
+                defaultValue={record.price || 0}
+                formatter={(value) => `₩ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={(value) => value.replace(/₩\s?|(,*)/g, '')}
+                onChange={(value) => handlePriceChange(record.res_no, value)}
+                style={{ width: '100%' }}
+                required
               />
             ) : (
               <Tooltip title="결제완료, 기사배정, 청소완료 상태에서는 금액을 수정할 수 없습니다.">
@@ -417,12 +423,12 @@ const ReservationTable = ({
           <div className="custom-search-group">
             <Input
               className="custom-search-input"
-              placeholder="검색어를 입력해주세요."
+              placeholder="주소를 검색해주세요."
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
               prefix={<SearchOutlined style={{ color: "#bdbdbd" }} />}
-              onPressEnter={() => handleSearch(searchText)}
               allowClear
+              onPressEnter={(e) => handleSearch(e.target.value)}
             />
           </div>
         </div>
@@ -570,12 +576,12 @@ const ReservationTable = ({
         <div className="custom-search-group">
           <Input
             className="custom-search-input"
-            placeholder="검색어를 입력해주세요."
+            placeholder="주소를 검색해주세요."
             value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={(e) => handleSearch(e.target.value)}
             prefix={<SearchOutlined style={{ color: "#bdbdbd" }} />}
-            onPressEnter={() => handleSearch(searchText)}
             allowClear
+            onPressEnter={(e) => handleSearch(e.target.value)}
           />
         </div>
       </div>

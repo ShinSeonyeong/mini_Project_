@@ -574,7 +574,7 @@ const BoardManage = () => {
         <div className="custom-search-group">
           <Input
             className="custom-search-input"
-            placeholder="제목 또는 작성자 검색"
+            placeholder="제목을 검색해주세요."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             prefix={<SearchOutlined style={{ color: "#bdbdbd" }} />}

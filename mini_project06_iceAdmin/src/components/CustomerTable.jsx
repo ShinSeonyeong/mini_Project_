@@ -125,7 +125,8 @@ const CustomerTable = ({ data, onEdit, onDelete, onDataChange, searchText, onSea
       render: (text) => {
         return <div style={{ textAlign: "center" }}>{text}</div>;
       },
-      defaultSortOrder: "ascend",
+      defaultSortOrder: "descend",
+      sorter: (a, b) => b.res_no - a.res_no,
     },
     {
       title: <div style={{ textAlign: "center" }}>이름</div>,

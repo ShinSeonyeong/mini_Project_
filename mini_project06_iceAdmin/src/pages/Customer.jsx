@@ -1,152 +1,142 @@
-import React, { useState, useEffect } from 'react';
-import {Layout, Modal, Card, Flex, Breadcrumb, Pagination} from 'antd';
-import CustomerTable from '../components/CustomerTable';
-import CustomerForm from '../components/CustomerForm';
+import React, { useState, useEffect } from "react";
+import { Layout, Modal, Card, Flex, Breadcrumb, Pagination } from "antd";
+import CustomerTable from "../components/CustomerTable";
+import CustomerForm from "../components/CustomerForm";
 import styles from "../css/customer.module.css";
 import { supabase } from "../js/supabase.js";
 
 const { Content } = Layout;
 
 const Customer = () => {
-    const [customers, setCustomers] = useState([]);
-    const [filteredCustomers, setFilteredCustomers] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingCustomer, setEditingCustomer] = useState(null);
-    const [searchText, setSearchText] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize] = useState(10);
+  const [customers, setCustomers] = useState([]);
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10);
+  const [totalCustomers, setTotalCustomers] = useState(0);
 
-    // 데이터 가져오기
-    const fetchCustomers = async () => {
-        try {
-            let query = supabase
-                .from('customer')
-                .select('*');
+  // 데이터 가져오기
+  const fetchCustomers = async () => {
+    try {
+      let query = supabase
+        .from("customer")
+        .select("*", { count: "exact" })
+        .order("res_no", { ascending: false });
 
-            const { data: customers, error } = await query;
-            
-            if (error) {
-                console.error('Error fetching customers:', error);
-                return;
-            }
+      // 검색어로 필터링
+      if (searchText) {
+        query = query.or(
+          `name.ilike.%${searchText}%,addr.ilike.%${searchText}%`
+        );
+      }
 
-            if (customers && customers.length > 0) {
-                // 검색어로 필터링
-                let filtered = [...customers];
-                
-                if (searchText) {
-                    filtered = filtered.filter((c) => {
-                        const searchLower = searchText.toLowerCase();
-                        return (
-                            c.name?.toLowerCase().includes(searchLower) ||
-                            c.phone?.includes(searchText) ||
-                            c.email?.toLowerCase().includes(searchLower) ||
-                            c.addr?.toLowerCase().includes(searchLower)
-                        );
-                    });
-                }
+      // 페이지네이션 적용
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize - 1;
+      query = query.range(start, end);
 
-                setCustomers(customers);
-                setFilteredCustomers(filtered);
-            } else {
-                console.log('No customers found');
-                setCustomers([]);
-                setFilteredCustomers([]);
-            }
-        } catch (error) {
-            console.error('Unexpected error:', error);
-        }
-    };
+      const { data: customers, error, count } = await query;
 
-    // 초기 데이터 로드
-    useEffect(() => {
-        fetchCustomers();
-    }, []);
+      if (error) {
+        console.error("Error fetching customers:", error);
+        return;
+      }
 
-    // 검색어가 변경될 때마다 필터링
-    useEffect(() => {
-        fetchCustomers();
-    }, [searchText]);
+      if (customers) {
+        setCustomers(customers);
+        setFilteredCustomers(customers);
+        setTotalCustomers(count || 0);
+      } else {
+        setCustomers([]);
+        setFilteredCustomers([]);
+        setTotalCustomers(0);
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+  };
 
-    // 모달 핸들러
-    const showModal = (customer = null) => {
-        setEditingCustomer(customer);
-        setIsModalOpen(true);
-    };
+  // 초기 데이터 로드
+  useEffect(() => {
+    fetchCustomers();
+  }, [currentPage, searchText]);
 
-    const handleOk = () => {
-        setIsModalOpen(false);
-        setEditingCustomer(null);
-        fetchCustomers();
-    };
+  // 검색어가 변경될 때 첫 페이지로 이동
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchText]);
 
-    const handleCancel = () => {
-        setIsModalOpen(false);
-        setEditingCustomer(null);
-    };
+  // 모달 핸들러
+  const showModal = (customer = null) => {
+    setEditingCustomer(customer);
+    setIsModalOpen(true);
+  };
 
-    // 검색 핸들러
-    const handleSearchChange = (value) => {
-        setSearchText(value);
-    };
+  const handleOk = () => {
+    setIsModalOpen(false);
+    setEditingCustomer(null);
+    fetchCustomers();
+  };
 
-    return (
-        <>
-            <div className={styles.content}>
-                <div>
-                    <Breadcrumb
-                        separator=">"
-                        items={[
-                            {
-                                title: 'Home',
-                            },
-                            {
-                                title: '고객관리',
-                            },
-                        ]}
-                    />
-                </div>
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setEditingCustomer(null);
+  };
 
-                <div>
-                    <CustomerTable
-                        data={filteredCustomers}
-                        onEdit={showModal}
-                        onDelete={async (email) => {
-                            await supabase.from('customer').delete().eq('email', email);
-                            fetchCustomers();
-                        }}
-                        onDataChange={() => fetchCustomers()}
-                        searchText={searchText}
-                        onSearchChange={handleSearchChange}
-                    />
+  // 검색 핸들러
+  const handleSearchChange = (value) => {
+    setSearchText(value);
+  };
 
-                    <div className={styles.pagination_container}>
-                        <Pagination
-                            current={currentPage}
-                            pageSize={pageSize}
-                            total={filteredCustomers.length}
-                            onChange={(page) => setCurrentPage(page)}
-                            showSizeChanger={false}
-                        />
-                    </div>
-                </div>
+  return (
+    <>
+      <div className={styles.content}>
+        <div>
+          <Breadcrumb
+            separator=">"
+            items={[{ title: "Home" }, { title: "고객관리", href: "" }]}
+          />
+        </div>
 
-                <Modal
-                    title="고객 수정"
-                    open={isModalOpen}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
-                    footer={null}
-                    width={800}
-                >
-                    <CustomerForm
-                        customer={editingCustomer}
-                        onSuccess={handleOk}
-                    />
-                </Modal>
-            </div>
-        </>
-    );
+        <div>
+          <CustomerTable
+            data={filteredCustomers}
+            onEdit={showModal}
+            onDelete={async (email) => {
+              await supabase.from("customer").delete().eq("email", email);
+              fetchCustomers();
+            }}
+            onDataChange={() => fetchCustomers()}
+            searchText={searchText}
+            onSearchChange={handleSearchChange}
+          />
+
+          <div className={styles.pagination_container}>
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={totalCustomers}
+              onChange={(page) => setCurrentPage(page)}
+              showSizeChanger={false}
+            />
+          </div>
+        </div>
+
+        <Modal
+          title="고객 수정"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+          width={800}
+        >
+          <CustomerForm customer={editingCustomer} onSuccess={handleOk} />
+        </Modal>
+      </div>
+    </>
+  );
 };
 
-export default Customer; 
+export default Customer;
