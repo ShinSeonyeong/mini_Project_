@@ -242,22 +242,22 @@ const ReservationForm = ({ reservation, onSuccess }) => {
         }
 
         // 1. reservation 테이블에 예약 정보 저장 (새로운 res_no 생성)
+        const reservationData = {
+          user_email: selectedCustomer.email,
+          gisa_email: null,  // 초기에는 기사 미배정
+          state: values.state || 1,  // 기본값 1 (신규예약)
+          price: 0,  // 초기 가격 0
+          agree: false,  // 초기 동의 상태 false
+          addr: fullAddr || selectedCustomer.addr, // 예약 주소가 없으면 고객 주소 사용
+          date: values.date.format('YYYY-MM-DD'),  // dayjs 객체를 문자열로 변환
+          time: values.time,
+          model: values.model,
+          remark: values.remark
+        };
+
         const { data: newReservation, error: reservationError } = await supabase
           .from("reservation")
-          .insert([
-            {
-              user_email: selectedCustomer.email,
-              gisa_email: null,  // 초기에는 기사 미배정
-              state: values.state || 1,  // 기본값 1 (신규예약)
-              price: 0,  // 초기 가격 0
-              agree: false,  // 초기 동의 상태 false
-              addr: fullAddr || selectedCustomer.addr, // 예약 주소가 없으면 고객 주소 사용
-              date: values.date.format('YYYY-MM-DD'),  // dayjs 객체를 문자열로 변환
-              time: values.time,
-              model: values.model,
-              remark: values.remark
-            },
-          ])
+          .insert([reservationData])
           .select()
           .single();
         if (reservationError) {
