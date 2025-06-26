@@ -109,7 +109,7 @@ const CleanerAssignModal = ({
         // form-urlencoded 형식으로 데이터 전송
         const formData = new URLSearchParams();
         formData.append("res_no", reservation.res_no);
-        alert(`전송할 데이터: ${formData.toString()}`);
+        // alert(`전송할 데이터: ${formData.toString()}`);
 
         try {
           const response1 = await axios.post(
@@ -122,9 +122,9 @@ const CleanerAssignModal = ({
             }
           );
 
-          alert("API 응답 확인");
-          alert(`응답 상태: ${response1.status}`);
-          alert(`응답 데이터: ${JSON.stringify(response1.data)}`);
+          // alert("API 응답 확인");
+          // alert(`응답 상태: ${response1.status}`);
+          // alert(`응답 데이터: ${JSON.stringify(response1.data)}`);
 
           if (response1.data.message === "success") {
             console.log(
@@ -177,9 +177,9 @@ const CleanerAssignModal = ({
             },
           });
 
-          alert("두 번째 API 응답 확인");
-          alert(`응답 상태: ${response2.status}`);
-          alert(`응답 데이터: ${JSON.stringify(response2.data)}`);
+          // alert("두 번째 API 응답 확인");
+          // alert(`응답 상태: ${response2.status}`);
+          // alert(`응답 데이터: ${JSON.stringify(response2.data)}`);
 
           if (response2.data.message === "success") {
             console.log(

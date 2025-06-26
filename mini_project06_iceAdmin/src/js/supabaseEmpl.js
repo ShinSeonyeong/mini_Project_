@@ -101,31 +101,75 @@ export const modifyProfile = async(props) =>{
 }
 
 export const insertProfile = async(props) =>{
-    let pw = await bcrypt.hash(props.pw,10);
+    try {
+        // 아이디 중복 체크
+        const { data: idCheck, error: idError } = await supabase
+            .from("member")
+            .select("id")
+            .eq("id", props.id)
+            .single();
 
-    let res = await supabase.from("member").insert([
-        {
-            id:props.id,
-            pw,
-            nm:props.nm,
-            auth:props.auth,
-            mail:props.mail,
-            entr_date:props.entr_date.format("YYYY-MM-DD"),
-            tel:props.tel,
-            addr:props.addr,
-            account_num:props.account_num,
-            bank:props.bank?props.bank:null,
-            type:props.type,
-            file_nm:props.file_nm?props.file_nm:null,
-            file_url:props.file_url?props.file_url:null,
+        if (idCheck) {
+            notification.error({
+                message: "직원 등록 실패",
+                description: "이미 존재하는 아이디입니다."
+            });
+            return { error: "Duplicate ID" };
         }
+
+        // 이름 중복 체크
+        const { data: nameCheck, error: nameError } = await supabase
+            .from("member")
+            .select("nm")
+            .eq("nm", props.nm)
+            .single();
+
+        if (nameCheck) {
+            notification.error({
+                message: "직원 등록 실패",
+                description: "이미 존재하는 이름입니다."
+            });
+            return { error: "Duplicate name" };
+        }
+
+        let pw = await bcrypt.hash(props.pw,10);
+
+        let res = await supabase.from("member").insert([
+            {
+                id:props.id,
+                pw,
+                nm:props.nm,
+                auth:props.auth,
+                mail:props.mail,
+                entr_date:props.entr_date.format("YYYY-MM-DD"),
+                tel:props.tel,
+                addr:props.addr,
+                account_num:props.account_num,
+                bank:props.bank?props.bank:null,
+                type:props.type,
+                file_nm:props.file_nm?props.file_nm:null,
+                file_url:props.file_url?props.file_url:null,
+            }
         ]);
-    if(res.error){
-        notification.error({message:"에러발생:"+res.error});
-    }else{
-        notification.success({message:"등록 성공"});
+
+        if(res.error){
+            console.error("상세 에러:", res.error);
+            notification.error({
+                message: "직원 등록 실패",
+                description: res.error.message || "알 수 없는 오류가 발생했습니다"
+            });
+        } else {
+            notification.success({message:"등록 성공"});
+        }
+        return res;
+    } catch (error) {
+        console.error("예외 발생:", error);
+        notification.error({
+            message: "직원 등록 실패",
+            description: error.message || "알 수 없는 오류가 발생했습니다"
+        });
+        return { error };
     }
-    return res;
 }
 
 export const updateEmployeeApproval = async (employeeId, isApproved) => {
