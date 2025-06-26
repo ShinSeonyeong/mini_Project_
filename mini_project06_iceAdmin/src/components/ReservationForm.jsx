@@ -203,14 +203,37 @@ const ReservationForm = ({ reservation, onSuccess }) => {
           })
           .eq("res_no", reservation.res_no);
 
-        if( values.state === 4) {
-          alert("기사배정");
-          alert(values.phone);
-          axios.post(`${API_URL}/push/send/${values.phone}`,{
+        if( values.state === 2) {
+          // alert("결제대기");
+          // alert(values.phone);
+          // alert(reservation.price);
+          axios.post(`${API_URL}/push/price_change/${values.phone}`,{
             res_no: reservation.res_no,
-          });
+            price: reservation.price,
+          }).then(res=>{
+            if(res.data.message === "success")
+            console.log("푸시 알림 전송 성공(대기, reservationForm.jsx)");
+          else
+          console.log('푸시 알림 전송 실패(대기, reservationForm.jsx)');
+          }).catch(err=>console.log(err));
         }
         if (reservationError) throw reservationError;
+
+        if( values.state === 5) {
+          // alert("청소완료");
+          // alert(values.phone);
+          // alert(reservation.price);
+          axios.post(`${API_URL}/push/complete/${values.phone}`,{
+            res_no: reservation.res_no,
+          }).then(res=>{
+            if(res.data.message === "success")
+            console.log("푸시 알림 전송 성공(대기, reservationForm.jsx)");
+          else
+          console.log('푸시 알림 전송 실패(대기, reservationForm.jsx)');
+          }).catch(err=>console.log(err));
+        }
+        if (reservationError) throw reservationError;
+
       } else {
         // 새로운 예약 생성
         if (!selectedCustomer) {
@@ -297,7 +320,7 @@ const ReservationForm = ({ reservation, onSuccess }) => {
     const addr = form.getFieldValue("addr");
     const detailAddr = form.getFieldValue("detailAddr");
 
-    console.log("주소 변경 감지:", { postcode, addr, detailAddr });
+    // console.log("주소 변경 감지:", { postcode, addr, detailAddr });
   };
 
   // 고객 주소 변경 시 예약 주소 업데이트 (신규 예약 시에만)

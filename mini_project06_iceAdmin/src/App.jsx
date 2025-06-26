@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Side from "./layout/Side.jsx";
 import Body from "./layout/Body.jsx";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { MenuUnfoldOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -26,9 +26,9 @@ function App() {
   //   https://github.com/dron512/pwa/tree/test-main/react_work/front02
   useEffect(() => {
     if ("serviceWorker" in navigator && "PushManager" in window) {
-      console.log("service worker after");
+      // console.log("service worker after");
       navigator.serviceWorker.ready.then((registration) => {
-        console.log("service worker ready");
+        // console.log("service worker ready");
         registration.pushManager
           .subscribe({
             userVisibleOnly: true,
@@ -98,8 +98,8 @@ function App() {
                     setToggleAside(!toggleAside);
                   }}
                 />
-                <AccountCircleIcon
-                  style={{ fontSize: "50px" }}
+                <LogoutIcon
+                  style={{ fontSize: "40px", cursor: "pointer" }}
                   onClick={logout}
                 />
               </section>

@@ -22,16 +22,18 @@ import dayjs from "dayjs";
 import { supabase } from "../js/supabase.js";
 import "../css/reservation.module.css";
 import CleanerAssignModal from "./CleanerAssignModal";
+import axios from "axios";
 
 const { Option } = Select;
+const API_URL = "https://port-0-icemobile-manaowvf213a09cd.sel4.cloudtype.app";
 
-const ReservationTable = ({ 
-  data, 
-  onEdit, 
-  onDelete, 
+const ReservationTable = ({
+  data,
+  onEdit,
+  onDelete,
   onDataChange,
   onFilterStateChange,
-  currentFilterState 
+  currentFilterState,
 }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [pendingUpdate, setPendingUpdate] = useState({
@@ -59,14 +61,15 @@ const ReservationTable = ({
   const fetchCleaners = async () => {
     try {
       const { data: memberData, error } = await supabase
-        .from('member')
-        .select('nm, id, tel')  // 기사이름, 이메일주소, 전화번호만 선택
-        .eq('auth', 2);
-
+        .from("member")
+        .select("nm, id, tel,p256dh,endpoint,alarm_auth") // 기사이름, 이메일주소, 전화번호만 선택
+        .eq("auth", 2)
+        .eq("indentify", true);
+      //.eq().eq() 구문은 and로 연결
       if (error) throw error;
       setCleaners(memberData);
     } catch (error) {
-      console.error('Error fetching cleaners:', error);
+      console.error("Error fetching cleaners:", error);
     }
   };
 
@@ -126,7 +129,9 @@ const ReservationTable = ({
   const handlePriceChange = async (res_no, newPrice) => {
     const record = data.find((item) => item.res_no === res_no);
     if (record && [3, 4, 5].includes(record.state)) {
-      message.error("결제완료, 기사배정, 청소완료 상태에서는 금액을 수정할 수 없습니다.");
+      message.error(
+        "결제완료, 기사배정, 청소완료 상태에서는 금액을 수정할 수 없습니다."
+      );
       return;
     }
 
@@ -154,7 +159,7 @@ const ReservationTable = ({
 
   const handleAssignClick = (record) => {
     if (record.state === 5) {
-      message.warning('청소완료 상태에서는 기사 배정을 변경할 수 없습니다.');
+      message.warning("청소완료 상태에서는 기사 배정을 변경할 수 없습니다.");
       return;
     }
     setSelectedReservation(record);
@@ -176,7 +181,7 @@ const ReservationTable = ({
         return <div style={{ textAlign: "center" }}>{text}</div>;
       },
       defaultSortOrder: "ascend",
-    },    
+    },
     {
       title: <div style={{ textAlign: "center" }}>이름</div>,
       dataIndex: ["customer", "name"],
@@ -321,11 +326,12 @@ const ReservationTable = ({
       key: "gisa_email",
       width: 130,
       render: (gisa_email, record) => {
-        const assignedCleaner = cleaners.find(c => c.id === gisa_email);
+        const assignedCleaner = cleaners.find((c) => c.id === gisa_email);
         const isAssignable = record.state === 3; // 결제완료 상태일 때만 기사 배정 가능
         const canChange = record.state >= 3 && record.state < 5; // 결제완료 이상, 청소완료 미만에서 기사 변경 가능
 
-        if (record.state >= 4 && record.state < 5) {  // 기사배정 상태
+        if (record.state >= 4 && record.state < 5) {
+          // 기사배정 상태
           return (
             <div style={{ textAlign: "center" }}>
               <div style={{ marginBottom: 4 }}>
@@ -342,15 +348,14 @@ const ReservationTable = ({
           );
         }
 
-        if (record.state === 5) {  // 청소완료 상태
+        if (record.state === 5) {
+          // 청소완료 상태
           return (
             <div style={{ textAlign: "center" }}>
               <div style={{ marginBottom: 4 }}>
                 {assignedCleaner ? assignedCleaner.nm : "미지정"}
               </div>
-              <div style={{ fontSize: '12px', color: '#999' }}>
-                변경 불가
-              </div>
+              <div style={{ fontSize: "12px", color: "#999" }}>변경 불가</div>
             </div>
           );
         }

@@ -18,7 +18,7 @@ export const getReservation = async (type, nm) => {
   if (res.error) {
     notification.error({ message: "에러발생:" + res.error });
   }
-  console.log(res);
+  // console.log(res);
   return res.data;
 };
 
@@ -35,7 +35,7 @@ async function getReservations(page, limit = 10) {
   if (error) {
     notification.error({ message: "에러발생:" + error });
   }
-  console.log(data);
+  // console.log(data);
   return { data, count };
 }
 

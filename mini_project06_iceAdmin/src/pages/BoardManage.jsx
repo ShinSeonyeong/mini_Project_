@@ -139,7 +139,7 @@ const BoardManage = () => {
       .from("icecarebucket")
       .getPublicUrl(filePath); // 공개 URL 가져오기
 
-    console.log("upload image URL:", urlData.publicUrl);
+    // console.log("upload image URL:", urlData.publicUrl);
     return urlData.publicUrl;
   };
 
