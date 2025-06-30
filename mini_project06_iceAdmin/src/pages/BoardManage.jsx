@@ -65,57 +65,66 @@ const BoardManage = () => {
   const [previewTitle, setPreviewTitle] = useState("");
 
   useEffect(() => {
+    // handleResize 함수를 정의. 이 함수는 창(window)의 너비를 확인해서
+    // 화면이 768px 이하인지 판단한 뒤, isMobile 상태를 업데이트
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
+    // 브라우저 창의 크기가 변경될 때마다 handleResize 함수를 실행하도록
+    // 'resize' 이벤트 리스너를 window 객체에 추가
     window.addEventListener("resize", handleResize);
+
+    // useEffect의 반환 함수
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // 게시글 데이터를 가져오는 비동기(async) 함수 정의
   const fetchPosts = async () => {
-    // console.log('Fetching posts with:', {currentPage, searchText, filterCategory});
+    // 'board' 테이블에서 데이터를 조회
     let query = supabase
       .from("board")
+        // category_id와 관련된 categories 테이블에서 데이터를 조인
       .select(
         `
         *,
-        categories:category_id (
+        categories:category_id ( 
           id,
           name
         )
       `,
-        { count: "exact" }
+        { count: "exact" } // 전체 데이터 개수를 정확히 계산
       )
       .order("id", { ascending: false }) // NO(id) 기준 내림차순 정렬
-      .range((currentPage - 1) * pageSize, currentPage * pageSize - 1);
+      .range((currentPage - 1) * pageSize, currentPage * pageSize - 1); // 페이지네이션: 시작, 끝 인덱스 계산
 
-    // console.log('Fetching postsdd with:', {currentPage, searchText, filterCategory});
-
+    // 검색어가 있으면 제목(title)이나 작성자(author)에 검색어가 포함된 게시글만 필터링
     if (searchText) {
       query = query.or(
         `title.ilike.%${searchText}%, author.ilike.%${searchText}%`
       );
     }
 
+    // 카테고리 필터가 'all'이 아니면 특정 카테고리 ID에 해당하는 게시글만 조회
     if (filterCategory !== "all") {
-      query = query.eq("category_id", filterCategory);
+      query = query.eq("category_id", filterCategory); // category_id가 filterCategory와 정확히 일치
     } else {
-      query = query.in("category_id", ["1", "2"]);
+      query = query.in("category_id", ["1", "2"]); // 'all'이면 category_id가 1 또는 2인 게시글만 조회
     }
 
+    // 쿼리 실행: 데이터, 에러, 총 게시글 수를 반환받음
     const { data, error, count } = await query;
     if (error) {
       message.error("게시글을 불러오는 데 실패했습니다.");
       return;
     }
 
-    setPosts(data);
-    setTotalPosts(count);
+    setPosts(data); // 조회된 데이터를 상태(posts)에 저장
+    setTotalPosts(count); // 총 게시글 수를 상태(totalPosts)에 저장 (페이지네이션에 사용)
   };
 
   useEffect(() => {
-    fetchPosts();
-  }, [currentPage, searchText, filterCategory]);
+    fetchPosts(); // fetchPosts 함수를 호출해서 게시글 데이터를 가져옴
+  }, [currentPage, searchText, filterCategory]); // 의존성 배열: 이 값들이 바뀔 때마다 useEffect가 실행됨
 
   const handleUpload = async (file) => {
     const fileExt = file.name.split(".").pop(); // 파일 확장자 추출
@@ -125,7 +134,7 @@ const BoardManage = () => {
     const { error: uploadError } = await supabase.storage
       .from("icecarebucket") // 저장할 버킷 이름은 icecarebucket
       .upload(filePath, file, {
-        cacheControl: "3600",
+        cacheControl: "3600", 
         upsert: false,
       }); // 공개 URL 가져오기
 
